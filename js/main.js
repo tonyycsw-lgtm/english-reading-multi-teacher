@@ -60,30 +60,45 @@ const AudioController = {
 
   clearAllSentenceHighlights() {
     document.querySelectorAll('.sentence-highlightable').forEach(el => {
-      el.classList.remove('sentence-playing');
+      el.classList.remove('sentence-playing', 'sentence-selected');
     });
   },
 
-  highlightSentence(paraNum, unitId, sentenceIndex) {
+  highlightSentence(paraNum, unitId, sentenceIndex, isSelected = false) {
     this.clearAllSentenceHighlights();
     
     const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIndex}"]`;
     const sentenceEl = document.querySelector(selector);
     
     if (sentenceEl) {
-      sentenceEl.classList.add('sentence-playing');
+      if (isSelected) {
+        sentenceEl.classList.add('sentence-selected');
+      } else {
+        sentenceEl.classList.add('sentence-playing');
+      }
       sentenceEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   },
 
-  async playSingleSentence(paraNum, unitId, sentenceIndex, sentenceText) {
+  // 提取纯文本内容（移除HTML标签）
+  extractPlainText(htmlContent) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+    return tempDiv.textContent || tempDiv.innerText || '';
+  },
+
+  async playSingleSentence(paraNum, unitId, sentenceIndex, sentenceHtml) {
     this.stop();
     
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     
-    this.highlightSentence(paraNum, unitId, sentenceIndex);
+    // 提取纯文本用于TTS播放
+    const plainText = this.extractPlainText(sentenceHtml);
     
-    const utter = new SpeechSynthesisUtterance(sentenceText);
+    // 使用 selected 样式（浅紫色，不加粗）
+    this.highlightSentence(paraNum, unitId, sentenceIndex, true);
+    
+    const utter = new SpeechSynthesisUtterance(plainText);
     utter.lang = 'en-GB';
     utter.rate = 0.85;
     
@@ -168,13 +183,18 @@ const AudioController = {
 
     const sentence = this.currentParagraphSentences[this.currentSentenceIndex];
     
+    // 使用 playing 样式（带脉冲动画）
     this.highlightSentence(
       this.currentParaNum, 
       this.currentUnitId, 
-      this.currentSentenceIndex
+      this.currentSentenceIndex,
+      false
     );
     
-    const utter = new SpeechSynthesisUtterance(sentence);
+    // 提取纯文本用于TTS播放
+    const plainText = this.extractPlainText(sentence);
+    
+    const utter = new SpeechSynthesisUtterance(plainText);
     utter.lang = 'en-GB';
     utter.rate = 0.85;
     
@@ -392,17 +412,19 @@ const Renderer = {
       
       if (para.sentences && para.sentences.length) {
         para.sentences.forEach((sentence, sIdx) => {
+          // 存储纯文本版本用于TTS播放，显示时保留原始HTML
           const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
           paragraphHtml += `<span class="sentence-highlightable" data-sentence-index="${sIdx}" 
-                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${escapedSentence}')">
+                            data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'")}"
+                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, this.dataset.plainText)">
                             ${sentence}</span> `;
         });
       } else {
         const sentences = para.english.split(/(?<=[.!?])\s+/);
         sentences.forEach((sentence, sIdx) => {
-          const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
           paragraphHtml += `<span class="sentence-highlightable sentence-fallback" data-sentence-index="${sIdx}"
-                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${escapedSentence}')">
+                            data-plain-text="${sentence.replace(/'/g, "\\'")}"
+                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${sentence.replace(/'/g, "\\'")}')">
                             ${sentence}</span> `;
         });
       }
@@ -458,6 +480,13 @@ const Renderer = {
     });
     html += `</div></div>`;
     wrapper.innerHTML = html;
+  },
+
+  // 辅助方法：移除HTML标签，提取纯文本
+  stripHtml(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
   },
 
   renderVocabUsage(unitData, unitId) {
