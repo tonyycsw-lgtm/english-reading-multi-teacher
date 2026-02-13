@@ -65,20 +65,16 @@ const AudioController = {
   },
 
   highlightSentence(paraNum, unitId, sentenceIndex) {
-    // 先清除所有高亮
     this.clearAllSentenceHighlights();
     
     const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIndex}"]`;
     const sentenceEl = document.querySelector(selector);
     
     if (sentenceEl) {
-      // 统一使用 sentence-selected 样式（浅紫色，无脉冲，不加粗）
       sentenceEl.classList.add('sentence-selected');
-      // 移除滚动行为，保持画面稳定
     }
   },
 
-  // 提取纯文本内容（移除HTML标签）
   extractPlainText(htmlContent) {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlContent;
@@ -89,11 +85,8 @@ const AudioController = {
     this.stop();
     
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
-    
-    // 提取纯文本用于TTS播放
     const plainText = this.extractPlainText(sentenceHtml);
     
-    // 使用统一的高亮样式（无滚动）
     this.highlightSentence(paraNum, unitId, sentenceIndex);
     
     const utter = new SpeechSynthesisUtterance(plainText);
@@ -181,14 +174,12 @@ const AudioController = {
 
     const sentence = this.currentParagraphSentences[this.currentSentenceIndex];
     
-    // 使用统一的高亮样式（无脉冲，无滚动）
     this.highlightSentence(
       this.currentParaNum, 
       this.currentUnitId, 
       this.currentSentenceIndex
     );
     
-    // 提取纯文本用于TTS播放
     const plainText = this.extractPlainText(sentence);
     
     const utter = new SpeechSynthesisUtterance(plainText);
@@ -391,10 +382,10 @@ const Renderer = {
     let html = `
       <div class="article-section">
         <div class="article-header">
-          <h3 class="article-title">${article.title.replace('\n', '<br>')}</h3>
+          <h3 class="article-title" lang="zh">${article.title.replace('\n', '<br lang="zh">')}</h3>
           <img src="${article.illustration || './images/placeholder.png'}" alt="illustration" class="article-illustration"
                onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="image-fallback" style="display:none; width:100%; height:180px; align-items:center; justify-content:center; color:#64748b;">
+          <div class="image-fallback" style="display:none; width:100%; height:180px; align-items:center; justify-content:center; color:#64748b;" lang="zh">
             <i class="fas fa-image" style="font-size:48px;"></i>
             <div style="margin-left:12px;">图片加载失败</div>
           </div>
@@ -409,9 +400,9 @@ const Renderer = {
       
       if (para.sentences && para.sentences.length) {
         para.sentences.forEach((sentence, sIdx) => {
-          // 存储纯文本版本用于TTS播放，显示时保留原始HTML
           const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-          paragraphHtml += `<span class="sentence-highlightable" data-sentence-index="${sIdx}" 
+          // ✅ 英文句子添加 lang="en"
+          paragraphHtml += `<span class="sentence-highlightable" lang="en" data-sentence-index="${sIdx}" 
                             data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'")}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, this.dataset.plainText)">
                             ${sentence}</span> `;
@@ -419,7 +410,8 @@ const Renderer = {
       } else {
         const sentences = para.english.split(/(?<=[.!?])\s+/);
         sentences.forEach((sentence, sIdx) => {
-          paragraphHtml += `<span class="sentence-highlightable sentence-fallback" data-sentence-index="${sIdx}"
+          // ✅ 英文句子添加 lang="en"
+          paragraphHtml += `<span class="sentence-highlightable sentence-fallback" lang="en" data-sentence-index="${sIdx}"
                             data-plain-text="${sentence.replace(/'/g, "\\'")}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${sentence.replace(/'/g, "\\'")}')">
                             ${sentence}</span> `;
@@ -441,11 +433,13 @@ const Renderer = {
             <i class="fas fa-lightbulb"></i> 解读
           </button>
         </div>
-        <div class="translation-content" id="${unitId}_trans${paraNum}">${para.translation}</div>
+        <div class="translation-content" id="${unitId}_trans${paraNum}" lang="zh">${para.translation}</div>
         <div class="implication-content" id="${unitId}_impl${paraNum}">
           <div class="implication-text-wrapper">
-            <div class="implication-english">${para.implication.english}</div>
-            <div class="implication-chinese">${para.implication.chinese}</div>
+            <!-- ✅ 英文解读添加 lang="en" -->
+            <div class="implication-english" lang="en">${para.implication.english}</div>
+            <!-- ✅ 中文解读添加 lang="zh" -->
+            <div class="implication-chinese" lang="zh">${para.implication.chinese}</div>
           </div>
           <div class="implication-buttons">
             <button class="implication-audio-btn" onclick="AudioController.toggleImplicationAudio(${paraNum}, '${unitId}')" id="${unitId}_impl-audio-btn-${paraNum}">
@@ -458,7 +452,7 @@ const Renderer = {
     
     html += `</div></div>`;
 
-    html += `<div class="vocab-section"><h4 class="vocab-title"><i class="fas fa-bookmark"></i> 核心词汇</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
+    html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心词汇</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
     vocab.forEach((v, i) => {
       html += `
         <div class="vocab-item ${v.highlightClass || ''}">
@@ -468,9 +462,11 @@ const Renderer = {
           <div class="vocab-text">
             <div class="vocab-word-line">
               <span class="vocab-number">${i+1}.</span>
-              <span class="vocab-word">${v.word}</span>
+              <!-- ✅ 英文词汇添加 lang="en" -->
+              <span class="vocab-word" lang="en">${v.word}</span>
             </div>
-            <div class="vocab-meaning">${v.meaning}</div>
+            <!-- ✅ 中文释义添加 lang="zh" -->
+            <div class="vocab-meaning" lang="zh">${v.meaning}</div>
           </div>
         </div>
       `;
@@ -479,7 +475,6 @@ const Renderer = {
     wrapper.innerHTML = html;
   },
 
-  // 辅助方法：移除HTML标签，提取纯文本
   stripHtml(html) {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
@@ -493,15 +488,15 @@ const Renderer = {
 
     let html = `
       <div class="vocab-drag-container">
-        <div style="font-weight:600; color:#4b5563; width:100%;"><i class="fas fa-hand-pointer"></i> 拖拽词汇到正确位置：</div>
+        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽词汇到正确位置：</div>
         <div class="vocab-drag-source" id="${unitId}_vocab-drag-source">
     `;
     vu.options.forEach(opt => {
-      html += `<div class="vocab-drag-item" draggable="true" id="${unitId}_vocab-option-${opt}">
+      html += `<div class="vocab-drag-item" draggable="true" id="${unitId}_vocab-option-${opt}" lang="en">
                   <i class="fas fa-grip-vertical" style="margin-right:8px; color:#9ca3af;"></i>${opt}
                 </div>`;
     });
-    html += `<button class="drag-undo-btn" onclick="DragDrop.undoVocabDrag('${unitId}')"><i class="fas fa-undo"></i> 返回上一步</button></div></div>`;
+    html += `<button class="drag-undo-btn" onclick="DragDrop.undoVocabDrag('${unitId}')" lang="zh"><i class="fas fa-undo"></i> 返回上一步</button></div></div>`;
 
     html += `<div style="font-size:12px; line-height:1.6; padding:12px; background:#fafafa; border-radius:6px;" id="${unitId}_vocab-usage-text">`;
     vu.questions.forEach((q, idx) => {
@@ -513,8 +508,8 @@ const Renderer = {
     });
     html += `</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkVocabUsage('${unitId}')"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetVocabUsage('${unitId}')"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkVocabUsage('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetVocabUsage('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_vocab-result"></div>`;
     container.innerHTML = html;
@@ -524,26 +519,26 @@ const Renderer = {
     const container = document.getElementById('reading-section');
     const rc = unitData.readingComprehension;
     if (!rc || !rc.length) { 
-      container.innerHTML = '<div style="padding:20px; text-align:center; color:#666;">暂无阅读理解题目</div>'; 
+      container.innerHTML = '<div style="padding:20px; text-align:center; color:#666;" lang="zh">暂无阅读理解题目</div>'; 
       return; 
     }
     let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
     rc.forEach((item, idx) => {
       const qNum = idx + 1;
-      html += `<div><div style="font-weight:600;">${item.question}</div><div style="margin-left:20px;">`;
+      html += `<div><div style="font-weight:600;" lang="en">${item.question}</div><div style="margin-left:20px;">`;
       item.options.forEach(opt => {
         const radioId = `${unitId}_reading-${qNum}-${opt.id}`;
         html += `<div style="display:flex; align-items:center; gap:8px;">
                     <input type="radio" name="${unitId}_reading-${qNum}" id="${radioId}" value="${opt.id}">
-                    <label for="${radioId}" class="option-label">${opt.text}</label>
+                    <label for="${radioId}" class="option-label" lang="en">${opt.text}</label>
                   </div>`;
       });
       html += `</div></div>`;
     });
     html += `</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkReading('${unitId}')"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetReading('${unitId}')"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkReading('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetReading('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_reading-result"></div>`;
     container.innerHTML = html;
@@ -556,8 +551,8 @@ const Renderer = {
     container.innerHTML = `
       <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkCloze('${unitId}')"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetCloze('${unitId}')"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkCloze('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetCloze('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_cloze-result"></div>
     `;
@@ -569,22 +564,22 @@ const Renderer = {
     if (!sf) { container.innerHTML = ''; return; }
     let optionsHtml = '';
     sf.options.forEach(opt => {
-      optionsHtml += `<div class="drag-item" draggable="true" id="${unitId}_option-${opt.id}">
+      optionsHtml += `<div class="drag-item" draggable="true" id="${unitId}_option-${opt.id}" lang="en">
                         <i class="fas fa-grip-vertical" style="margin-right:8px;"></i>${opt.text}
                       </div>`;
     });
     let text = sf.text.replace(/id='drop-(\d+)'/g, `id='${unitId}_drop-$1'`);
     container.innerHTML = `
       <div class="drag-drop-container">
-        <div style="font-weight:600; color:#4b5563; width:100%;"><i class="fas fa-hand-pointer"></i> 拖拽短语到正确位置：</div>
+        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽短语到正确位置：</div>
         <div class="drag-source" id="${unitId}_drag-source">${optionsHtml}
-          <button class="drag-undo-btn" onclick="DragDrop.undoDrag('${unitId}')"><i class="fas fa-undo"></i> 返回上一步</button>
+          <button class="drag-undo-btn" onclick="DragDrop.undoDrag('${unitId}')" lang="zh"><i class="fas fa-undo"></i> 返回上一步</button>
         </div>
       </div>
       <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkSevenFive('${unitId}')"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetSevenFive('${unitId}')"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkSevenFive('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetSevenFive('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_sevenfive-result"></div>
     `;
@@ -597,8 +592,8 @@ const Renderer = {
     container.innerHTML = `
       <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkGrammar('${unitId}')"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetGrammar('${unitId}')"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkGrammar('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetGrammar('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_grammar-result"></div>
     `;
