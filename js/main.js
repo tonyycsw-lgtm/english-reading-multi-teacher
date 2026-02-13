@@ -336,10 +336,19 @@ const Renderer = {
     const wrapper = document.getElementById('article-vocab-wrapper');
     const article = unitData.article;
     const vocab = unitData.vocabulary || [];
+    
+    // 拆分標題
+    const titleParts = article.title.split('\n');
+    const englishTitle = titleParts[0] || '';
+    const chineseTitle = titleParts[1] || '';
+
     let html = `
       <div class="article-section">
         <div class="article-header">
-          <h3 class="article-title" lang="zh">${article.title.replace('\n', '<br lang="zh">')}</h3>
+          <h3 class="article-title">
+            <span lang="en">${englishTitle}</span><br>
+            <span lang="zh">${chineseTitle}</span>
+          </h3>
           <img src="${article.illustration || './images/placeholder.png'}" alt="illustration" class="article-illustration"
                onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="image-fallback" style="display:none; width:100%; height:180px; align-items:center; justify-content:center; color:#64748b;" lang="zh">
@@ -349,7 +358,7 @@ const Renderer = {
         </div>
         <div class="article-paragraph-wrapper" id="article-content-${unitId}">
     `;
-    
+
     article.paragraphs.forEach((para, idx) => {
       const paraNum = idx + 1;
       let paragraphHtml = '';
@@ -369,7 +378,7 @@ const Renderer = {
                             ${sentence}</span> `;
         });
       }
-      
+
       html += `
         <div class="single-paragraph" id="${unitId}_para${paraNum}-text">
           ${paragraphHtml}
@@ -388,14 +397,14 @@ const Renderer = {
           </div>
         </div>
       `;
-      
+
       // 統一的內容容器（預設全部隱藏）
       html += `
         <div class="unified-content" id="${unitId}_content-${paraNum}">
           <!-- 翻譯內容（預設隱藏） -->
           <div class="translation-content" id="${unitId}_trans-${paraNum}" data-content-type="translation" style="display: none;">
       `;
-      
+
       if (para.translation_sentences && para.translation_sentences.length) {
         para.translation_sentences.forEach((sentence, sIdx) => {
           html += `<span class="translation-sentence" lang="zh" 
@@ -406,7 +415,7 @@ const Renderer = {
       } else {
         html += para.translation;
       }
-      
+
       html += `
           </div>
           <!-- 解讀內容（預設隱藏） -->
@@ -424,7 +433,7 @@ const Renderer = {
         </div>
       `;
     });
-    
+
     html += `</div></div>`;
 
     html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心詞彙</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
