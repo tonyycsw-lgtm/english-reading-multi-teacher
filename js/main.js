@@ -36,23 +36,17 @@ const AudioController = {
   },
 
   stop() {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-    
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
     if (this.currentAudio instanceof HTMLAudioElement) {
       this.currentAudio.pause();
       this.currentAudio.currentTime = 0;
       this.currentAudio = null;
     }
-    
     if (this.currentPlayingButton) {
       this.resetButton(this.currentPlayingButton);
       this.currentPlayingButton = null;
     }
-    
     this.clearAllSentenceHighlights();
-    
     this.isPlayingParagraph = false;
     this.currentSentenceIndex = -1;
     this.currentParagraphSentences = [];
@@ -62,7 +56,6 @@ const AudioController = {
     document.querySelectorAll('.sentence-highlightable').forEach(el => {
       el.classList.remove('sentence-playing', 'sentence-selected');
     });
-    // 同時清除所有翻譯高亮
     document.querySelectorAll('.translation-sentence').forEach(el => {
       el.classList.remove('translation-highlight');
     });
@@ -70,20 +63,12 @@ const AudioController = {
 
   highlightSentence(paraNum, unitId, sentenceIndex) {
     this.clearAllSentenceHighlights();
-    
     const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIndex}"]`;
     const sentenceEl = document.querySelector(selector);
-    
-    if (sentenceEl) {
-      sentenceEl.classList.add('sentence-selected');
-    }
-    
-    // 同時高亮對應的中文翻譯
+    if (sentenceEl) sentenceEl.classList.add('sentence-selected');
     const transSelector = `#${unitId}_trans-${paraNum} .translation-sentence[data-sentence-index="${sentenceIndex}"]`;
     const transEl = document.querySelector(transSelector);
-    if (transEl) {
-      transEl.classList.add('translation-highlight');
-    }
+    if (transEl) transEl.classList.add('translation-highlight');
   },
 
   extractPlainText(htmlContent) {
@@ -94,41 +79,25 @@ const AudioController = {
 
   async playSingleSentence(paraNum, unitId, sentenceIndex, sentenceHtml) {
     this.stop();
-    
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     const plainText = this.extractPlainText(sentenceHtml);
-    
     this.highlightSentence(paraNum, unitId, sentenceIndex);
-    
     const utter = new SpeechSynthesisUtterance(plainText);
-    utter.lang = 'en-GB';
-    utter.rate = 0.85;
-    
+    utter.lang = 'en-GB'; utter.rate = 0.85;
     utter.onend = () => {
       this.clearAllSentenceHighlights();
       this.currentAudio = null;
-      if (btn) {
-        this.resetButton(btn);
-        this.currentPlayingButton = null;
-      }
+      if (btn) { this.resetButton(btn); this.currentPlayingButton = null; }
     };
-    
     utter.onerror = (e) => {
       console.error('TTS播放錯誤', e);
       this.clearAllSentenceHighlights();
-      if (btn) {
-        this.resetButton(btn);
-        this.currentPlayingButton = null;
-      }
+      if (btn) { this.resetButton(btn); this.currentPlayingButton = null; }
     };
-    
     window.speechSynthesis.speak(utter);
     this.currentAudio = utter;
-    
     if (btn) {
-      if (this.currentPlayingButton) {
-        this.resetButton(this.currentPlayingButton);
-      }
+      if (this.currentPlayingButton) this.resetButton(this.currentPlayingButton);
       btn.classList.add('playing');
       btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
       this.currentPlayingButton = btn;
@@ -138,86 +107,49 @@ const AudioController = {
   async playParagraphBySentences(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     if (!btn) return;
-    
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
-
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     const unitData = UnitManager.getCurrentUnitData();
     const paragraph = unitData?.article?.paragraphs[paraNum - 1];
     let sentences = paragraph?.sentences || [];
-    
-    if (!sentences.length) {
-      sentences = paragraph.english.split(/(?<=[.!?])\s+/);
-    }
-    
-    if (!sentences.length) {
-      console.warn('無法獲取句子列表');
-      return;
-    }
-
+    if (!sentences.length) sentences = paragraph.english.split(/(?<=[.!?])\s+/);
+    if (!sentences.length) { console.warn('無法獲取句子列表'); return; }
     this.stop();
-    
     this.isPlayingParagraph = true;
     this.currentParagraphSentences = sentences;
     this.currentSentenceIndex = -1;
     this.currentParaNum = paraNum;
     this.currentUnitId = unitId;
     this.currentPlayingButton = btn;
-    
     btn.classList.remove('loading');
     btn.classList.add('playing');
     btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
-    
     this.playNextSentence();
   },
 
   playNextSentence() {
     if (!this.isPlayingParagraph) return;
-    
     this.currentSentenceIndex++;
-    
     if (this.currentSentenceIndex >= this.currentParagraphSentences.length) {
       this.finishParagraphPlayback();
       return;
     }
-
     const sentence = this.currentParagraphSentences[this.currentSentenceIndex];
-    
-    this.highlightSentence(
-      this.currentParaNum, 
-      this.currentUnitId, 
-      this.currentSentenceIndex
-    );
-    
+    this.highlightSentence(this.currentParaNum, this.currentUnitId, this.currentSentenceIndex);
     const plainText = this.extractPlainText(sentence);
-    
     const utter = new SpeechSynthesisUtterance(plainText);
-    utter.lang = 'en-GB';
-    utter.rate = 0.85;
-    
-    utter.onend = () => {
-      this.playNextSentence();
-    };
-    
-    utter.onerror = (e) => {
-      console.error('TTS播放錯誤', e);
-      this.playNextSentence();
-    };
-    
+    utter.lang = 'en-GB'; utter.rate = 0.85;
+    utter.onend = () => { this.playNextSentence(); };
+    utter.onerror = (e) => { console.error('TTS播放錯誤', e); this.playNextSentence(); };
     window.speechSynthesis.speak(utter);
     this.currentAudio = utter;
   },
 
   finishParagraphPlayback() {
     this.clearAllSentenceHighlights();
-    
     if (this.currentPlayingButton) {
       this.resetButton(this.currentPlayingButton);
       this.currentPlayingButton = null;
     }
-    
     this.currentAudio = null;
     this.isPlayingParagraph = false;
     this.currentParagraphSentences = [];
@@ -227,36 +159,26 @@ const AudioController = {
   async toggleParagraphAudio(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     if (!btn) return;
-    
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
-    
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     btn.classList.add('loading');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 載入中...';
-    
     try {
       const audio = new Audio();
       const unitData = UnitManager.getCurrentUnitData();
       const pattern = unitData.audio?.paragraphPattern || `/english-reading-multi/audio/${unitId}/paragraph_{id}.mp3`;
       audio.src = pattern.replace('{id}', paraNum.toString().padStart(2, '0'));
-      
       await audio.play();
-      
       this.stop();
       this.currentAudio = audio;
       this.currentPlayingButton = btn;
       btn.classList.remove('loading');
       btn.classList.add('playing');
       btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
-      
       audio.onended = () => {
         this.resetButton(btn);
         if (this.currentAudio === audio) this.currentAudio = null;
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
-      
     } catch (e) {
       console.warn('本地音頻失敗，使用逐句TTS', e);
       btn.classList.remove('loading');
@@ -267,10 +189,7 @@ const AudioController = {
   async toggleImplicationAudio(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_impl-audio-btn-${paraNum}`);
     if (!btn) return;
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     btn.classList.add('loading');
     const unitData = UnitManager.getCurrentUnitData();
     const rawImpl = unitData?.article?.paragraphs[paraNum-1]?.implication?.english || '';
@@ -300,10 +219,7 @@ const AudioController = {
   async playVocabularyWord(vocabId, unitId) {
     const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
     if (!btn) return;
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     btn.classList.add('loading');
     const unitData = UnitManager.getCurrentUnitData();
     const word = unitData?.vocabulary?.find(v => v.id === vocabId)?.word || '';
@@ -333,17 +249,13 @@ const AudioController = {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-GB';
-    utter.rate = 0.85;
+    utter.lang = 'en-GB'; utter.rate = 0.85;
     if (btn) {
       this.stop();
       btn.classList.remove('loading');
       btn.classList.add('playing');
-      if (type === 'para') {
-        btn.innerHTML = '<i class="fas fa-stop"></i> 停止(TTS)';
-      } else {
-        btn.innerHTML = '<i class="fas fa-stop"></i>';
-      }
+      if (type === 'para') btn.innerHTML = '<i class="fas fa-stop"></i> 停止(TTS)';
+      else btn.innerHTML = '<i class="fas fa-stop"></i>';
       this.currentPlayingButton = btn;
     }
     utter.onend = () => {
@@ -360,42 +272,31 @@ const AudioController = {
 };
 
 // ============================================
-// 句子懸停管理器（修正版：使用 data-unit-id 選擇器）
+// 句子懸停管理器
 // ============================================
 const SentenceHover = {
   setupHoverListeners(unitId) {
-    // 為所有英文句子添加懸停事件 - 使用 data-unit-id 屬性選擇器
     document.querySelectorAll(`[data-unit-id="${unitId}"] .sentence-highlightable`).forEach(sentence => {
-      // 避免重複添加監聽器
       if (sentence.hasAttribute('data-hover-initialized')) return;
-      
       const paraNum = sentence.closest('[id*="para"]')?.id.match(/para(\d+)/)?.[1];
       const sentenceIdx = sentence.dataset.sentenceIndex;
-      
       if (paraNum && sentenceIdx !== undefined) {
         sentence.setAttribute('data-hover-initialized', 'true');
-        
         sentence.addEventListener('mouseenter', () => {
           this.highlightTranslation(unitId, paraNum, sentenceIdx);
         });
-        
         sentence.addEventListener('mouseleave', () => {
           this.clearTranslationHighlight();
         });
       }
     });
   },
-  
   highlightTranslation(unitId, paraNum, sentenceIdx) {
-    // 高亮對應的中文翻譯句子 - 使用新的統一容器 ID
     const targetTrans = document.querySelector(
       `#${unitId}_trans-${paraNum} .translation-sentence[data-sentence-index="${sentenceIdx}"]`
     );
-    if (targetTrans) {
-      targetTrans.classList.add('translation-highlight');
-    }
+    if (targetTrans) targetTrans.classList.add('translation-highlight');
   },
-  
   clearTranslationHighlight() {
     document.querySelectorAll('.translation-sentence.translation-highlight').forEach(el => {
       el.classList.remove('translation-highlight');
@@ -404,7 +305,7 @@ const SentenceHover = {
 };
 
 // ============================================
-// 渲染器（修改版 - 合併翻譯和解讀容器）
+// 渲染器
 // ============================================
 const Renderer = {
   showLoading() {
@@ -427,7 +328,6 @@ const Renderer = {
     this.renderGrammar(unitData, unitId);
     setTimeout(() => {
       this.attachInputListeners(unitId);
-      // 設置句子懸停監聽器
       SentenceHover.setupHoverListeners(unitId);
     }, 50);
   },
@@ -452,12 +352,9 @@ const Renderer = {
     
     article.paragraphs.forEach((para, idx) => {
       const paraNum = idx + 1;
-      
       let paragraphHtml = '';
-      
       if (para.sentences && para.sentences.length) {
         para.sentences.forEach((sentence, sIdx) => {
-          const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
           paragraphHtml += `<span class="sentence-highlightable" lang="en" data-sentence-index="${sIdx}" 
                             data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'")}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, this.dataset.plainText)">
@@ -482,7 +379,7 @@ const Renderer = {
             <i class="fas fa-volume-up"></i> 朗讀
           </button>
           <div class="toggle-button-group" id="${unitId}_toggle-group-${paraNum}">
-            <button class="btn btn-outline toggle-btn active" onclick="Renderer.showTranslation(${paraNum}, '${unitId}')" id="${unitId}_trans-btn-${paraNum}">
+            <button class="btn btn-outline toggle-btn" onclick="Renderer.showTranslation(${paraNum}, '${unitId}')" id="${unitId}_trans-btn-${paraNum}">
               <i class="fas fa-exchange-alt"></i> 翻譯
             </button>
             <button class="btn btn-outline toggle-btn" onclick="Renderer.showImplication(${paraNum}, '${unitId}')" id="${unitId}_impl-btn-${paraNum}">
@@ -492,14 +389,13 @@ const Renderer = {
         </div>
       `;
       
-      // 統一的內容容器（初始顯示翻譯）
+      // 統一的內容容器（預設全部隱藏）
       html += `
         <div class="unified-content" id="${unitId}_content-${paraNum}">
-          <!-- 翻譯內容（初始顯示） -->
-          <div class="translation-content show" id="${unitId}_trans-${paraNum}" data-content-type="translation">
+          <!-- 翻譯內容（預設隱藏） -->
+          <div class="translation-content" id="${unitId}_trans-${paraNum}" data-content-type="translation" style="display: none;">
       `;
       
-      // 渲染翻譯內容
       if (para.translation_sentences && para.translation_sentences.length) {
         para.translation_sentences.forEach((sentence, sIdx) => {
           html += `<span class="translation-sentence" lang="zh" 
@@ -513,7 +409,7 @@ const Renderer = {
       
       html += `
           </div>
-          <!-- 解讀內容（隱藏） -->
+          <!-- 解讀內容（預設隱藏） -->
           <div class="implication-content" id="${unitId}_impl-${paraNum}" data-content-type="implication" style="display: none;">
             <div class="implication-text-wrapper">
               <div class="implication-english" lang="en">${para.implication.english}</div>
@@ -531,7 +427,6 @@ const Renderer = {
     
     html += `</div></div>`;
 
-    // 詞彙表部分保持不變
     html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心詞彙</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
     vocab.forEach((v, i) => {
       html += `
@@ -553,36 +448,26 @@ const Renderer = {
     wrapper.innerHTML = html;
   },
 
-  // 新增方法：顯示翻譯
   showTranslation(paraNum, unitId) {
-    // 切換按鈕狀態
     const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
     const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
     if (transBtn) transBtn.classList.add('active');
     if (implBtn) implBtn.classList.remove('active');
-    
-    // 切換內容顯示
     const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
     const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
-    
     if (transContent) transContent.style.display = 'block';
     if (implContent) implContent.style.display = 'none';
   },
 
-  // 新增方法：顯示解讀
   showImplication(paraNum, unitId) {
-    // 切換按鈕狀態
     const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
     const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
     if (transBtn) transBtn.classList.remove('active');
     if (implBtn) implBtn.classList.add('active');
-    
-    // 切換內容顯示
     const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
     const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
-    
     if (transContent) transContent.style.display = 'none';
-    if (implContent) implContent.style.display = 'flex'; // 解讀使用 flex 布局
+    if (implContent) implContent.style.display = 'flex';
   },
 
   stripHtml(html) {
@@ -595,7 +480,6 @@ const Renderer = {
     const container = document.getElementById('vocab-usage-section');
     const vu = unitData.vocabUsage;
     if (!vu) { container.innerHTML = ''; return; }
-
     let html = `
       <div class="vocab-drag-container">
         <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽詞彙到正確位置：</div>
@@ -733,9 +617,7 @@ const Renderer = {
     el.style.width = `${cur + 0.5}em`;
   },
   
-  blurWidth(e) {
-    Renderer.adjustWidth(e);
-  }
+  blurWidth(e) { Renderer.adjustWidth(e); }
 };
 
 // ============================================
@@ -749,9 +631,7 @@ const DragDrop = {
 
   handleDragStart(ev) {
     const el = ev.target.closest('.drag-item, .vocab-drag-item');
-    if (el && el.draggable) {
-      ev.dataTransfer.setData('text/plain', el.id);
-    }
+    if (el && el.draggable) ev.dataTransfer.setData('text/plain', el.id);
   },
 
   handleDrop(ev) {
@@ -759,35 +639,25 @@ const DragDrop = {
     if (vocabDropzone) {
       ev.preventDefault();
       const unitId = UnitManager.getCurrentUnitId();
-      if (unitId) {
-        this.dropVocab(ev, unitId, vocabDropzone);
-      }
+      if (unitId) this.dropVocab(ev, unitId, vocabDropzone);
       return;
     }
-    
     const sevenFiveDropzone = ev.target.closest('.seven-five-dropzone');
     if (sevenFiveDropzone) {
       ev.preventDefault();
       const unitId = UnitManager.getCurrentUnitId();
-      if (unitId) {
-        this.drop(ev, unitId, sevenFiveDropzone);
-      }
+      if (unitId) this.drop(ev, unitId, sevenFiveDropzone);
     }
   },
 
   drop(ev, unitId, dropzone) {
     const data = ev.dataTransfer.getData('text/plain');
     const dragged = document.getElementById(data);
-    if (!dragged || dragged.classList.contains('used')) return;
-    if (!dropzone) return;
-
+    if (!dragged || dragged.classList.contains('used') || !dropzone) return;
     if (!this.dragHistory.has(unitId)) this.dragHistory.set(unitId, []);
     this.dragHistory.get(unitId).push({
-      dropzone: dropzone,
-      optionId: data,
-      draggedElement: dragged
+      dropzone, optionId: data, draggedElement: dragged
     });
-
     dropzone.innerHTML = dragged.textContent.replace(/^.*?>\s*/, '');
     dropzone.classList.add('filled');
     dropzone.setAttribute('data-answer', data.split('-').pop());
@@ -815,16 +685,11 @@ const DragDrop = {
   dropVocab(ev, unitId, dropzone) {
     const data = ev.dataTransfer.getData('text/plain');
     const dragged = document.getElementById(data);
-    if (!dragged || dragged.classList.contains('used')) return;
-    if (!dropzone) return;
-
+    if (!dragged || dragged.classList.contains('used') || !dropzone) return;
     if (!this.vocabDragHistory.has(unitId)) this.vocabDragHistory.set(unitId, []);
     this.vocabDragHistory.get(unitId).push({
-      dropzone: dropzone,
-      optionId: data,
-      draggedElement: dragged
+      dropzone, optionId: data, draggedElement: dragged
     });
-
     const word = data.replace(`${unitId}_vocab-option-`, '');
     dropzone.innerHTML = word;
     dropzone.classList.add('filled');
@@ -938,26 +803,17 @@ const ExerciseChecker = {
     if (res) res.style.display = 'none';
   },
 
-  checkCloze(unitId) {
-    this.genericCheckFill(unitId, 'cloze', unitData => unitData.answers.cloze);
-  },
-
+  checkCloze(unitId) { this.genericCheckFill(unitId, 'cloze', unitData => unitData.answers.cloze); },
   resetCloze(unitId) {
     const data = UnitManager.getCurrentUnitData();
     if (!data) return;
-    const count = data.answers.cloze.length;
-    this.genericResetFill(unitId, 'cloze', count, 1.8);
+    this.genericResetFill(unitId, 'cloze', data.answers.cloze.length, 1.8);
   },
-
-  checkGrammar(unitId) {
-    this.genericCheckFill(unitId, 'grammar', unitData => unitData.answers.grammar);
-  },
-
+  checkGrammar(unitId) { this.genericCheckFill(unitId, 'grammar', unitData => unitData.answers.grammar); },
   resetGrammar(unitId) {
     const data = UnitManager.getCurrentUnitData();
     if (!data) return;
-    const count = data.answers.grammar.length;
-    this.genericResetFill(unitId, 'grammar', count, 1.5);
+    this.genericResetFill(unitId, 'grammar', data.answers.grammar.length, 1.5);
   },
 
   checkSevenFive(unitId) {
@@ -1083,18 +939,12 @@ const UnitManager = (function() {
   async function init() {
     await loadUnitsIndex();
     populateUnitSelect();
-
     const urlUnit = getUnitFromURL();
     if (urlUnit) {
       const found = unitsIndex.find(u => u.unitId === urlUnit);
-      if (found) {
-        await loadAndRenderUnit(found);
-        return;
-      }
+      if (found) { await loadAndRenderUnit(found); return; }
     }
-    if (unitsIndex.length > 0) {
-      await loadAndRenderUnit(unitsIndex[0]);
-    }
+    if (unitsIndex.length > 0) await loadAndRenderUnit(unitsIndex[0]);
   }
 
   async function loadUnitsIndex() {
@@ -1131,17 +981,13 @@ const UnitManager = (function() {
     try {
       if (currentUnitId && currentUnitId.startsWith('upload_')) {
         const prevEntry = unitsIndex.find(u => u.unitId === currentUnitId);
-        if (prevEntry?.dataUrl?.startsWith('blob:')) {
-          URL.revokeObjectURL(prevEntry.dataUrl);
-        }
+        if (prevEntry?.dataUrl?.startsWith('blob:')) URL.revokeObjectURL(prevEntry.dataUrl);
       }
-
       AudioController.stop();
       if (currentUnitId) {
         DragDrop.dragHistory.delete(currentUnitId);
         DragDrop.vocabDragHistory.delete(currentUnitId);
       }
-
       Renderer.showLoading();
       const res = await fetch(unitInfo.dataUrl);
       if (!res.ok) throw new Error('載入單元數據失敗');
@@ -1149,14 +995,11 @@ const UnitManager = (function() {
       currentUnitData = unitData;
       currentUnitId = unitData.unitId || unitInfo.unitId;
       app.dataset.unitId = currentUnitId;
-
       const select = document.getElementById('unit-select');
       select.value = currentUnitId;
-
       const url = new URL(window.location);
       url.searchParams.set('unit', currentUnitId);
       window.history.pushState({}, '', url);
-
       Renderer.renderAll(unitData, currentUnitId);
       AudioController.preloadUnitAudio(currentUnitId, unitData.audio);
     } catch (e) {
@@ -1173,22 +1016,18 @@ const UnitManager = (function() {
   async function handleFileUpload(input) {
     const file = input.files[0];
     if (!file) return;
-    
     try {
       const text = await file.text();
       const unitData = JSON.parse(text);
-      
       if (!unitData.unitId || !unitData.unitName || !unitData.article) {
         throw new Error('無效的單元JSON格式：缺少 unitId/unitName/article');
       }
-      
       const tempId = 'upload_' + Date.now();
       const tempEntry = {
         unitId: tempId,
         unitName: unitData.unitName,
         dataUrl: URL.createObjectURL(file)
       };
-      
       unitsIndex.push(tempEntry);
       populateUnitSelect();
       await loadAndRenderUnit(tempEntry);
@@ -1211,21 +1050,11 @@ const UnitManager = (function() {
 // ============================================
 // 全局拖拽監聽器
 // ============================================
-document.addEventListener('dragstart', (e) => {
-  DragDrop.handleDragStart(e);
-});
-
-document.addEventListener('dragover', (e) => {
-  e.preventDefault();
-});
-
-document.addEventListener('drop', (e) => {
-  DragDrop.handleDrop(e);
-});
+document.addEventListener('dragstart', (e) => { DragDrop.handleDragStart(e); });
+document.addEventListener('dragover', (e) => { e.preventDefault(); });
+document.addEventListener('drop', (e) => { DragDrop.handleDrop(e); });
 
 // ============================================
 // 頁面啟動
 // ============================================
-window.onload = () => {
-  UnitManager.init();
-};
+window.onload = () => { UnitManager.init(); };

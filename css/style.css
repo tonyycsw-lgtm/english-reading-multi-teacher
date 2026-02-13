@@ -13,15 +13,15 @@ body {
   color: #2d3748;
 }
 
-/* ===== 中文字体字距优化 - 只作用於明確標記為中文的元素 ===== */
+/* ===== 中文字体字距优化 ===== */
 [lang="zh"] {
-  letter-spacing: 0.2em;   /* 20% 字距，清晰舒適 */
-  line-height: 1.9;        /* 90% 行高增加，充足呼吸感 */
+  letter-spacing: 0.2em;
+  line-height: 1.9;
   font-weight: 400;
   word-spacing: 0.1em;
 }
 
-/* ===== 英文恢復瀏覽器默認樣式 ===== */
+/* ===== 英文恢復默認 ===== */
 [lang="en"] {
   letter-spacing: normal;
   line-height: normal;
@@ -29,7 +29,6 @@ body {
   font-weight: normal;
 }
 
-/* ===== 文章標題 - 分語言設置 ===== */
 .article-title[lang="zh"] {
   font-size: 24px;
   font-weight: 700;
@@ -37,8 +36,8 @@ body {
   margin-bottom: 10px;
   text-align: center;
   white-space: pre-line;
-  line-height: 2.0;        /* 中文標題雙倍行高 */
-  letter-spacing: 0.25em;  /* 中文標題字距稍大 */
+  line-height: 2.0;
+  letter-spacing: 0.25em;
 }
 
 .article-title[lang="en"] {
@@ -48,68 +47,59 @@ body {
   margin-bottom: 10px;
   text-align: center;
   white-space: pre-line;
-  line-height: 1.3;        /* 英文標題保持原樣 */
+  line-height: 1.3;
   letter-spacing: normal;
 }
 
-/* ===== 段落 - 分語言設置 ===== */
 .single-paragraph[lang="zh"] {
   line-height: 2.0;
   margin-bottom: 12px;
 }
 
 .single-paragraph[lang="en"] {
-  line-height: 1.8;        /* 英文段落保持原行高 */
+  line-height: 1.8;
   margin-bottom: 12px;
 }
 
-/* ===== 英文句子保持舒適閱讀 ===== */
 .sentence-highlightable[lang="en"] {
-  line-height: 1.8;        /* 英文原來的行高 */
+  line-height: 1.8;
   letter-spacing: normal;
   font-weight: normal;
 }
 
-/* ===== 英文詞彙保持粗體 ===== */
 .vocab-word[lang="en"] {
   font-weight: 700;
   letter-spacing: normal;
   line-height: normal;
 }
 
-/* ===== 英文解讀保持半粗體 ===== */
 .implication-english[lang="en"] {
   font-weight: 600;
   letter-spacing: normal;
   line-height: normal;
 }
 
-/* ===== 按鈕中文特殊調整 ===== */
 .btn[lang="zh"] {
-  letter-spacing: 0.18em;  /* 18% 字距，按鈕適中 */
+  letter-spacing: 0.18em;
   line-height: 1.6;
 }
 
-/* ===== 詞彙釋義中文調整 ===== */
 .vocab-meaning[lang="zh"] {
-  letter-spacing: 0.18em;  /* 18% 字距，小字體舒適 */
+  letter-spacing: 0.18em;
   line-height: 1.8;
 }
 
-/* ===== 翻譯內容中文調整 ===== */
 .translation-content[lang="zh"] {
   letter-spacing: 0.18em;
   line-height: 1.8;
 }
 
-/* ===== 單元選擇器中文 ===== */
 .unit-select[lang="zh"],
 .unit-select option[lang="zh"] {
   letter-spacing: 0.15em;
   line-height: 1.6;
 }
 
-/* ===== 章節標題中文 ===== */
 .section-title[lang="zh"] {
   line-height: 2.0;
   letter-spacing: 0.2em;
@@ -201,7 +191,6 @@ body {
   border: 1px solid #e2e8f0;
 }
 
-/* ===== 文章標題/插圖 ===== */
 .article-illustration {
   width: 100%;
   max-height: 180px;
@@ -223,7 +212,6 @@ body {
   background-color: #fcfdfe;
 }
 
-/* ===== 段落与句子样式 ===== */
 .single-paragraph {
   margin-bottom: 12px;
 }
@@ -255,13 +243,17 @@ body {
   animation: none;
 }
 
-/* ===== 段落控制按钮组 ===== */
+/* ===== 段落控制按钮组：水平對齊 ===== */
 .paragraph-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   margin: 12px 0 8px;
+}
+.paragraph-controls .btn,
+.paragraph-controls .toggle-button-group {
+  margin: 0; /* 移除預設外邊距，統一由 gap 控制間距 */
 }
 
 /* ===== 按鈕樣式 ===== */
@@ -277,9 +269,6 @@ body {
   gap: 6px;
   transition: all 0.25s;
   font-weight: 500;
-  margin-right: 8px;
-  margin-top: 6px;
-  margin-bottom: 12px;
 }
 
 .btn-primary {
@@ -387,7 +376,7 @@ body {
   transition: all 0.3s ease;
 }
 
-/* 翻譯內容樣式 */
+/* 翻譯內容樣式（預設隱藏） */
 .unified-content .translation-content {
   margin: 0;
   padding: 16px;
@@ -398,9 +387,10 @@ body {
   line-height: 1.8;
   letter-spacing: 0.18em;
   border-radius: 0 6px 6px 0;
+  display: none; /* 預設隱藏 */
 }
 
-/* 解讀內容樣式 */
+/* 解讀內容樣式（預設隱藏） */
 .unified-content .implication-content {
   margin: 0;
   padding: 16px;
@@ -408,7 +398,7 @@ body {
   border-left: 4px solid #f59e0b;
   color: #92400e;
   font-size: 12px;
-  display: flex;
+  display: none; /* 預設隱藏 */
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
@@ -577,33 +567,12 @@ body {
   font-size: 12px;
 }
 
-/* ===== 高亮顏色 ===== */
-.highlight1 {
-  color: #dc2626;
-  background-color: rgba(220, 38, 38, 0.08);
-}
+.highlight1 { color: #dc2626; background-color: rgba(220, 38, 38, 0.08); }
+.highlight2 { color: #059669; background-color: rgba(5, 150, 105, 0.08); }
+.highlight3 { color: #2563eb; background-color: rgba(37, 99, 235, 0.08); }
+.highlight4 { color: #7c3aed; background-color: rgba(124, 58, 237, 0.08); }
+.highlight5 { color: #db2777; background-color: rgba(219, 39, 119, 0.08); }
 
-.highlight2 {
-  color: #059669;
-  background-color: rgba(5, 150, 105, 0.08);
-}
-
-.highlight3 {
-  color: #2563eb;
-  background-color: rgba(37, 99, 235, 0.08);
-}
-
-.highlight4 {
-  color: #7c3aed;
-  background-color: rgba(124, 58, 237, 0.08);
-}
-
-.highlight5 {
-  color: #db2777;
-  background-color: rgba(219, 39, 119, 0.08);
-}
-
-/* ===== 解讀音頻按鈕 ===== */
 .implication-audio-btn {
   background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
   color: #92400e;
@@ -638,7 +607,6 @@ body {
   cursor: wait;
 }
 
-/* ===== 段落朗讀按鈕 ===== */
 .paragraph-audio-btn.playing {
   background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
   color: white;
@@ -650,15 +618,8 @@ body {
   border-color: #dc2626;
 }
 
-/* ===== 音頻元素 ===== */
-.audio-element {
-  display: none;
-}
-
-.audio-error {
-  background-color: rgba(239, 68, 68, 0.1) !important;
-  color: #b91c1c !important;
-}
+.audio-element { display: none; }
+.audio-error { background-color: rgba(239, 68, 68, 0.1) !important; color: #b91c1c !important; }
 
 /* ===== 章節標題 ===== */
 .section-title {
@@ -674,30 +635,11 @@ body {
   border-radius: 0 6px 6px 0;
 }
 
-.vocab-usage-title {
-  border-color: #f59e0b;
-  color: #92400e;
-}
-
-.reading-title {
-  border-color: #10b981;
-  color: #047857;
-}
-
-.cloze-title {
-  border-color: #3b82f6;
-  color: #1e40af;
-}
-
-.seven-five-title {
-  border-color: #8b5cf6;
-  color: #6d28d9;
-}
-
-.grammar-title {
-  border-color: #ef4444;
-  color: #b91c1c;
-}
+.vocab-usage-title { border-color: #f59e0b; color: #92400e; }
+.reading-title { border-color: #10b981; color: #047857; }
+.cloze-title { border-color: #3b82f6; color: #1e40af; }
+.seven-five-title { border-color: #8b5cf6; color: #6d28d9; }
+.grammar-title { border-color: #ef4444; color: #b91c1c; }
 
 .title-icon {
   font-size: 18px;
@@ -710,7 +652,6 @@ body {
   background: white;
 }
 
-/* ===== 互動區 ===== */
 .interactive-section {
   margin-top: 20px;
   margin-bottom: 30px;
@@ -740,7 +681,6 @@ body {
   border-top: 1.5px dashed #e2e8f0;
 }
 
-/* ===== 載入中指示 ===== */
 .loading-indicator {
   padding: 24px;
   text-align: center;
@@ -751,36 +691,15 @@ body {
   border: 1.5px dashed #cbd5e0;
 }
 
-/* ===== 章節分隔線 ===== */
 .section-divider {
   height: 1px;
   margin: 16px 0;
   background: linear-gradient(to right, transparent, #e2e8f0, transparent);
 }
 
-/* ===== 完形填空輸入框 ===== */
-.cloze-input {
-  display: inline-block;
-  min-width: 1.8em;
-  width: 1.8em;
-  padding: 4px 2px;
-  margin: 0 1px;
-  border: 1.5px solid #cbd5e0;
-  border-radius: 5px;
-  font-size: 12px;
-  text-align: center;
-  background-color: white;
-  height: 28px;
-  vertical-align: middle;
-  box-sizing: border-box;
-  transition: width 0.2s ease;
-}
-
-/* ===== 語法填空輸入框 ===== */
+.cloze-input,
 .grammar-input {
   display: inline-block;
-  min-width: 1.5em;
-  width: 1.5em;
   padding: 4px 2px;
   margin: 0 1px;
   border: 1.5px solid #cbd5e0;
@@ -793,8 +712,9 @@ body {
   box-sizing: border-box;
   transition: width 0.2s ease;
 }
+.cloze-input { min-width: 1.8em; width: 1.8em; }
+.grammar-input { min-width: 1.5em; width: 1.5em; }
 
-/* ===== 答案狀態樣式 ===== */
 .cloze-input.correct,
 .grammar-input.correct,
 .seven-five-dropzone.correct,
@@ -824,7 +744,6 @@ body {
   font-weight: 600;
 }
 
-/* ===== 句子完成拖放區 ===== */
 .seven-five-dropzone {
   min-height: 28px;
   min-width: 80px;
@@ -860,7 +779,6 @@ body {
   width: auto;
 }
 
-/* ===== 詞彙運用拖放區 ===== */
 .vocab-dropzone {
   min-height: 32px;
   min-width: 80px;
@@ -881,7 +799,6 @@ body {
   background-color: #eff6ff;
 }
 
-/* ===== 拖拽容器 ===== */
 .drag-drop-container,
 .vocab-drag-container {
   display: flex;
@@ -906,7 +823,6 @@ body {
   align-content: flex-start;
 }
 
-/* ===== 拖拽項目 ===== */
 .drag-item,
 .vocab-drag-item {
   padding: 8px 12px;
@@ -924,10 +840,7 @@ body {
   justify-content: center;
 }
 
-.vocab-drag-item {
-  min-width: 80px;
-  font-size: 11px;
-}
+.vocab-drag-item { min-width: 80px; font-size: 11px; }
 
 .drag-item:hover,
 .vocab-drag-item:hover {
@@ -950,7 +863,6 @@ body {
   border-color: #cbd5e1 !important;
 }
 
-/* ===== 拖拽撤銷按鈕 ===== */
 .drag-undo-btn {
   padding: 6px 12px;
   font-size: 11px;
@@ -967,138 +879,50 @@ body {
   height: 36px;
 }
 
-/* ===== 閱讀理解選項 ===== */
-.options {
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.option-label.correct {
-  color: #059669;
-  font-weight: 600;
-}
-
-.option-label.incorrect {
-  color: #dc2626;
-}
-
+.options { margin-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.option-label.correct { color: #059669; font-weight: 600; }
+.option-label.incorrect { color: #dc2626; }
 .option-label.selected-correct {
-  color: #059669;
-  font-weight: 700;
-  background-color: rgba(16, 185, 129, 0.1);
-  padding: 4px 8px;
-  border-radius: 4px;
+  color: #059669; font-weight: 700;
+  background-color: rgba(16, 185, 129, 0.1); padding: 4px 8px; border-radius: 4px;
 }
-
 .option-label.selected-incorrect {
-  color: #dc2626;
-  background-color: rgba(239, 68, 68, 0.1);
-  padding: 4px 8px;
-  border-radius: 4px;
+  color: #dc2626; background-color: rgba(239, 68, 68, 0.1);
+  padding: 4px 8px; border-radius: 4px;
 }
 
-/* ===== 結果回饋 ===== */
 .result-feedback {
-  margin-top: 20px;
-  padding: 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  display: none;
-  border-left: 4px solid;
+  margin-top: 20px; padding: 14px; border-radius: 8px; font-size: 13px; display: none; border-left: 4px solid;
 }
+.result-correct { background: #f0fdf4; border-left-color: #10b981; color: #047857; }
+.result-incorrect { background: #fef2f2; border-left-color: #ef4444; color: #b91c1c; }
 
-.result-correct {
-  background: #f0fdf4;
-  border-left-color: #10b981;
-  color: #047857;
-}
-
-.result-incorrect {
-  background: #fef2f2;
-  border-left-color: #ef4444;
-  color: #b91c1c;
-}
-
-/* ===== 脈衝動畫 ===== */
 @keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 /* ===== 響應式 ===== */
 @media screen and (max-width: 1024px) {
-  .a4-container {
-    width: 100%;
-    padding: 15px;
-  }
-  .article-vocab-wrapper {
-    flex-direction: column;
-  }
-  .vocab-section {
-    width: 100%;
-    margin-top: 20px;
-  }
+  .a4-container { width: 100%; padding: 15px; }
+  .article-vocab-wrapper { flex-direction: column; }
+  .vocab-section { width: 100%; margin-top: 20px; }
 }
 
 @media screen and (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-  
-  .btn {
-    width: 100%;
-    justify-content: center;
-    margin-right: 0;
-  }
-  
-  .paragraph-controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .paragraph-controls .btn {
-    margin-right: 0;
-    width: 100%;
-  }
-  
-  .drag-item,
-  .vocab-drag-item {
-    min-width: 100%;
-  }
-  
-  .section-title {
-    font-size: 14px;
-  }
-  
-  .drag-undo-btn {
-    width: 100%;
-  }
-
-  .unit-control-bar {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-  
-  .unit-select {
-    width: 100%;
-    min-width: auto;
-  }
-  
-  .upload-btn {
-    width: 100%;
-    justify-content: center;
-  }
+  body { padding: 10px; }
+  .btn { width: 100%; justify-content: center; margin-right: 0; }
+  .paragraph-controls { flex-direction: column; align-items: stretch; }
+  .paragraph-controls .btn,
+  .paragraph-controls .toggle-button-group { width: 100%; }
+  .drag-item, .vocab-drag-item { min-width: 100%; }
+  .section-title { font-size: 14px; }
+  .drag-undo-btn { width: 100%; }
+  .unit-control-bar { flex-direction: column; gap: 12px; align-items: stretch; }
+  .unit-select { width: 100%; min-width: auto; }
+  .upload-btn { width: 100%; justify-content: center; }
 }
 
-/* ===== 翻譯句子懸停高亮樣式 ===== */
 .translation-sentence {
   display: inline;
   transition: background-color 0.2s ease;
@@ -1113,24 +937,13 @@ body {
   font-weight: 500;
 }
 
-/* 確保翻譯容器內的中文句子也有適當的字距 */
 .translation-content[lang="zh"] .translation-sentence {
   letter-spacing: 0.18em;
   line-height: 1.8;
 }
 
-/* 英文句子懸停時的提示效果 */
 .sentence-highlightable:hover {
   background-color: rgba(79, 70, 229, 0.12);
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
   cursor: pointer;
-}
-
-/* 確保翻譯內容在顯示時有適當的間距 */
-.translation-content.show {
-  display: block;
-  padding: 16px;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  line-height: 2.0;
 }
