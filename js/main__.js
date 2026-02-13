@@ -1,5 +1,5 @@
 // ============================================
-// 音频控制器（增强版 - 支持逐句高亮，无滚动，无脉冲）
+// 音频控制器（增强版 - 支持逐句高亮）
 // ============================================
 const AudioController = {
   currentAudio: null,
@@ -64,17 +64,19 @@ const AudioController = {
     });
   },
 
-  highlightSentence(paraNum, unitId, sentenceIndex) {
-    // 先清除所有高亮
+  highlightSentence(paraNum, unitId, sentenceIndex, isSelected = false) {
     this.clearAllSentenceHighlights();
     
     const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIndex}"]`;
     const sentenceEl = document.querySelector(selector);
     
     if (sentenceEl) {
-      // 统一使用 sentence-selected 样式（浅紫色，无脉冲，不加粗）
-      sentenceEl.classList.add('sentence-selected');
-      // 移除滚动行为，保持画面稳定
+      if (isSelected) {
+        sentenceEl.classList.add('sentence-selected');
+      } else {
+        sentenceEl.classList.add('sentence-playing');
+      }
+      sentenceEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   },
 
@@ -93,8 +95,8 @@ const AudioController = {
     // 提取纯文本用于TTS播放
     const plainText = this.extractPlainText(sentenceHtml);
     
-    // 使用统一的高亮样式（无滚动）
-    this.highlightSentence(paraNum, unitId, sentenceIndex);
+    // 使用 selected 样式（浅紫色，不加粗）
+    this.highlightSentence(paraNum, unitId, sentenceIndex, true);
     
     const utter = new SpeechSynthesisUtterance(plainText);
     utter.lang = 'en-GB';
@@ -181,11 +183,12 @@ const AudioController = {
 
     const sentence = this.currentParagraphSentences[this.currentSentenceIndex];
     
-    // 使用统一的高亮样式（无脉冲，无滚动）
+    // 使用 playing 样式（带脉冲动画）
     this.highlightSentence(
       this.currentParaNum, 
       this.currentUnitId, 
-      this.currentSentenceIndex
+      this.currentSentenceIndex,
+      false
     );
     
     // 提取纯文本用于TTS播放
