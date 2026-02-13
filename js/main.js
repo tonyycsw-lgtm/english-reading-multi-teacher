@@ -1,9 +1,14 @@
 // ============================================
-// 音频控制器（提升至最前）
+// 音频控制器（增强版 - 支持逐句高亮）
 // ============================================
 const AudioController = {
   currentAudio: null,
   currentPlayingButton: null,
+  currentParagraphSentences: [],
+  currentSentenceIndex: -1,
+  currentParaNum: null,
+  currentUnitId: null,
+  isPlayingParagraph: false,
 
   resetButton(btn) {
     if (!btn) return;
@@ -31,51 +36,212 @@ const AudioController = {
   },
 
   stop() {
-    if (this.currentAudio) {
-      if (this.currentAudio instanceof HTMLAudioElement) {
-        this.currentAudio.pause();
-        this.currentAudio.currentTime = 0;
-      } else {
-        window.speechSynthesis.cancel();
-      }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    
+    if (this.currentAudio instanceof HTMLAudioElement) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
       this.currentAudio = null;
     }
+    
     if (this.currentPlayingButton) {
       this.resetButton(this.currentPlayingButton);
       this.currentPlayingButton = null;
     }
+    
+    this.clearAllSentenceHighlights();
+    
+    this.isPlayingParagraph = false;
+    this.currentSentenceIndex = -1;
+    this.currentParagraphSentences = [];
+  },
+
+  clearAllSentenceHighlights() {
+    document.querySelectorAll('.sentence-highlightable').forEach(el => {
+      el.classList.remove('sentence-playing');
+    });
+  },
+
+  highlightSentence(paraNum, unitId, sentenceIndex) {
+    this.clearAllSentenceHighlights();
+    
+    const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIndex}"]`;
+    const sentenceEl = document.querySelector(selector);
+    
+    if (sentenceEl) {
+      sentenceEl.classList.add('sentence-playing');
+      sentenceEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  },
+
+  async playSingleSentence(paraNum, unitId, sentenceIndex, sentenceText) {
+    this.stop();
+    
+    const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
+    
+    this.highlightSentence(paraNum, unitId, sentenceIndex);
+    
+    const utter = new SpeechSynthesisUtterance(sentenceText);
+    utter.lang = 'en-GB';
+    utter.rate = 0.85;
+    
+    utter.onend = () => {
+      this.clearAllSentenceHighlights();
+      this.currentAudio = null;
+      if (btn) {
+        this.resetButton(btn);
+        this.currentPlayingButton = null;
+      }
+    };
+    
+    utter.onerror = (e) => {
+      console.error('TTS播放错误', e);
+      this.clearAllSentenceHighlights();
+      if (btn) {
+        this.resetButton(btn);
+        this.currentPlayingButton = null;
+      }
+    };
+    
+    window.speechSynthesis.speak(utter);
+    this.currentAudio = utter;
+    
+    if (btn) {
+      if (this.currentPlayingButton) {
+        this.resetButton(this.currentPlayingButton);
+      }
+      btn.classList.add('playing');
+      btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
+      this.currentPlayingButton = btn;
+    }
+  },
+
+  async playParagraphBySentences(paraNum, unitId) {
+    const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
+    if (!btn) return;
+    
+    if (btn.classList.contains('playing')) {
+      this.stop();
+      return;
+    }
+
+    const unitData = UnitManager.getCurrentUnitData();
+    const paragraph = unitData?.article?.paragraphs[paraNum - 1];
+    let sentences = paragraph?.sentences || [];
+    
+    if (!sentences.length) {
+      sentences = paragraph.english.split(/(?<=[.!?])\s+/);
+    }
+    
+    if (!sentences.length) {
+      console.warn('无法获取句子列表');
+      return;
+    }
+
+    this.stop();
+    
+    this.isPlayingParagraph = true;
+    this.currentParagraphSentences = sentences;
+    this.currentSentenceIndex = -1;
+    this.currentParaNum = paraNum;
+    this.currentUnitId = unitId;
+    this.currentPlayingButton = btn;
+    
+    btn.classList.remove('loading');
+    btn.classList.add('playing');
+    btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
+    
+    this.playNextSentence();
+  },
+
+  playNextSentence() {
+    if (!this.isPlayingParagraph) return;
+    
+    this.currentSentenceIndex++;
+    
+    if (this.currentSentenceIndex >= this.currentParagraphSentences.length) {
+      this.finishParagraphPlayback();
+      return;
+    }
+
+    const sentence = this.currentParagraphSentences[this.currentSentenceIndex];
+    
+    this.highlightSentence(
+      this.currentParaNum, 
+      this.currentUnitId, 
+      this.currentSentenceIndex
+    );
+    
+    const utter = new SpeechSynthesisUtterance(sentence);
+    utter.lang = 'en-GB';
+    utter.rate = 0.85;
+    
+    utter.onend = () => {
+      this.playNextSentence();
+    };
+    
+    utter.onerror = (e) => {
+      console.error('TTS播放错误', e);
+      this.playNextSentence();
+    };
+    
+    window.speechSynthesis.speak(utter);
+    this.currentAudio = utter;
+  },
+
+  finishParagraphPlayback() {
+    this.clearAllSentenceHighlights();
+    
+    if (this.currentPlayingButton) {
+      this.resetButton(this.currentPlayingButton);
+      this.currentPlayingButton = null;
+    }
+    
+    this.currentAudio = null;
+    this.isPlayingParagraph = false;
+    this.currentParagraphSentences = [];
+    this.currentSentenceIndex = -1;
   },
 
   async toggleParagraphAudio(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     if (!btn) return;
+    
     if (btn.classList.contains('playing')) {
       this.stop();
       return;
     }
+    
     btn.classList.add('loading');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
+    
     try {
       const audio = new Audio();
       const unitData = UnitManager.getCurrentUnitData();
       const pattern = unitData.audio?.paragraphPattern || `/english-reading-multi/audio/${unitId}/paragraph_{id}.mp3`;
-      audio.src = pattern.replace('{id}', paraNum.toString().padStart(2,'0'));
+      audio.src = pattern.replace('{id}', paraNum.toString().padStart(2, '0'));
+      
       await audio.play();
+      
       this.stop();
       this.currentAudio = audio;
       this.currentPlayingButton = btn;
       btn.classList.remove('loading');
       btn.classList.add('playing');
       btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
+      
       audio.onended = () => {
         this.resetButton(btn);
         if (this.currentAudio === audio) this.currentAudio = null;
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
+      
     } catch (e) {
-      console.warn('本地音频失败，使用TTS', e);
-      const paraText = document.getElementById(`${unitId}_para${paraNum}-text`)?.innerText || '';
-      this.playTTS(paraText, btn, 'para');
+      console.warn('本地音频失败，使用逐句TTS', e);
+      btn.classList.remove('loading');
+      this.playParagraphBySentences(paraNum, unitId);
     }
   },
 
@@ -167,6 +333,7 @@ const AudioController = {
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       }
       this.currentAudio = null;
+      this.clearAllSentenceHighlights();
     };
     window.speechSynthesis.speak(utter);
     this.currentAudio = utter;
@@ -217,19 +384,44 @@ const Renderer = {
         </div>
         <div class="article-paragraph-wrapper" id="article-content-${unitId}">
     `;
+    
     article.paragraphs.forEach((para, idx) => {
       const paraNum = idx + 1;
+      
+      let paragraphHtml = '';
+      
+      if (para.sentences && para.sentences.length) {
+        para.sentences.forEach((sentence, sIdx) => {
+          const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          paragraphHtml += `<span class="sentence-highlightable" data-sentence-index="${sIdx}" 
+                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${escapedSentence}')">
+                            ${sentence}</span> `;
+        });
+      } else {
+        const sentences = para.english.split(/(?<=[.!?])\s+/);
+        sentences.forEach((sentence, sIdx) => {
+          const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          paragraphHtml += `<span class="sentence-highlightable sentence-fallback" data-sentence-index="${sIdx}"
+                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${escapedSentence}')">
+                            ${sentence}</span> `;
+        });
+      }
+      
       html += `
-        <div class="single-paragraph" id="${unitId}_para${paraNum}-text">${para.english}</div>
-        <button class="btn btn-outline paragraph-audio-btn" onclick="AudioController.toggleParagraphAudio(${paraNum}, '${unitId}')" id="${unitId}_para-audio-btn-${paraNum}">
-          <i class="fas fa-volume-up"></i> 朗读
-        </button>
-        <button class="btn btn-outline" onclick="Renderer.toggleTranslation('${unitId}_trans${paraNum}')">
-          <i class="fas fa-exchange-alt"></i> 翻译
-        </button>
-        <button class="btn btn-outline" onclick="Renderer.toggleImplication('${unitId}_impl${paraNum}')">
-          <i class="fas fa-lightbulb"></i> 解读
-        </button>
+        <div class="single-paragraph" id="${unitId}_para${paraNum}-text">
+          ${paragraphHtml}
+        </div>
+        <div class="paragraph-controls">
+          <button class="btn btn-outline paragraph-audio-btn" onclick="AudioController.toggleParagraphAudio(${paraNum}, '${unitId}')" id="${unitId}_para-audio-btn-${paraNum}">
+            <i class="fas fa-volume-up"></i> 朗读
+          </button>
+          <button class="btn btn-outline" onclick="Renderer.toggleTranslation('${unitId}_trans${paraNum}')">
+            <i class="fas fa-exchange-alt"></i> 翻译
+          </button>
+          <button class="btn btn-outline" onclick="Renderer.toggleImplication('${unitId}_impl${paraNum}')">
+            <i class="fas fa-lightbulb"></i> 解读
+          </button>
+        </div>
         <div class="translation-content" id="${unitId}_trans${paraNum}">${para.translation}</div>
         <div class="implication-content" id="${unitId}_impl${paraNum}">
           <div class="implication-text-wrapper">
@@ -244,6 +436,7 @@ const Renderer = {
         </div>
       `;
     });
+    
     html += `</div></div>`;
 
     html += `<div class="vocab-section"><h4 class="vocab-title"><i class="fas fa-bookmark"></i> 核心词汇</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
@@ -389,6 +582,7 @@ const Renderer = {
     const el = document.getElementById(id);
     if (el) el.classList.toggle('show');
   },
+  
   toggleImplication(id) {
     const el = document.getElementById(id);
     if (el) el.classList.toggle('show');
@@ -404,17 +598,20 @@ const Renderer = {
       input.addEventListener('blur', this.blurWidth);
     });
   },
+  
   adjustWidth(e) {
     const el = e.target;
     let min = el.classList.contains('cloze-input') ? 1.8 : 1.5;
     const len = el.value.length;
     el.style.width = `${Math.max(min, len * 0.8 + 0.5)}em`;
   },
+  
   focusWidth(e) {
     const el = e.target;
     const cur = parseFloat(el.style.width) || 1.8;
     el.style.width = `${cur + 0.5}em`;
   },
+  
   blurWidth(e) {
     Renderer.adjustWidth(e);
   }
@@ -754,7 +951,7 @@ const ExerciseChecker = {
 };
 
 // ============================================
-// 单元管理器（依赖以上所有对象）
+// 单元管理器
 // ============================================
 const UnitManager = (function() {
   let unitsIndex = [];
@@ -811,7 +1008,6 @@ const UnitManager = (function() {
 
   async function loadAndRenderUnit(unitInfo) {
     try {
-      // 释放上一个临时单元的 Blob URL
       if (currentUnitId && currentUnitId.startsWith('upload_')) {
         const prevEntry = unitsIndex.find(u => u.unitId === currentUnitId);
         if (prevEntry?.dataUrl?.startsWith('blob:')) {
@@ -819,7 +1015,7 @@ const UnitManager = (function() {
         }
       }
 
-      AudioController.stop();   // ✅ 此时 AudioController 已定义
+      AudioController.stop();
       if (currentUnitId) {
         DragDrop.dragHistory.delete(currentUnitId);
         DragDrop.vocabDragHistory.delete(currentUnitId);
@@ -853,7 +1049,6 @@ const UnitManager = (function() {
     if (unitInfo) await loadAndRenderUnit(unitInfo);
   }
 
-  // ✅ 上传单元功能
   async function handleFileUpload(input) {
     const file = input.files[0];
     if (!file) return;

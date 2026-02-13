@@ -17,7 +17,7 @@ body {
   letter-spacing: 0.7px;
 }
 
-/* ===== 单元控制栏（新增样式） ===== */
+/* ===== 单元控制栏 ===== */
 .unit-control-bar {
   display: flex;
   justify-content: space-between;
@@ -133,6 +133,61 @@ body {
   color: #2d3748;
   text-align: justify;
   background-color: #fcfdfe;
+}
+
+/* ===== 段落与句子样式 ===== */
+.single-paragraph {
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.sentence-highlightable {
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 0;
+  display: inline;
+  position: relative;
+}
+
+.sentence-highlightable:hover {
+  background-color: rgba(79, 70, 229, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sentence-highlightable.sentence-playing {
+  background: linear-gradient(120deg, rgba(79, 70, 229, 0.15) 0%, rgba(99, 102, 241, 0.12) 100%);
+  color: #1e40af;
+  font-weight: 600;
+  border-left: 3px solid #4f46e5;
+  padding-left: 6px;
+  padding-right: 2px;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
+}
+
+@keyframes sentencePulse {
+  0% {
+    background-color: rgba(79, 70, 229, 0.1);
+  }
+  50% {
+    background-color: rgba(79, 70, 229, 0.2);
+  }
+  100% {
+    background-color: rgba(79, 70, 229, 0.1);
+  }
+}
+
+.sentence-playing {
+  animation: sentencePulse 1.8s infinite ease-in-out;
+}
+
+/* ===== 段落控制按钮组 ===== */
+.paragraph-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 8px;
 }
 
 /* ===== 按鈕樣式 ===== */
@@ -365,6 +420,32 @@ body {
   font-size: 12px;
 }
 
+/* ===== 高亮顏色 ===== */
+.highlight1 {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.08);
+}
+
+.highlight2 {
+  color: #059669;
+  background-color: rgba(5, 150, 105, 0.08);
+}
+
+.highlight3 {
+  color: #2563eb;
+  background-color: rgba(37, 99, 235, 0.08);
+}
+
+.highlight4 {
+  color: #7c3aed;
+  background-color: rgba(124, 58, 237, 0.08);
+}
+
+.highlight5 {
+  color: #db2777;
+  background-color: rgba(219, 39, 119, 0.08);
+}
+
 /* ===== 解讀音頻按鈕 ===== */
 .implication-audio-btn {
   background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
@@ -420,32 +501,6 @@ body {
 .audio-error {
   background-color: rgba(239, 68, 68, 0.1) !important;
   color: #b91c1c !important;
-}
-
-/* ===== 高亮顏色 ===== */
-.highlight1 {
-  color: #dc2626;
-  background-color: rgba(220, 38, 38, 0.08);
-}
-
-.highlight2 {
-  color: #059669;
-  background-color: rgba(5, 150, 105, 0.08);
-}
-
-.highlight3 {
-  color: #2563eb;
-  background-color: rgba(37, 99, 235, 0.08);
-}
-
-.highlight4 {
-  color: #7c3aed;
-  background-color: rgba(124, 58, 237, 0.08);
-}
-
-.highlight5 {
-  color: #db2777;
-  background-color: rgba(219, 39, 119, 0.08);
 }
 
 /* ===== 章節標題 ===== */
@@ -839,34 +894,54 @@ body {
   body {
     padding: 10px;
   }
+  
   .btn {
     width: 100%;
     justify-content: center;
     margin-right: 0;
   }
+  
+  .paragraph-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .paragraph-controls .btn {
+    margin-right: 0;
+    width: 100%;
+  }
+  
   .drag-item,
   .vocab-drag-item {
     min-width: 100%;
   }
+  
   .section-title {
     font-size: 14px;
   }
+  
   .drag-undo-btn {
     width: 100%;
   }
 
-  /* ✅ 上传栏响应式 */
   .unit-control-bar {
     flex-direction: column;
     gap: 12px;
     align-items: stretch;
   }
+  
   .unit-select {
     width: 100%;
     min-width: auto;
   }
+  
   .upload-btn {
     width: 100%;
     justify-content: center;
+  }
+  
+  .sentence-highlightable.sentence-playing {
+    border-left-width: 4px;
+    padding-left: 8px;
   }
 }
