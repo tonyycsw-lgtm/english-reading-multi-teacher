@@ -365,7 +365,7 @@ const Renderer = {
       if (para.sentences && para.sentences.length) {
         para.sentences.forEach((sentence, sIdx) => {
           paragraphHtml += `<span class="sentence-highlightable" lang="en" data-sentence-index="${sIdx}" 
-                            data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'")}"
+                            data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'").replace(/"/g, '&quot;')}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, this.dataset.plainText)">
                             ${sentence}</span> `;
         });
