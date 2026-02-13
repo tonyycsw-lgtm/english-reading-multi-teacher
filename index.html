@@ -9,7 +9,7 @@
   <!-- 主样式表 -->
   <link rel="stylesheet" href="./css/style.css">
 </head>
-<body>
+<body lang="zh"> <!-- ✅ 在body添加lang="zh"，所有内容自动继承 -->
   <div id="app" data-unit-id="">
     <!-- 全局单元控制栏 - 保留下拉选择框 + 上传按钮 -->
     <div class="unit-control-bar">
@@ -19,7 +19,7 @@
           <option value="">加载中…</option>
         </select>
       </div>
-      <!-- ✅ 添加上传按钮区域 -->
+      <!-- 添加上传按钮区域 -->
       <div class="upload-wrapper">
         <label for="unit-upload" class="btn btn-outline upload-btn">
           <i class="fas fa-upload"></i> 上传JSON单元
@@ -34,35 +34,35 @@
       <div class="article-vocab-wrapper" id="article-vocab-wrapper"></div>
 
       <!-- Vocabulary Usage -->
-      <h2 class="section-title vocab-usage-title">
+      <h2 class="section-title vocab-usage-title" lang="zh"> <!-- ✅ 添加lang="zh" -->
         <span class="title-icon"><i class="fas fa-font"></i></span> Vocabulary Usage (Drag & Drop)
       </h2>
       <div class="interactive-section" id="vocab-usage-section"></div>
       <div class="section-divider"></div>
 
       <!-- Reading Comprehension -->
-      <h2 class="section-title reading-title">
+      <h2 class="section-title reading-title" lang="zh"> <!-- ✅ 添加lang="zh" -->
         <span class="title-icon"><i class="fas fa-book-reader"></i></span> Reading Comprehension
       </h2>
       <div class="interactive-section" id="reading-section"></div>
       <div class="section-divider"></div>
 
       <!-- Cloze Test -->
-      <h2 class="section-title cloze-title">
+      <h2 class="section-title cloze-title" lang="zh"> <!-- ✅ 添加lang="zh" -->
         <span class="title-icon"><i class="fas fa-edit"></i></span> Cloze Test (150 Words)
       </h2>
       <div class="interactive-section" id="cloze-section"></div>
       <div class="section-divider"></div>
 
       <!-- Sentence Completion (7 choose 5) -->
-      <h2 class="section-title seven-five-title">
+      <h2 class="section-title seven-five-title" lang="zh"> <!-- ✅ 添加lang="zh" -->
         <span class="title-icon"><i class="fas fa-tasks"></i></span> Sentence Completion
       </h2>
       <div class="interactive-section" id="seven-five-section"></div>
       <div class="section-divider"></div>
 
       <!-- Grammar Fill in the Blanks -->
-      <h2 class="section-title grammar-title">
+      <h2 class="section-title grammar-title" lang="zh"> <!-- ✅ 添加lang="zh" -->
         <span class="title-icon"><i class="fas fa-language"></i></span> Grammar Fill in the Blanks
       </h2>
       <div class="interactive-section" id="grammar-section"></div>
