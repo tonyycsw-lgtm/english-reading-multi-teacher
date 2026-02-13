@@ -13,8 +13,15 @@ body {
   color: #2d3748;
 }
 
+/* ===== 中文字体字距优化 ===== */
 :lang(zh) {
-  letter-spacing: 0.7px;
+  letter-spacing: 0.25em; /* 增加25%字距 */
+  word-spacing: 0.1em;
+}
+
+:lang(en) {
+  letter-spacing: normal;
+  word-spacing: normal;
 }
 
 /* ===== 单元控制栏 ===== */
