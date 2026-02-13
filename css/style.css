@@ -15,8 +15,8 @@ body {
 
 /* ===== 中文字体字距优化 - 通過body繼承 ===== */
 :lang(zh) {
-  letter-spacing: 0.25em;  /* 20% 明顯字距 */
-  line-height: 2;         /* 雙倍行高 */
+  letter-spacing: 0.15em;  /* 20% 明顯字距 */
+  line-height: 1.25;         /* 雙倍行高 */
   font-weight: 400;       /* 正常字重 */
   word-spacing: 0.15em;
 }
