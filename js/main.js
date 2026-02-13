@@ -362,10 +362,16 @@ const AudioController = {
 // ============================================
 // 句子懸停管理器（修正版）
 // ============================================
+
+
+
+
+
+
 const SentenceHover = {
   setupHoverListeners(unitId) {
     // 為所有英文句子添加懸停事件
-    document.querySelectorAll(`#${unitId} .sentence-highlightable`).forEach(sentence => {
+    document.querySelectorAll(`[data-unit-id="${unitId}"] .sentence-highlightable`).forEach(sentence => {
       // 避免重複添加監聽器
       if (sentence.hasAttribute('data-hover-initialized')) return;
       
