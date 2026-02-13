@@ -305,7 +305,7 @@ const SentenceHover = {
 };
 
 // ============================================
-// 渲染器
+// 渲染器（修正英文容器 lang 屬性）
 // ============================================
 const Renderer = {
   showLoading() {
@@ -480,6 +480,7 @@ const Renderer = {
     const container = document.getElementById('vocab-usage-section');
     const vu = unitData.vocabUsage;
     if (!vu) { container.innerHTML = ''; return; }
+
     let html = `
       <div class="vocab-drag-container">
         <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽詞彙到正確位置：</div>
@@ -492,7 +493,8 @@ const Renderer = {
     });
     html += `<button class="drag-undo-btn" onclick="DragDrop.undoVocabDrag('${unitId}')" lang="zh"><i class="fas fa-undo"></i> 返回上一步</button></div></div>`;
 
-    html += `<div style="font-size:12px; line-height:1.6; padding:12px; background:#fafafa; border-radius:6px;" id="${unitId}_vocab-usage-text">`;
+    // 問題文本容器添加 lang="en"
+    html += `<div lang="en" style="font-size:12px; line-height:1.6; padding:12px; background:#fafafa; border-radius:6px;" id="${unitId}_vocab-usage-text">`;
     vu.questions.forEach((q, idx) => {
       const qWithId = q.replace(/id='vocab-drop-(\d+)'/, `id='${unitId}_vocab-drop-$1'`);
       html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
@@ -516,7 +518,7 @@ const Renderer = {
       container.innerHTML = '<div style="padding:20px; text-align:center; color:#666;" lang="zh">暫無閱讀理解題目</div>'; 
       return; 
     }
-    let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
+    let html = `<div lang="en" style="display:flex; flex-direction:column; gap:12px;">`; // 添加 lang="en"
     rc.forEach((item, idx) => {
       const qNum = idx + 1;
       html += `<div><div style="font-weight:600;" lang="en">${item.question}</div><div style="margin-left:20px;">`;
@@ -542,8 +544,9 @@ const Renderer = {
     const container = document.getElementById('cloze-section');
     let text = unitData.clozeText || '';
     text = text.replace(/id='cloze-(\d+)'/g, `id='${unitId}_cloze-$1'`);
+    // 添加 lang="en" 到容器
     container.innerHTML = `
-      <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
+      <div lang="en" style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
         <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkCloze('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
         <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetCloze('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
@@ -563,6 +566,7 @@ const Renderer = {
                       </div>`;
     });
     let text = sf.text.replace(/id='drop-(\d+)'/g, `id='${unitId}_drop-$1'`);
+    // 添加 lang="en" 到文本容器
     container.innerHTML = `
       <div class="drag-drop-container">
         <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽短語到正確位置：</div>
@@ -570,7 +574,7 @@ const Renderer = {
           <button class="drag-undo-btn" onclick="DragDrop.undoDrag('${unitId}')" lang="zh"><i class="fas fa-undo"></i> 返回上一步</button>
         </div>
       </div>
-      <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
+      <div lang="en" style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
         <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkSevenFive('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
         <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetSevenFive('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
@@ -583,8 +587,9 @@ const Renderer = {
     const container = document.getElementById('grammar-section');
     let text = unitData.grammarText || '';
     text = text.replace(/id='grammar-(\d+)'/g, `id='${unitId}_grammar-$1'`);
+    // 添加 lang="en" 到容器
     container.innerHTML = `
-      <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
+      <div lang="en" style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
         <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkGrammar('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
         <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetGrammar('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
