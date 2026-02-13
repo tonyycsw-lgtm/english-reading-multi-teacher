@@ -1018,18 +1018,21 @@ body {
     width: 100%;
     justify-content: center;
   }
+}
 
-/* ===== 中英文對應高亮樣式 ===== */
+/* ===== 翻譯句子懸停高亮樣式（合併版本） ===== */
 .translation-sentence {
   display: inline;
   transition: background-color 0.2s ease;
   border-radius: 4px;
   padding: 2px 0;
+  cursor: default;
 }
 
 .translation-sentence.translation-highlight {
-  background-color: rgba(79, 70, 229, 0.12);
-  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
+  background-color: rgba(139, 92, 246, 0.15);
+  box-shadow: 0 1px 4px rgba(139, 92, 246, 0.15);
+  font-weight: 500;
 }
 
 /* 確保翻譯容器內的中文句子也有適當的字距 */
@@ -1037,4 +1040,25 @@ body {
   letter-spacing: 0.18em;
   line-height: 1.8;
 }
+
+/* 英文句子懸停時的提示效果（增強版） */
+.sentence-highlightable:hover {
+  background-color: rgba(79, 70, 229, 0.12);
+  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
+  cursor: pointer;
+}
+
+/* 確保翻譯內容在顯示時有適當的間距 */
+.translation-content.show {
+  display: block;
+  padding: 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  line-height: 2.0;
+}
+
+/* 中英文對應高亮樣式（與上方合併） */
+.translation-sentence.translation-highlight {
+  background-color: rgba(139, 92, 246, 0.15);
+  box-shadow: 0 1px 4px rgba(139, 92, 246, 0.15);
 }

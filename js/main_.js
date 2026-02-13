@@ -1,5 +1,5 @@
 // ============================================
-// 音頻控制器（增強版 - 支持逐句高亮，無滾動，無脈衝）
+// 音频控制器（增强版 - 支持逐句高亮，无滚动，无脉冲）
 // ============================================
 const AudioController = {
   currentAudio: null,
@@ -14,13 +14,13 @@ const AudioController = {
     if (!btn) return;
     btn.classList.remove('playing', 'loading');
     if (btn.id.includes('_para-audio-btn-')) {
-      btn.innerHTML = '<i class="fas fa-volume-up"></i> 朗讀';
+      btn.innerHTML = '<i class="fas fa-volume-up"></i> 朗读';
     } else if (btn.id.includes('_impl-audio-btn-')) {
       btn.innerHTML = '<i class="fas fa-play"></i>';
     } else if (btn.id.includes('_vocab-audio-btn-')) {
       btn.innerHTML = '<i class="fas fa-volume-up"></i>';
     } else {
-      btn.innerHTML = btn.innerHTML.includes('朗讀') ? '<i class="fas fa-volume-up"></i> 朗讀' : '<i class="fas fa-play"></i>';
+      btn.innerHTML = btn.innerHTML.includes('朗读') ? '<i class="fas fa-volume-up"></i> 朗读' : '<i class="fas fa-play"></i>';
     }
   },
 
@@ -62,10 +62,6 @@ const AudioController = {
     document.querySelectorAll('.sentence-highlightable').forEach(el => {
       el.classList.remove('sentence-playing', 'sentence-selected');
     });
-    // 同時清除所有翻譯高亮
-    document.querySelectorAll('.translation-sentence').forEach(el => {
-      el.classList.remove('translation-highlight');
-    });
   },
 
   highlightSentence(paraNum, unitId, sentenceIndex) {
@@ -76,13 +72,6 @@ const AudioController = {
     
     if (sentenceEl) {
       sentenceEl.classList.add('sentence-selected');
-    }
-    
-    // 同時高亮對應的中文翻譯
-    const transSelector = `#${unitId}_trans${paraNum} .translation-sentence[data-sentence-index="${sentenceIndex}"]`;
-    const transEl = document.querySelector(transSelector);
-    if (transEl) {
-      transEl.classList.add('translation-highlight');
     }
   },
 
@@ -114,7 +103,7 @@ const AudioController = {
     };
     
     utter.onerror = (e) => {
-      console.error('TTS播放錯誤', e);
+      console.error('TTS播放错误', e);
       this.clearAllSentenceHighlights();
       if (btn) {
         this.resetButton(btn);
@@ -153,7 +142,7 @@ const AudioController = {
     }
     
     if (!sentences.length) {
-      console.warn('無法獲取句子列表');
+      console.warn('无法获取句子列表');
       return;
     }
 
@@ -202,7 +191,7 @@ const AudioController = {
     };
     
     utter.onerror = (e) => {
-      console.error('TTS播放錯誤', e);
+      console.error('TTS播放错误', e);
       this.playNextSentence();
     };
     
@@ -234,7 +223,7 @@ const AudioController = {
     }
     
     btn.classList.add('loading');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 載入中...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
     
     try {
       const audio = new Audio();
@@ -258,7 +247,7 @@ const AudioController = {
       };
       
     } catch (e) {
-      console.warn('本地音頻失敗，使用逐句TTS', e);
+      console.warn('本地音频失败，使用逐句TTS', e);
       btn.classList.remove('loading');
       this.playParagraphBySentences(paraNum, unitId);
     }
@@ -292,7 +281,7 @@ const AudioController = {
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
     } catch (e) {
-      console.warn('本地音頻失敗，使用TTS', e);
+      console.warn('本地音频失败，使用TTS', e);
       this.playTTS(cleanImpl, btn, 'impl');
     }
   },
@@ -324,7 +313,7 @@ const AudioController = {
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
     } catch (e) {
-      console.warn('本地音頻失敗，使用TTS', e);
+      console.warn('本地音频失败，使用TTS', e);
       this.playTTS(word, btn, 'vocab');
     }
   },
@@ -360,50 +349,6 @@ const AudioController = {
 };
 
 // ============================================
-// 句子懸停管理器（新增功能）
-// ============================================
-const SentenceHover = {
-  setupHoverListeners(unitId) {
-    // 為所有英文句子添加懸停事件
-    document.querySelectorAll(`#${unitId} .sentence-highlightable`).forEach(sentence => {
-      // 避免重複添加監聽器
-      if (sentence.hasAttribute('data-hover-initialized')) return;
-      
-      const paraNum = sentence.closest('[id*="para"]')?.id.match(/para(\d+)/)?.[1];
-      const sentenceIdx = sentence.dataset.sentenceIndex;
-      
-      if (paraNum && sentenceIdx !== undefined) {
-        sentence.setAttribute('data-hover-initialized', 'true');
-        
-        sentence.addEventListener('mouseenter', () => {
-          this.highlightTranslation(paraNum, sentenceIdx);
-        });
-        
-        sentence.addEventListener('mouseleave', () => {
-          this.clearTranslationHighlight();
-        });
-      }
-    });
-  },
-  
-  highlightTranslation(paraNum, sentenceIdx) {
-    // 高亮對應的中文翻譯句子
-    const targetTrans = document.querySelector(
-      `#unit3_trans${paraNum} .translation-sentence[data-sentence-index="${sentenceIdx}"]`
-    );
-    if (targetTrans) {
-      targetTrans.classList.add('translation-highlight');
-    }
-  },
-  
-  clearTranslationHighlight() {
-    document.querySelectorAll('.translation-sentence.translation-highlight').forEach(el => {
-      el.classList.remove('translation-highlight');
-    });
-  }
-};
-
-// ============================================
 // 渲染器
 // ============================================
 const Renderer = {
@@ -414,7 +359,7 @@ const Renderer = {
     ];
     containers.forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.innerHTML = '<div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> 載入單元中...</div>';
+      if (el) el.innerHTML = '<div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> 载入单元中...</div>';
     });
   },
 
@@ -427,8 +372,6 @@ const Renderer = {
     this.renderGrammar(unitData, unitId);
     setTimeout(() => {
       this.attachInputListeners(unitId);
-      // 設置句子懸停監聽器
-      SentenceHover.setupHoverListeners(unitId);
     }, 50);
   },
 
@@ -444,7 +387,7 @@ const Renderer = {
                onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="image-fallback" style="display:none; width:100%; height:180px; align-items:center; justify-content:center; color:#64748b;" lang="zh">
             <i class="fas fa-image" style="font-size:48px;"></i>
-            <div style="margin-left:12px;">圖片載入失敗</div>
+            <div style="margin-left:12px;">图片加载失败</div>
           </div>
         </div>
         <div class="article-paragraph-wrapper" id="article-content-${unitId}">
@@ -458,6 +401,7 @@ const Renderer = {
       if (para.sentences && para.sentences.length) {
         para.sentences.forEach((sentence, sIdx) => {
           const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          // ✅ 英文句子添加 lang="en"
           paragraphHtml += `<span class="sentence-highlightable" lang="en" data-sentence-index="${sIdx}" 
                             data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'")}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, this.dataset.plainText)">
@@ -466,6 +410,7 @@ const Renderer = {
       } else {
         const sentences = para.english.split(/(?<=[.!?])\s+/);
         sentences.forEach((sentence, sIdx) => {
+          // ✅ 英文句子添加 lang="en"
           paragraphHtml += `<span class="sentence-highlightable sentence-fallback" lang="en" data-sentence-index="${sIdx}"
                             data-plain-text="${sentence.replace(/'/g, "\\'")}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${sentence.replace(/'/g, "\\'")}')">
@@ -479,42 +424,21 @@ const Renderer = {
         </div>
         <div class="paragraph-controls">
           <button class="btn btn-outline paragraph-audio-btn" onclick="AudioController.toggleParagraphAudio(${paraNum}, '${unitId}')" id="${unitId}_para-audio-btn-${paraNum}">
-            <i class="fas fa-volume-up"></i> 朗讀
+            <i class="fas fa-volume-up"></i> 朗读
           </button>
           <button class="btn btn-outline" onclick="Renderer.toggleTranslation('${unitId}_trans${paraNum}')">
-            <i class="fas fa-exchange-alt"></i> 翻譯
+            <i class="fas fa-exchange-alt"></i> 翻译
           </button>
           <button class="btn btn-outline" onclick="Renderer.toggleImplication('${unitId}_impl${paraNum}')">
-            <i class="fas fa-lightbulb"></i> 解讀
+            <i class="fas fa-lightbulb"></i> 解读
           </button>
         </div>
-    `;
-      
-      // 渲染翻譯內容（使用 translation_sentences 如果有的話）
-      let transHtml = '';
-      if (para.translation_sentences && para.translation_sentences.length) {
-        para.translation_sentences.forEach((sentence, sIdx) => {
-          transHtml += `<span class="translation-sentence" lang="zh" 
-                        data-para="${paraNum}" 
-                        data-sentence-index="${sIdx}">
-                        ${sentence}</span> `;
-        });
-      } else {
-        // 如果沒有分割的翻譯句子，使用整個翻譯
-        transHtml = para.translation;
-      }
-      
-      html += `
-        <div class="translation-content" id="${unitId}_trans${paraNum}" lang="zh">
-          ${transHtml}
-        </div>
-      `;
-      
-      // 解讀內容
-      html += `
+        <div class="translation-content" id="${unitId}_trans${paraNum}" lang="zh">${para.translation}</div>
         <div class="implication-content" id="${unitId}_impl${paraNum}">
           <div class="implication-text-wrapper">
+            <!-- ✅ 英文解读添加 lang="en" -->
             <div class="implication-english" lang="en">${para.implication.english}</div>
+            <!-- ✅ 中文解读添加 lang="zh" -->
             <div class="implication-chinese" lang="zh">${para.implication.chinese}</div>
           </div>
           <div class="implication-buttons">
@@ -528,7 +452,7 @@ const Renderer = {
     
     html += `</div></div>`;
 
-    html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心詞彙</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
+    html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心词汇</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
     vocab.forEach((v, i) => {
       html += `
         <div class="vocab-item ${v.highlightClass || ''}">
@@ -538,8 +462,10 @@ const Renderer = {
           <div class="vocab-text">
             <div class="vocab-word-line">
               <span class="vocab-number">${i+1}.</span>
+              <!-- ✅ 英文词汇添加 lang="en" -->
               <span class="vocab-word" lang="en">${v.word}</span>
             </div>
+            <!-- ✅ 中文释义添加 lang="zh" -->
             <div class="vocab-meaning" lang="zh">${v.meaning}</div>
           </div>
         </div>
@@ -562,7 +488,7 @@ const Renderer = {
 
     let html = `
       <div class="vocab-drag-container">
-        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽詞彙到正確位置：</div>
+        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽词汇到正确位置：</div>
         <div class="vocab-drag-source" id="${unitId}_vocab-drag-source">
     `;
     vu.options.forEach(opt => {
@@ -582,8 +508,8 @@ const Renderer = {
     });
     html += `</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkVocabUsage('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetVocabUsage('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkVocabUsage('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetVocabUsage('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_vocab-result"></div>`;
     container.innerHTML = html;
@@ -593,7 +519,7 @@ const Renderer = {
     const container = document.getElementById('reading-section');
     const rc = unitData.readingComprehension;
     if (!rc || !rc.length) { 
-      container.innerHTML = '<div style="padding:20px; text-align:center; color:#666;" lang="zh">暫無閱讀理解題目</div>'; 
+      container.innerHTML = '<div style="padding:20px; text-align:center; color:#666;" lang="zh">暂无阅读理解题目</div>'; 
       return; 
     }
     let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
@@ -611,8 +537,8 @@ const Renderer = {
     });
     html += `</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkReading('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetReading('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkReading('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetReading('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_reading-result"></div>`;
     container.innerHTML = html;
@@ -625,8 +551,8 @@ const Renderer = {
     container.innerHTML = `
       <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkCloze('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetCloze('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkCloze('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetCloze('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_cloze-result"></div>
     `;
@@ -645,15 +571,15 @@ const Renderer = {
     let text = sf.text.replace(/id='drop-(\d+)'/g, `id='${unitId}_drop-$1'`);
     container.innerHTML = `
       <div class="drag-drop-container">
-        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽短語到正確位置：</div>
+        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽短语到正确位置：</div>
         <div class="drag-source" id="${unitId}_drag-source">${optionsHtml}
           <button class="drag-undo-btn" onclick="DragDrop.undoDrag('${unitId}')" lang="zh"><i class="fas fa-undo"></i> 返回上一步</button>
         </div>
       </div>
       <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkSevenFive('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetSevenFive('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkSevenFive('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetSevenFive('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_sevenfive-result"></div>
     `;
@@ -666,8 +592,8 @@ const Renderer = {
     container.innerHTML = `
       <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkGrammar('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetGrammar('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkGrammar('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetGrammar('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
       </div>
       <div class="result-feedback" id="${unitId}_grammar-result"></div>
     `;
@@ -830,7 +756,7 @@ const DragDrop = {
 };
 
 // ============================================
-// 習題檢查器
+// 习题检查器
 // ============================================
 const ExerciseChecker = {
   checkVocabUsage(unitId) {
@@ -850,7 +776,7 @@ const ExerciseChecker = {
         dz.classList.add('correct'); correct++;
       } else {
         dz.classList.add('incorrect');
-        dz.innerHTML = `${user} <span style="color:#b91c1c; font-size:10px;">(正確: ${answers[i-1]})</span>`;
+        dz.innerHTML = `${user} <span style="color:#b91c1c; font-size:10px;">(正确: ${answers[i-1]})</span>`;
       }
     }
     this.showResult(unitId, 'vocab', correct, answers.length);
@@ -960,7 +886,7 @@ const ExerciseChecker = {
         dz.classList.add('filled');
         const userOpt = data.sevenFive.options.find(o => o.id === user);
         const corrOpt = data.sevenFive.options.find(o => o.id === answers[i-1]);
-        dz.innerHTML = `${userOpt?.text || user} <br><small style="color:#b91c1c;">正確: ${corrOpt?.text || answers[i-1]}</small>`;
+        dz.innerHTML = `${userOpt?.text || user} <br><small style="color:#b91c1c;">正确: ${corrOpt?.text || answers[i-1]}</small>`;
         DragDrop.adjustDropzoneWidth(dz);
       }
     }
@@ -1035,10 +961,10 @@ const ExerciseChecker = {
     if (!res) return;
     const percent = Math.round((correct/total)*100);
     if (correct === total) {
-      res.innerHTML = `<strong><i class="fas fa-trophy"></i> 全部正確！ (${correct}/${total})</strong>`;
+      res.innerHTML = `<strong><i class="fas fa-trophy"></i> 全部正确！ (${correct}/${total})</strong>`;
       res.className = 'result-feedback result-correct';
     } else {
-      res.innerHTML = `<strong><i class="fas fa-chart-line"></i> 答對 ${correct}/${total} (${percent}%)</strong>`;
+      res.innerHTML = `<strong><i class="fas fa-chart-line"></i> 答对 ${correct}/${total} (${percent}%)</strong>`;
       res.className = 'result-feedback result-incorrect';
     }
     res.style.display = 'block';
@@ -1046,7 +972,7 @@ const ExerciseChecker = {
 };
 
 // ============================================
-// 單元管理器
+// 单元管理器
 // ============================================
 const UnitManager = (function() {
   let unitsIndex = [];
@@ -1074,10 +1000,10 @@ const UnitManager = (function() {
   async function loadUnitsIndex() {
     try {
       const res = await fetch('./data/units-index.json');
-      if (!res.ok) throw new Error('網路錯誤');
+      if (!res.ok) throw new Error('网络错误');
       unitsIndex = await res.json();
     } catch (e) {
-      console.warn('載入單元索引失敗，使用內置測試數據', e);
+      console.warn('加载单元索引失败，使用内置测试数据', e);
       unitsIndex = [
         { unitId: 'unit1', unitName: 'Unit 1 – A Severe Fire in Hong Kong', dataUrl: './data/unit1.json' },
         { unitId: 'unit2', unitName: 'Unit 2 – The Rise of Blindbox', dataUrl: './data/unit2.json' }
@@ -1118,7 +1044,7 @@ const UnitManager = (function() {
 
       Renderer.showLoading();
       const res = await fetch(unitInfo.dataUrl);
-      if (!res.ok) throw new Error('載入單元數據失敗');
+      if (!res.ok) throw new Error('加载单元数据失败');
       const unitData = await res.json();
       currentUnitData = unitData;
       currentUnitId = unitData.unitId || unitInfo.unitId;
@@ -1135,7 +1061,7 @@ const UnitManager = (function() {
       AudioController.preloadUnitAudio(currentUnitId, unitData.audio);
     } catch (e) {
       console.error(e);
-      alert('載入單元失敗：' + e.message);
+      alert('加载单元失败：' + e.message);
     }
   }
 
@@ -1153,7 +1079,7 @@ const UnitManager = (function() {
       const unitData = JSON.parse(text);
       
       if (!unitData.unitId || !unitData.unitName || !unitData.article) {
-        throw new Error('無效的單元JSON格式：缺少 unitId/unitName/article');
+        throw new Error('无效的单元JSON格式：缺少 unitId/unitName/article');
       }
       
       const tempId = 'upload_' + Date.now();
@@ -1167,7 +1093,7 @@ const UnitManager = (function() {
       populateUnitSelect();
       await loadAndRenderUnit(tempEntry);
     } catch (e) {
-      alert('解析JSON失敗：' + e.message);
+      alert('解析JSON失败：' + e.message);
     } finally {
       input.value = '';
     }
@@ -1183,7 +1109,7 @@ const UnitManager = (function() {
 })();
 
 // ============================================
-// 全局拖拽監聽器
+// 全局拖拽监听器
 // ============================================
 document.addEventListener('dragstart', (e) => {
   DragDrop.handleDragStart(e);
@@ -1198,7 +1124,7 @@ document.addEventListener('drop', (e) => {
 });
 
 // ============================================
-// 頁面啟動
+// 页面启动
 // ============================================
 window.onload = () => {
   UnitManager.init();
