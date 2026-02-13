@@ -345,137 +345,59 @@ body {
   cursor: wait;
 }
 
-/* ===== 統一切換按鈕組 ===== */
-.toggle-button-group {
-  display: inline-flex;
+/* ===== 翻譯/解讀卡片 ===== */
+.translation-content {
+  margin-top: 8px;
+  padding: 12px;
   border-radius: 6px;
-  overflow: hidden;
-  border: 1.5px solid #c7d2fe;
-  background: white;
-}
-
-.toggle-button-group .btn {
-  margin: 0 !important;
-  border-radius: 0;
-  border: none;
-  border-right: 1.5px solid #c7d2fe;
-  background: transparent;
-  color: #4f46e5;
-  padding: 6px 12px;
-  font-size: 11px;
-}
-
-.toggle-button-group .btn:last-child {
-  border-right: none;
-}
-
-.toggle-button-group .btn.active {
-  background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-  color: white;
-  border-color: #4f46e5;
-}
-
-.toggle-button-group .btn.active:hover {
-  background: linear-gradient(135deg, #4338ca 0%, #312e81 100%);
-}
-
-/* ===== 統一內容容器 ===== */
-.unified-content {
-  margin-top: 12px;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-/* 翻譯內容樣式 */
-.unified-content .translation-content {
-  margin: 0;
-  padding: 16px;
+  font-size: 12px;
+  display: none;
+  border-left: 4px solid;
   background-color: #f0f9ff;
-  border-left: 4px solid #3b82f6;
+  border-color: #3b82f6;
   color: #1e40af;
-  font-size: 12px;
-  line-height: 1.8;
-  letter-spacing: 0.18em;
-  border-radius: 0 6px 6px 0;
 }
 
-/* 解讀內容樣式 */
-.unified-content .implication-content {
-  margin: 0;
-  padding: 16px;
-  background-color: #fefce8;
-  border-left: 4px solid #f59e0b;
-  color: #92400e;
+.implication-content {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 6px;
   font-size: 12px;
+  display: none;
+  border-left: 4px solid;
+  background-color: #fefce8;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.translation-content.show,
+.implication-content.show {
+  display: block;
+}
+
+.implication-content.show {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  border-radius: 0 6px 6px 0;
 }
 
-.unified-content .implication-text-wrapper {
+.implication-text-wrapper {
   flex: 1;
 }
 
-.unified-content .implication-english {
+.implication-english {
   font-weight: 600;
-  margin-bottom: 8px;
-  line-height: 1.6;
-  letter-spacing: normal;
+  margin-bottom: 4px;
 }
 
-.unified-content .implication-chinese {
+.implication-chinese {
   color: #854d0e;
-  line-height: 1.8;
-  letter-spacing: 0.18em;
 }
 
-.unified-content .implication-buttons {
+.implication-buttons {
   display: flex;
-  margin-left: 20px;
-}
-
-.unified-content .implication-audio-btn {
-  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
-  color: #92400e;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  flex-shrink: 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.unified-content .implication-audio-btn:hover {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  transform: scale(1.05);
-}
-
-.unified-content .implication-audio-btn.playing {
-  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-  color: white;
-}
-
-/* 確保翻譯句子懸停效果在統一容器中也生效 */
-.unified-content .translation-sentence {
-  display: inline;
-  transition: background-color 0.2s ease;
-  border-radius: 4px;
-  padding: 2px 0;
-  cursor: default;
-}
-
-.unified-content .translation-sentence.translation-highlight {
-  background-color: rgba(139, 92, 246, 0.15);
-  box-shadow: 0 1px 4px rgba(139, 92, 246, 0.15);
-  font-weight: 500;
+  margin-left: 30px;
 }
 
 /* ===== 詞彙表 ===== */

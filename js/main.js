@@ -79,7 +79,7 @@ const AudioController = {
     }
     
     // 同時高亮對應的中文翻譯
-    const transSelector = `#${unitId}_trans${paraNum} .translation-sentence[data-sentence-index="${sentenceIndex}"]`;
+    const transSelector = `#${unitId}_trans-${paraNum} .translation-sentence[data-sentence-index="${sentenceIndex}"]`;
     const transEl = document.querySelector(transSelector);
     if (transEl) {
       transEl.classList.add('translation-highlight');
@@ -360,17 +360,11 @@ const AudioController = {
 };
 
 // ============================================
-// 句子懸停管理器（修正版）
+// 句子懸停管理器（修正版：使用 data-unit-id 選擇器）
 // ============================================
-
-
-
-
-
-
 const SentenceHover = {
   setupHoverListeners(unitId) {
-    // 為所有英文句子添加懸停事件
+    // 為所有英文句子添加懸停事件 - 使用 data-unit-id 屬性選擇器
     document.querySelectorAll(`[data-unit-id="${unitId}"] .sentence-highlightable`).forEach(sentence => {
       // 避免重複添加監聽器
       if (sentence.hasAttribute('data-hover-initialized')) return;
@@ -393,9 +387,9 @@ const SentenceHover = {
   },
   
   highlightTranslation(unitId, paraNum, sentenceIdx) {
-    // 高亮對應的中文翻譯句子 - 使用動態的 unitId
+    // 高亮對應的中文翻譯句子 - 使用新的統一容器 ID
     const targetTrans = document.querySelector(
-      `#${unitId}_trans${paraNum} .translation-sentence[data-sentence-index="${sentenceIdx}"]`
+      `#${unitId}_trans-${paraNum} .translation-sentence[data-sentence-index="${sentenceIdx}"]`
     );
     if (targetTrans) {
       targetTrans.classList.add('translation-highlight');
@@ -410,7 +404,7 @@ const SentenceHover = {
 };
 
 // ============================================
-// 渲染器
+// 渲染器（修改版 - 合併翻譯和解讀容器）
 // ============================================
 const Renderer = {
   showLoading() {
@@ -487,46 +481,49 @@ const Renderer = {
           <button class="btn btn-outline paragraph-audio-btn" onclick="AudioController.toggleParagraphAudio(${paraNum}, '${unitId}')" id="${unitId}_para-audio-btn-${paraNum}">
             <i class="fas fa-volume-up"></i> 朗讀
           </button>
-          <button class="btn btn-outline" onclick="Renderer.toggleTranslation('${unitId}_trans${paraNum}')">
-            <i class="fas fa-exchange-alt"></i> 翻譯
-          </button>
-          <button class="btn btn-outline" onclick="Renderer.toggleImplication('${unitId}_impl${paraNum}')">
-            <i class="fas fa-lightbulb"></i> 解讀
-          </button>
+          <div class="toggle-button-group" id="${unitId}_toggle-group-${paraNum}">
+            <button class="btn btn-outline toggle-btn active" onclick="Renderer.showTranslation(${paraNum}, '${unitId}')" id="${unitId}_trans-btn-${paraNum}">
+              <i class="fas fa-exchange-alt"></i> 翻譯
+            </button>
+            <button class="btn btn-outline toggle-btn" onclick="Renderer.showImplication(${paraNum}, '${unitId}')" id="${unitId}_impl-btn-${paraNum}">
+              <i class="fas fa-lightbulb"></i> 解讀
+            </button>
+          </div>
         </div>
-    `;
+      `;
       
-      // 渲染翻譯內容（使用 translation_sentences 如果有的話）
-      let transHtml = '';
+      // 統一的內容容器（初始顯示翻譯）
+      html += `
+        <div class="unified-content" id="${unitId}_content-${paraNum}">
+          <!-- 翻譯內容（初始顯示） -->
+          <div class="translation-content show" id="${unitId}_trans-${paraNum}" data-content-type="translation">
+      `;
+      
+      // 渲染翻譯內容
       if (para.translation_sentences && para.translation_sentences.length) {
         para.translation_sentences.forEach((sentence, sIdx) => {
-          transHtml += `<span class="translation-sentence" lang="zh" 
+          html += `<span class="translation-sentence" lang="zh" 
                         data-para="${paraNum}" 
                         data-sentence-index="${sIdx}">
                         ${sentence}</span> `;
         });
       } else {
-        // 如果沒有分割的翻譯句子，使用整個翻譯
-        transHtml = para.translation;
+        html += para.translation;
       }
       
       html += `
-        <div class="translation-content" id="${unitId}_trans${paraNum}" lang="zh">
-          ${transHtml}
-        </div>
-      `;
-      
-      // 解讀內容
-      html += `
-        <div class="implication-content" id="${unitId}_impl${paraNum}">
-          <div class="implication-text-wrapper">
-            <div class="implication-english" lang="en">${para.implication.english}</div>
-            <div class="implication-chinese" lang="zh">${para.implication.chinese}</div>
           </div>
-          <div class="implication-buttons">
-            <button class="implication-audio-btn" onclick="AudioController.toggleImplicationAudio(${paraNum}, '${unitId}')" id="${unitId}_impl-audio-btn-${paraNum}">
-              <i class="fas fa-play"></i>
-            </button>
+          <!-- 解讀內容（隱藏） -->
+          <div class="implication-content" id="${unitId}_impl-${paraNum}" data-content-type="implication" style="display: none;">
+            <div class="implication-text-wrapper">
+              <div class="implication-english" lang="en">${para.implication.english}</div>
+              <div class="implication-chinese" lang="zh">${para.implication.chinese}</div>
+            </div>
+            <div class="implication-buttons">
+              <button class="implication-audio-btn" onclick="AudioController.toggleImplicationAudio(${paraNum}, '${unitId}')" id="${unitId}_impl-audio-btn-${paraNum}">
+                <i class="fas fa-play"></i>
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -534,6 +531,7 @@ const Renderer = {
     
     html += `</div></div>`;
 
+    // 詞彙表部分保持不變
     html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心詞彙</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
     vocab.forEach((v, i) => {
       html += `
@@ -553,6 +551,38 @@ const Renderer = {
     });
     html += `</div></div>`;
     wrapper.innerHTML = html;
+  },
+
+  // 新增方法：顯示翻譯
+  showTranslation(paraNum, unitId) {
+    // 切換按鈕狀態
+    const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
+    const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.add('active');
+    if (implBtn) implBtn.classList.remove('active');
+    
+    // 切換內容顯示
+    const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
+    const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
+    
+    if (transContent) transContent.style.display = 'block';
+    if (implContent) implContent.style.display = 'none';
+  },
+
+  // 新增方法：顯示解讀
+  showImplication(paraNum, unitId) {
+    // 切換按鈕狀態
+    const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
+    const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.remove('active');
+    if (implBtn) implBtn.classList.add('active');
+    
+    // 切換內容顯示
+    const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
+    const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
+    
+    if (transContent) transContent.style.display = 'none';
+    if (implContent) implContent.style.display = 'flex'; // 解讀使用 flex 布局
   },
 
   stripHtml(html) {
@@ -677,16 +707,6 @@ const Renderer = {
       </div>
       <div class="result-feedback" id="${unitId}_grammar-result"></div>
     `;
-  },
-
-  toggleTranslation(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('show');
-  },
-  
-  toggleImplication(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('show');
   },
 
   attachInputListeners(unitId) {
