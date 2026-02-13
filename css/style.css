@@ -1018,4 +1018,23 @@ body {
     width: 100%;
     justify-content: center;
   }
+
+/* ===== 中英文對應高亮樣式 ===== */
+.translation-sentence {
+  display: inline;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  padding: 2px 0;
+}
+
+.translation-sentence.translation-highlight {
+  background-color: rgba(79, 70, 229, 0.12);
+  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
+}
+
+/* 確保翻譯容器內的中文句子也有適當的字距 */
+.translation-content[lang="zh"] .translation-sentence {
+  letter-spacing: 0.18em;
+  line-height: 1.8;
+}
 }
