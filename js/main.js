@@ -360,7 +360,7 @@ const AudioController = {
 };
 
 // ============================================
-// 句子懸停管理器（新增功能）
+// 句子懸停管理器（修正版）
 // ============================================
 const SentenceHover = {
   setupHoverListeners(unitId) {
@@ -376,7 +376,7 @@ const SentenceHover = {
         sentence.setAttribute('data-hover-initialized', 'true');
         
         sentence.addEventListener('mouseenter', () => {
-          this.highlightTranslation(paraNum, sentenceIdx);
+          this.highlightTranslation(unitId, paraNum, sentenceIdx);
         });
         
         sentence.addEventListener('mouseleave', () => {
@@ -386,10 +386,10 @@ const SentenceHover = {
     });
   },
   
-  highlightTranslation(paraNum, sentenceIdx) {
-    // 高亮對應的中文翻譯句子
+  highlightTranslation(unitId, paraNum, sentenceIdx) {
+    // 高亮對應的中文翻譯句子 - 使用動態的 unitId
     const targetTrans = document.querySelector(
-      `#unit3_trans${paraNum} .translation-sentence[data-sentence-index="${sentenceIdx}"]`
+      `#${unitId}_trans${paraNum} .translation-sentence[data-sentence-index="${sentenceIdx}"]`
     );
     if (targetTrans) {
       targetTrans.classList.add('translation-highlight');
