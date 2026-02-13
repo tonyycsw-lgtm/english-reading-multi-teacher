@@ -15,7 +15,9 @@ body {
 
 /* ===== 中文字体字距优化 ===== */
 :lang(zh) {
-  letter-spacing: 0.25em; /* 增加25%字距 */
+  letter-spacing: 0.4em !important;  /* 40% 明顯字距 */
+  line-height: 2 !important;         /* 雙倍行高 */
+  font-weight: 400 !important;       /* 正常字重 */
   word-spacing: 0.1em;
 }
 
