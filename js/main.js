@@ -77,10 +77,23 @@ const AudioController = {
     return tempDiv.textContent || tempDiv.innerText || '';
   },
 
+  preprocessForTTS(text) {
+    // 可選：將縮寫展開以改善 TTS 發音
+    return text
+      .replace(/\bI'm\b/g, 'I am')
+      .replace(/\byou're\b/g, 'you are')
+      .replace(/\byou've\b/g, 'you have')
+      .replace(/\bit's\b/g, 'it is')
+      .replace(/\bdon't\b/g, 'do not')
+      .replace(/\bdoesn't\b/g, 'does not')
+      .replace(/\bdidn't\b/g, 'did not')
+      .replace(/\bcan't\b/g, 'cannot');
+  },
+
   async playSingleSentence(paraNum, unitId, sentenceIndex, sentenceHtml) {
     this.stop();
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
-    const plainText = this.extractPlainText(sentenceHtml);
+    const plainText = this.preprocessForTTS(this.extractPlainText(sentenceHtml));
     this.highlightSentence(paraNum, unitId, sentenceIndex);
     const utter = new SpeechSynthesisUtterance(plainText);
     utter.lang = 'en-GB'; utter.rate = 0.85;
@@ -135,7 +148,7 @@ const AudioController = {
     }
     const sentence = this.currentParagraphSentences[this.currentSentenceIndex];
     this.highlightSentence(this.currentParaNum, this.currentUnitId, this.currentSentenceIndex);
-    const plainText = this.extractPlainText(sentence);
+    const plainText = this.preprocessForTTS(this.extractPlainText(sentence));
     const utter = new SpeechSynthesisUtterance(plainText);
     utter.lang = 'en-GB'; utter.rate = 0.85;
     utter.onend = () => { this.playNextSentence(); };
@@ -332,6 +345,22 @@ const Renderer = {
     }, 50);
   },
 
+  // 新增：用於安全地將文本放入 HTML 屬性
+  encodeForHtmlAttribute(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  },
+
+  stripHtml(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+  },
+
   renderArticleVocabulary(unitData, unitId) {
     const wrapper = document.getElementById('article-vocab-wrapper');
     const article = unitData.article;
@@ -364,17 +393,20 @@ const Renderer = {
       let paragraphHtml = '';
       if (para.sentences && para.sentences.length) {
         para.sentences.forEach((sentence, sIdx) => {
+          const plainText = this.stripHtml(sentence);
+          const encodedPlainText = this.encodeForHtmlAttribute(plainText);
           paragraphHtml += `<span class="sentence-highlightable" lang="en" data-sentence-index="${sIdx}" 
-                            data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'").replace(/"/g, '&quot;')}"
+                            data-plain-text="${encodedPlainText}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, this.dataset.plainText)">
                             ${sentence}</span> `;
         });
       } else {
         const sentences = para.english.split(/(?<=[.!?])\s+/);
         sentences.forEach((sentence, sIdx) => {
+          const encodedSentence = this.encodeForHtmlAttribute(sentence);
           paragraphHtml += `<span class="sentence-highlightable sentence-fallback" lang="en" data-sentence-index="${sIdx}"
-                            data-plain-text="${sentence.replace(/'/g, "\\'")}"
-                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${sentence.replace(/'/g, "\\'")}')">
+                            data-plain-text="${encodedSentence}"
+                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${encodedSentence}')">
                             ${sentence}</span> `;
         });
       }
@@ -477,12 +509,6 @@ const Renderer = {
     const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
     if (transContent) transContent.style.display = 'none';
     if (implContent) implContent.style.display = 'flex';
-  },
-
-  stripHtml(html) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || '';
   },
 
   renderVocabUsage(unitData, unitId) {
