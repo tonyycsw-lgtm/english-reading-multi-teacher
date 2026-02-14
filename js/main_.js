@@ -1,5 +1,5 @@
 // ============================================
-// 音频控制器（增强版 - 支持逐句高亮，无滚动，无脉冲）
+// 音頻控制器（增強版 - 支持逐句高亮，無滾動，無脈衝）
 // ============================================
 const AudioController = {
   currentAudio: null,
@@ -14,13 +14,13 @@ const AudioController = {
     if (!btn) return;
     btn.classList.remove('playing', 'loading');
     if (btn.id.includes('_para-audio-btn-')) {
-      btn.innerHTML = '<i class="fas fa-volume-up"></i> 朗读';
+      btn.innerHTML = '<i class="fas fa-volume-up"></i> 朗讀';
     } else if (btn.id.includes('_impl-audio-btn-')) {
       btn.innerHTML = '<i class="fas fa-play"></i>';
     } else if (btn.id.includes('_vocab-audio-btn-')) {
       btn.innerHTML = '<i class="fas fa-volume-up"></i>';
     } else {
-      btn.innerHTML = btn.innerHTML.includes('朗读') ? '<i class="fas fa-volume-up"></i> 朗读' : '<i class="fas fa-play"></i>';
+      btn.innerHTML = btn.innerHTML.includes('朗讀') ? '<i class="fas fa-volume-up"></i> 朗讀' : '<i class="fas fa-play"></i>';
     }
   },
 
@@ -36,23 +36,17 @@ const AudioController = {
   },
 
   stop() {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-    
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
     if (this.currentAudio instanceof HTMLAudioElement) {
       this.currentAudio.pause();
       this.currentAudio.currentTime = 0;
       this.currentAudio = null;
     }
-    
     if (this.currentPlayingButton) {
       this.resetButton(this.currentPlayingButton);
       this.currentPlayingButton = null;
     }
-    
     this.clearAllSentenceHighlights();
-    
     this.isPlayingParagraph = false;
     this.currentSentenceIndex = -1;
     this.currentParagraphSentences = [];
@@ -62,17 +56,19 @@ const AudioController = {
     document.querySelectorAll('.sentence-highlightable').forEach(el => {
       el.classList.remove('sentence-playing', 'sentence-selected');
     });
+    document.querySelectorAll('.translation-sentence').forEach(el => {
+      el.classList.remove('translation-highlight');
+    });
   },
 
   highlightSentence(paraNum, unitId, sentenceIndex) {
     this.clearAllSentenceHighlights();
-    
     const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIndex}"]`;
     const sentenceEl = document.querySelector(selector);
-    
-    if (sentenceEl) {
-      sentenceEl.classList.add('sentence-selected');
-    }
+    if (sentenceEl) sentenceEl.classList.add('sentence-selected');
+    const transSelector = `#${unitId}_trans-${paraNum} .translation-sentence[data-sentence-index="${sentenceIndex}"]`;
+    const transEl = document.querySelector(transSelector);
+    if (transEl) transEl.classList.add('translation-highlight');
   },
 
   extractPlainText(htmlContent) {
@@ -81,43 +77,40 @@ const AudioController = {
     return tempDiv.textContent || tempDiv.innerText || '';
   },
 
+  preprocessForTTS(text) {
+    // 可選：將縮寫展開以改善 TTS 發音
+    return text
+      .replace(/\bI'm\b/g, 'I am')
+      .replace(/\byou're\b/g, 'you are')
+      .replace(/\byou've\b/g, 'you have')
+      .replace(/\bit's\b/g, 'it is')
+      .replace(/\bdon't\b/g, 'do not')
+      .replace(/\bdoesn't\b/g, 'does not')
+      .replace(/\bdidn't\b/g, 'did not')
+      .replace(/\bcan't\b/g, 'cannot');
+  },
+
   async playSingleSentence(paraNum, unitId, sentenceIndex, sentenceHtml) {
     this.stop();
-    
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
-    const plainText = this.extractPlainText(sentenceHtml);
-    
+    const plainText = this.preprocessForTTS(this.extractPlainText(sentenceHtml));
     this.highlightSentence(paraNum, unitId, sentenceIndex);
-    
     const utter = new SpeechSynthesisUtterance(plainText);
-    utter.lang = 'en-GB';
-    utter.rate = 0.85;
-    
+    utter.lang = 'en-GB'; utter.rate = 0.85;
     utter.onend = () => {
       this.clearAllSentenceHighlights();
       this.currentAudio = null;
-      if (btn) {
-        this.resetButton(btn);
-        this.currentPlayingButton = null;
-      }
+      if (btn) { this.resetButton(btn); this.currentPlayingButton = null; }
     };
-    
     utter.onerror = (e) => {
-      console.error('TTS播放错误', e);
+      console.error('TTS播放錯誤', e);
       this.clearAllSentenceHighlights();
-      if (btn) {
-        this.resetButton(btn);
-        this.currentPlayingButton = null;
-      }
+      if (btn) { this.resetButton(btn); this.currentPlayingButton = null; }
     };
-    
     window.speechSynthesis.speak(utter);
     this.currentAudio = utter;
-    
     if (btn) {
-      if (this.currentPlayingButton) {
-        this.resetButton(this.currentPlayingButton);
-      }
+      if (this.currentPlayingButton) this.resetButton(this.currentPlayingButton);
       btn.classList.add('playing');
       btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
       this.currentPlayingButton = btn;
@@ -127,86 +120,49 @@ const AudioController = {
   async playParagraphBySentences(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     if (!btn) return;
-    
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
-
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     const unitData = UnitManager.getCurrentUnitData();
     const paragraph = unitData?.article?.paragraphs[paraNum - 1];
     let sentences = paragraph?.sentences || [];
-    
-    if (!sentences.length) {
-      sentences = paragraph.english.split(/(?<=[.!?])\s+/);
-    }
-    
-    if (!sentences.length) {
-      console.warn('无法获取句子列表');
-      return;
-    }
-
+    if (!sentences.length) sentences = paragraph.english.split(/(?<=[.!?])\s+/);
+    if (!sentences.length) { console.warn('無法獲取句子列表'); return; }
     this.stop();
-    
     this.isPlayingParagraph = true;
     this.currentParagraphSentences = sentences;
     this.currentSentenceIndex = -1;
     this.currentParaNum = paraNum;
     this.currentUnitId = unitId;
     this.currentPlayingButton = btn;
-    
     btn.classList.remove('loading');
     btn.classList.add('playing');
     btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
-    
     this.playNextSentence();
   },
 
   playNextSentence() {
     if (!this.isPlayingParagraph) return;
-    
     this.currentSentenceIndex++;
-    
     if (this.currentSentenceIndex >= this.currentParagraphSentences.length) {
       this.finishParagraphPlayback();
       return;
     }
-
     const sentence = this.currentParagraphSentences[this.currentSentenceIndex];
-    
-    this.highlightSentence(
-      this.currentParaNum, 
-      this.currentUnitId, 
-      this.currentSentenceIndex
-    );
-    
-    const plainText = this.extractPlainText(sentence);
-    
+    this.highlightSentence(this.currentParaNum, this.currentUnitId, this.currentSentenceIndex);
+    const plainText = this.preprocessForTTS(this.extractPlainText(sentence));
     const utter = new SpeechSynthesisUtterance(plainText);
-    utter.lang = 'en-GB';
-    utter.rate = 0.85;
-    
-    utter.onend = () => {
-      this.playNextSentence();
-    };
-    
-    utter.onerror = (e) => {
-      console.error('TTS播放错误', e);
-      this.playNextSentence();
-    };
-    
+    utter.lang = 'en-GB'; utter.rate = 0.85;
+    utter.onend = () => { this.playNextSentence(); };
+    utter.onerror = (e) => { console.error('TTS播放錯誤', e); this.playNextSentence(); };
     window.speechSynthesis.speak(utter);
     this.currentAudio = utter;
   },
 
   finishParagraphPlayback() {
     this.clearAllSentenceHighlights();
-    
     if (this.currentPlayingButton) {
       this.resetButton(this.currentPlayingButton);
       this.currentPlayingButton = null;
     }
-    
     this.currentAudio = null;
     this.isPlayingParagraph = false;
     this.currentParagraphSentences = [];
@@ -216,38 +172,28 @@ const AudioController = {
   async toggleParagraphAudio(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     if (!btn) return;
-    
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
-    
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     btn.classList.add('loading');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 加载中...';
-    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 載入中...';
     try {
       const audio = new Audio();
       const unitData = UnitManager.getCurrentUnitData();
       const pattern = unitData.audio?.paragraphPattern || `/english-reading-multi/audio/${unitId}/paragraph_{id}.mp3`;
       audio.src = pattern.replace('{id}', paraNum.toString().padStart(2, '0'));
-      
       await audio.play();
-      
       this.stop();
       this.currentAudio = audio;
       this.currentPlayingButton = btn;
       btn.classList.remove('loading');
       btn.classList.add('playing');
       btn.innerHTML = '<i class="fas fa-stop"></i> 停止';
-      
       audio.onended = () => {
         this.resetButton(btn);
         if (this.currentAudio === audio) this.currentAudio = null;
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
-      
     } catch (e) {
-      console.warn('本地音频失败，使用逐句TTS', e);
+      console.warn('本地音頻失敗，使用逐句TTS', e);
       btn.classList.remove('loading');
       this.playParagraphBySentences(paraNum, unitId);
     }
@@ -256,10 +202,7 @@ const AudioController = {
   async toggleImplicationAudio(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_impl-audio-btn-${paraNum}`);
     if (!btn) return;
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     btn.classList.add('loading');
     const unitData = UnitManager.getCurrentUnitData();
     const rawImpl = unitData?.article?.paragraphs[paraNum-1]?.implication?.english || '';
@@ -281,7 +224,7 @@ const AudioController = {
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
     } catch (e) {
-      console.warn('本地音频失败，使用TTS', e);
+      console.warn('本地音頻失敗，使用TTS', e);
       this.playTTS(cleanImpl, btn, 'impl');
     }
   },
@@ -289,10 +232,7 @@ const AudioController = {
   async playVocabularyWord(vocabId, unitId) {
     const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
     if (!btn) return;
-    if (btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
+    if (btn.classList.contains('playing')) { this.stop(); return; }
     btn.classList.add('loading');
     const unitData = UnitManager.getCurrentUnitData();
     const word = unitData?.vocabulary?.find(v => v.id === vocabId)?.word || '';
@@ -313,7 +253,7 @@ const AudioController = {
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
     } catch (e) {
-      console.warn('本地音频失败，使用TTS', e);
+      console.warn('本地音頻失敗，使用TTS', e);
       this.playTTS(word, btn, 'vocab');
     }
   },
@@ -322,17 +262,13 @@ const AudioController = {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-GB';
-    utter.rate = 0.85;
+    utter.lang = 'en-GB'; utter.rate = 0.85;
     if (btn) {
       this.stop();
       btn.classList.remove('loading');
       btn.classList.add('playing');
-      if (type === 'para') {
-        btn.innerHTML = '<i class="fas fa-stop"></i> 停止(TTS)';
-      } else {
-        btn.innerHTML = '<i class="fas fa-stop"></i>';
-      }
+      if (type === 'para') btn.innerHTML = '<i class="fas fa-stop"></i> 停止(TTS)';
+      else btn.innerHTML = '<i class="fas fa-stop"></i>';
       this.currentPlayingButton = btn;
     }
     utter.onend = () => {
@@ -349,7 +285,40 @@ const AudioController = {
 };
 
 // ============================================
-// 渲染器
+// 句子懸停管理器
+// ============================================
+const SentenceHover = {
+  setupHoverListeners(unitId) {
+    document.querySelectorAll(`[data-unit-id="${unitId}"] .sentence-highlightable`).forEach(sentence => {
+      if (sentence.hasAttribute('data-hover-initialized')) return;
+      const paraNum = sentence.closest('[id*="para"]')?.id.match(/para(\d+)/)?.[1];
+      const sentenceIdx = sentence.dataset.sentenceIndex;
+      if (paraNum && sentenceIdx !== undefined) {
+        sentence.setAttribute('data-hover-initialized', 'true');
+        sentence.addEventListener('mouseenter', () => {
+          this.highlightTranslation(unitId, paraNum, sentenceIdx);
+        });
+        sentence.addEventListener('mouseleave', () => {
+          this.clearTranslationHighlight();
+        });
+      }
+    });
+  },
+  highlightTranslation(unitId, paraNum, sentenceIdx) {
+    const targetTrans = document.querySelector(
+      `#${unitId}_trans-${paraNum} .translation-sentence[data-sentence-index="${sentenceIdx}"]`
+    );
+    if (targetTrans) targetTrans.classList.add('translation-highlight');
+  },
+  clearTranslationHighlight() {
+    document.querySelectorAll('.translation-sentence.translation-highlight').forEach(el => {
+      el.classList.remove('translation-highlight');
+    });
+  }
+};
+
+// ============================================
+// 渲染器（修正英文容器 lang 屬性）
 // ============================================
 const Renderer = {
   showLoading() {
@@ -359,7 +328,7 @@ const Renderer = {
     ];
     containers.forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.innerHTML = '<div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> 载入单元中...</div>';
+      if (el) el.innerHTML = '<div class="loading-indicator"><i class="fas fa-spinner fa-spin"></i> 載入單元中...</div>';
     });
   },
 
@@ -372,87 +341,134 @@ const Renderer = {
     this.renderGrammar(unitData, unitId);
     setTimeout(() => {
       this.attachInputListeners(unitId);
+      SentenceHover.setupHoverListeners(unitId);
     }, 50);
+  },
+
+  // 新增：用於安全地將文本放入 HTML 屬性
+  encodeForHtmlAttribute(text) {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  },
+
+  stripHtml(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
   },
 
   renderArticleVocabulary(unitData, unitId) {
     const wrapper = document.getElementById('article-vocab-wrapper');
     const article = unitData.article;
     const vocab = unitData.vocabulary || [];
+    
+    // 拆分標題
+    const titleParts = article.title.split('\n');
+    const englishTitle = titleParts[0] || '';
+    const chineseTitle = titleParts[1] || '';
+
     let html = `
       <div class="article-section">
         <div class="article-header">
-          <h3 class="article-title" lang="zh">${article.title.replace('\n', '<br lang="zh">')}</h3>
+          <h3 class="article-title">
+            <span lang="en">${englishTitle}</span><br>
+            <span lang="zh">${chineseTitle}</span>
+          </h3>
           <img src="${article.illustration || './images/placeholder.png'}" alt="illustration" class="article-illustration"
                onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="image-fallback" style="display:none; width:100%; height:180px; align-items:center; justify-content:center; color:#64748b;" lang="zh">
             <i class="fas fa-image" style="font-size:48px;"></i>
-            <div style="margin-left:12px;">图片加载失败</div>
+            <div style="margin-left:12px;">圖片載入失敗</div>
           </div>
         </div>
         <div class="article-paragraph-wrapper" id="article-content-${unitId}">
     `;
-    
+
     article.paragraphs.forEach((para, idx) => {
       const paraNum = idx + 1;
-      
       let paragraphHtml = '';
-      
       if (para.sentences && para.sentences.length) {
         para.sentences.forEach((sentence, sIdx) => {
-          const escapedSentence = sentence.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-          // ✅ 英文句子添加 lang="en"
+          const plainText = this.stripHtml(sentence);
+          const encodedPlainText = this.encodeForHtmlAttribute(plainText);
           paragraphHtml += `<span class="sentence-highlightable" lang="en" data-sentence-index="${sIdx}" 
-                            data-plain-text="${this.stripHtml(sentence).replace(/'/g, "\\'")}"
+                            data-plain-text="${encodedPlainText}"
                             onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, this.dataset.plainText)">
                             ${sentence}</span> `;
         });
       } else {
         const sentences = para.english.split(/(?<=[.!?])\s+/);
         sentences.forEach((sentence, sIdx) => {
-          // ✅ 英文句子添加 lang="en"
+          const encodedSentence = this.encodeForHtmlAttribute(sentence);
           paragraphHtml += `<span class="sentence-highlightable sentence-fallback" lang="en" data-sentence-index="${sIdx}"
-                            data-plain-text="${sentence.replace(/'/g, "\\'")}"
-                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${sentence.replace(/'/g, "\\'")}')">
+                            data-plain-text="${encodedSentence}"
+                            onclick="AudioController.playSingleSentence(${paraNum}, '${unitId}', ${sIdx}, '${encodedSentence}')">
                             ${sentence}</span> `;
         });
       }
-      
+
       html += `
         <div class="single-paragraph" id="${unitId}_para${paraNum}-text">
           ${paragraphHtml}
         </div>
         <div class="paragraph-controls">
           <button class="btn btn-outline paragraph-audio-btn" onclick="AudioController.toggleParagraphAudio(${paraNum}, '${unitId}')" id="${unitId}_para-audio-btn-${paraNum}">
-            <i class="fas fa-volume-up"></i> 朗读
+            <i class="fas fa-volume-up"></i> 朗讀
           </button>
-          <button class="btn btn-outline" onclick="Renderer.toggleTranslation('${unitId}_trans${paraNum}')">
-            <i class="fas fa-exchange-alt"></i> 翻译
-          </button>
-          <button class="btn btn-outline" onclick="Renderer.toggleImplication('${unitId}_impl${paraNum}')">
-            <i class="fas fa-lightbulb"></i> 解读
-          </button>
-        </div>
-        <div class="translation-content" id="${unitId}_trans${paraNum}" lang="zh">${para.translation}</div>
-        <div class="implication-content" id="${unitId}_impl${paraNum}">
-          <div class="implication-text-wrapper">
-            <!-- ✅ 英文解读添加 lang="en" -->
-            <div class="implication-english" lang="en">${para.implication.english}</div>
-            <!-- ✅ 中文解读添加 lang="zh" -->
-            <div class="implication-chinese" lang="zh">${para.implication.chinese}</div>
-          </div>
-          <div class="implication-buttons">
-            <button class="implication-audio-btn" onclick="AudioController.toggleImplicationAudio(${paraNum}, '${unitId}')" id="${unitId}_impl-audio-btn-${paraNum}">
-              <i class="fas fa-play"></i>
+          <div class="toggle-button-group" id="${unitId}_toggle-group-${paraNum}">
+            <button class="btn btn-outline toggle-btn" onclick="Renderer.showTranslation(${paraNum}, '${unitId}')" id="${unitId}_trans-btn-${paraNum}">
+              <i class="fas fa-exchange-alt"></i> 翻譯
+            </button>
+            <button class="btn btn-outline toggle-btn" onclick="Renderer.showImplication(${paraNum}, '${unitId}')" id="${unitId}_impl-btn-${paraNum}">
+              <i class="fas fa-lightbulb"></i> 解讀
             </button>
           </div>
         </div>
       `;
+
+      // 統一的內容容器（預設全部隱藏）
+      html += `
+        <div class="unified-content" id="${unitId}_content-${paraNum}">
+          <!-- 翻譯內容（預設隱藏） -->
+          <div class="translation-content" id="${unitId}_trans-${paraNum}" data-content-type="translation" style="display: none;">
+      `;
+
+      if (para.translation_sentences && para.translation_sentences.length) {
+        para.translation_sentences.forEach((sentence, sIdx) => {
+          html += `<span class="translation-sentence" lang="zh" 
+                        data-para="${paraNum}" 
+                        data-sentence-index="${sIdx}">
+                        ${sentence}</span> `;
+        });
+      } else {
+        html += para.translation;
+      }
+
+      html += `
+          </div>
+          <!-- 解讀內容（預設隱藏） -->
+          <div class="implication-content" id="${unitId}_impl-${paraNum}" data-content-type="implication" style="display: none;">
+            <div class="implication-text-wrapper">
+              <div class="implication-english" lang="en">${para.implication.english}</div>
+              <div class="implication-chinese" lang="zh">${para.implication.chinese}</div>
+            </div>
+            <div class="implication-buttons">
+              <button class="implication-audio-btn" onclick="AudioController.toggleImplicationAudio(${paraNum}, '${unitId}')" id="${unitId}_impl-audio-btn-${paraNum}">
+                <i class="fas fa-play"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
     });
-    
+
     html += `</div></div>`;
 
-    html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心词汇</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
+    html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心詞彙</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
     vocab.forEach((v, i) => {
       html += `
         <div class="vocab-item ${v.highlightClass || ''}">
@@ -462,10 +478,8 @@ const Renderer = {
           <div class="vocab-text">
             <div class="vocab-word-line">
               <span class="vocab-number">${i+1}.</span>
-              <!-- ✅ 英文词汇添加 lang="en" -->
               <span class="vocab-word" lang="en">${v.word}</span>
             </div>
-            <!-- ✅ 中文释义添加 lang="zh" -->
             <div class="vocab-meaning" lang="zh">${v.meaning}</div>
           </div>
         </div>
@@ -475,10 +489,26 @@ const Renderer = {
     wrapper.innerHTML = html;
   },
 
-  stripHtml(html) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || '';
+  showTranslation(paraNum, unitId) {
+    const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
+    const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.add('active');
+    if (implBtn) implBtn.classList.remove('active');
+    const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
+    const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
+    if (transContent) transContent.style.display = 'block';
+    if (implContent) implContent.style.display = 'none';
+  },
+
+  showImplication(paraNum, unitId) {
+    const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
+    const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.remove('active');
+    if (implBtn) implBtn.classList.add('active');
+    const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
+    const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
+    if (transContent) transContent.style.display = 'none';
+    if (implContent) implContent.style.display = 'flex';
   },
 
   renderVocabUsage(unitData, unitId) {
@@ -488,7 +518,7 @@ const Renderer = {
 
     let html = `
       <div class="vocab-drag-container">
-        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽词汇到正确位置：</div>
+        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽詞彙到正確位置：</div>
         <div class="vocab-drag-source" id="${unitId}_vocab-drag-source">
     `;
     vu.options.forEach(opt => {
@@ -498,7 +528,8 @@ const Renderer = {
     });
     html += `<button class="drag-undo-btn" onclick="DragDrop.undoVocabDrag('${unitId}')" lang="zh"><i class="fas fa-undo"></i> 返回上一步</button></div></div>`;
 
-    html += `<div style="font-size:12px; line-height:1.6; padding:12px; background:#fafafa; border-radius:6px;" id="${unitId}_vocab-usage-text">`;
+    // 問題文本容器添加 lang="en"
+    html += `<div lang="en" style="font-size:12px; line-height:1.6; padding:12px; background:#fafafa; border-radius:6px;" id="${unitId}_vocab-usage-text">`;
     vu.questions.forEach((q, idx) => {
       const qWithId = q.replace(/id='vocab-drop-(\d+)'/, `id='${unitId}_vocab-drop-$1'`);
       html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
@@ -508,8 +539,8 @@ const Renderer = {
     });
     html += `</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkVocabUsage('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetVocabUsage('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkVocabUsage('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetVocabUsage('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
       </div>
       <div class="result-feedback" id="${unitId}_vocab-result"></div>`;
     container.innerHTML = html;
@@ -519,10 +550,10 @@ const Renderer = {
     const container = document.getElementById('reading-section');
     const rc = unitData.readingComprehension;
     if (!rc || !rc.length) { 
-      container.innerHTML = '<div style="padding:20px; text-align:center; color:#666;" lang="zh">暂无阅读理解题目</div>'; 
+      container.innerHTML = '<div style="padding:20px; text-align:center; color:#666;" lang="zh">暫無閱讀理解題目</div>'; 
       return; 
     }
-    let html = `<div style="display:flex; flex-direction:column; gap:12px;">`;
+    let html = `<div lang="en" style="display:flex; flex-direction:column; gap:12px;">`; // 添加 lang="en"
     rc.forEach((item, idx) => {
       const qNum = idx + 1;
       html += `<div><div style="font-weight:600;" lang="en">${item.question}</div><div style="margin-left:20px;">`;
@@ -537,8 +568,8 @@ const Renderer = {
     });
     html += `</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkReading('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetReading('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkReading('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetReading('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
       </div>
       <div class="result-feedback" id="${unitId}_reading-result"></div>`;
     container.innerHTML = html;
@@ -548,11 +579,12 @@ const Renderer = {
     const container = document.getElementById('cloze-section');
     let text = unitData.clozeText || '';
     text = text.replace(/id='cloze-(\d+)'/g, `id='${unitId}_cloze-$1'`);
+    // 添加 lang="en" 到容器
     container.innerHTML = `
-      <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
+      <div lang="en" style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkCloze('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetCloze('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkCloze('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetCloze('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
       </div>
       <div class="result-feedback" id="${unitId}_cloze-result"></div>
     `;
@@ -569,17 +601,18 @@ const Renderer = {
                       </div>`;
     });
     let text = sf.text.replace(/id='drop-(\d+)'/g, `id='${unitId}_drop-$1'`);
+    // 添加 lang="en" 到文本容器
     container.innerHTML = `
       <div class="drag-drop-container">
-        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽短语到正确位置：</div>
+        <div style="font-weight:600; color:#4b5563; width:100%;" lang="zh"><i class="fas fa-hand-pointer"></i> 拖拽短語到正確位置：</div>
         <div class="drag-source" id="${unitId}_drag-source">${optionsHtml}
           <button class="drag-undo-btn" onclick="DragDrop.undoDrag('${unitId}')" lang="zh"><i class="fas fa-undo"></i> 返回上一步</button>
         </div>
       </div>
-      <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
+      <div lang="en" style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkSevenFive('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetSevenFive('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkSevenFive('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetSevenFive('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
       </div>
       <div class="result-feedback" id="${unitId}_sevenfive-result"></div>
     `;
@@ -589,24 +622,15 @@ const Renderer = {
     const container = document.getElementById('grammar-section');
     let text = unitData.grammarText || '';
     text = text.replace(/id='grammar-(\d+)'/g, `id='${unitId}_grammar-$1'`);
+    // 添加 lang="en" 到容器
     container.innerHTML = `
-      <div style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
+      <div lang="en" style="font-size:12px; line-height:1.6; padding:12px; border:1px solid #eee; border-radius:6px;">${text}</div>
       <div class="action-buttons">
-        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkGrammar('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 检查答案</button>
-        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetGrammar('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新开始</button>
+        <button class="btn btn-success check-btn" onclick="ExerciseChecker.checkGrammar('${unitId}')" lang="zh"><i class="fas fa-check-circle"></i> 檢查答案</button>
+        <button class="btn btn-danger reset-btn" onclick="ExerciseChecker.resetGrammar('${unitId}')" lang="zh"><i class="fas fa-redo"></i> 重新開始</button>
       </div>
       <div class="result-feedback" id="${unitId}_grammar-result"></div>
     `;
-  },
-
-  toggleTranslation(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('show');
-  },
-  
-  toggleImplication(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('show');
   },
 
   attachInputListeners(unitId) {
@@ -633,9 +657,7 @@ const Renderer = {
     el.style.width = `${cur + 0.5}em`;
   },
   
-  blurWidth(e) {
-    Renderer.adjustWidth(e);
-  }
+  blurWidth(e) { Renderer.adjustWidth(e); }
 };
 
 // ============================================
@@ -649,9 +671,7 @@ const DragDrop = {
 
   handleDragStart(ev) {
     const el = ev.target.closest('.drag-item, .vocab-drag-item');
-    if (el && el.draggable) {
-      ev.dataTransfer.setData('text/plain', el.id);
-    }
+    if (el && el.draggable) ev.dataTransfer.setData('text/plain', el.id);
   },
 
   handleDrop(ev) {
@@ -659,35 +679,25 @@ const DragDrop = {
     if (vocabDropzone) {
       ev.preventDefault();
       const unitId = UnitManager.getCurrentUnitId();
-      if (unitId) {
-        this.dropVocab(ev, unitId, vocabDropzone);
-      }
+      if (unitId) this.dropVocab(ev, unitId, vocabDropzone);
       return;
     }
-    
     const sevenFiveDropzone = ev.target.closest('.seven-five-dropzone');
     if (sevenFiveDropzone) {
       ev.preventDefault();
       const unitId = UnitManager.getCurrentUnitId();
-      if (unitId) {
-        this.drop(ev, unitId, sevenFiveDropzone);
-      }
+      if (unitId) this.drop(ev, unitId, sevenFiveDropzone);
     }
   },
 
   drop(ev, unitId, dropzone) {
     const data = ev.dataTransfer.getData('text/plain');
     const dragged = document.getElementById(data);
-    if (!dragged || dragged.classList.contains('used')) return;
-    if (!dropzone) return;
-
+    if (!dragged || dragged.classList.contains('used') || !dropzone) return;
     if (!this.dragHistory.has(unitId)) this.dragHistory.set(unitId, []);
     this.dragHistory.get(unitId).push({
-      dropzone: dropzone,
-      optionId: data,
-      draggedElement: dragged
+      dropzone, optionId: data, draggedElement: dragged
     });
-
     dropzone.innerHTML = dragged.textContent.replace(/^.*?>\s*/, '');
     dropzone.classList.add('filled');
     dropzone.setAttribute('data-answer', data.split('-').pop());
@@ -715,16 +725,11 @@ const DragDrop = {
   dropVocab(ev, unitId, dropzone) {
     const data = ev.dataTransfer.getData('text/plain');
     const dragged = document.getElementById(data);
-    if (!dragged || dragged.classList.contains('used')) return;
-    if (!dropzone) return;
-
+    if (!dragged || dragged.classList.contains('used') || !dropzone) return;
     if (!this.vocabDragHistory.has(unitId)) this.vocabDragHistory.set(unitId, []);
     this.vocabDragHistory.get(unitId).push({
-      dropzone: dropzone,
-      optionId: data,
-      draggedElement: dragged
+      dropzone, optionId: data, draggedElement: dragged
     });
-
     const word = data.replace(`${unitId}_vocab-option-`, '');
     dropzone.innerHTML = word;
     dropzone.classList.add('filled');
@@ -756,7 +761,7 @@ const DragDrop = {
 };
 
 // ============================================
-// 习题检查器
+// 習題檢查器
 // ============================================
 const ExerciseChecker = {
   checkVocabUsage(unitId) {
@@ -776,7 +781,7 @@ const ExerciseChecker = {
         dz.classList.add('correct'); correct++;
       } else {
         dz.classList.add('incorrect');
-        dz.innerHTML = `${user} <span style="color:#b91c1c; font-size:10px;">(正确: ${answers[i-1]})</span>`;
+        dz.innerHTML = `${user} <span style="color:#b91c1c; font-size:10px;">(正確: ${answers[i-1]})</span>`;
       }
     }
     this.showResult(unitId, 'vocab', correct, answers.length);
@@ -838,26 +843,17 @@ const ExerciseChecker = {
     if (res) res.style.display = 'none';
   },
 
-  checkCloze(unitId) {
-    this.genericCheckFill(unitId, 'cloze', unitData => unitData.answers.cloze);
-  },
-
+  checkCloze(unitId) { this.genericCheckFill(unitId, 'cloze', unitData => unitData.answers.cloze); },
   resetCloze(unitId) {
     const data = UnitManager.getCurrentUnitData();
     if (!data) return;
-    const count = data.answers.cloze.length;
-    this.genericResetFill(unitId, 'cloze', count, 1.8);
+    this.genericResetFill(unitId, 'cloze', data.answers.cloze.length, 1.8);
   },
-
-  checkGrammar(unitId) {
-    this.genericCheckFill(unitId, 'grammar', unitData => unitData.answers.grammar);
-  },
-
+  checkGrammar(unitId) { this.genericCheckFill(unitId, 'grammar', unitData => unitData.answers.grammar); },
   resetGrammar(unitId) {
     const data = UnitManager.getCurrentUnitData();
     if (!data) return;
-    const count = data.answers.grammar.length;
-    this.genericResetFill(unitId, 'grammar', count, 1.5);
+    this.genericResetFill(unitId, 'grammar', data.answers.grammar.length, 1.5);
   },
 
   checkSevenFive(unitId) {
@@ -886,7 +882,7 @@ const ExerciseChecker = {
         dz.classList.add('filled');
         const userOpt = data.sevenFive.options.find(o => o.id === user);
         const corrOpt = data.sevenFive.options.find(o => o.id === answers[i-1]);
-        dz.innerHTML = `${userOpt?.text || user} <br><small style="color:#b91c1c;">正确: ${corrOpt?.text || answers[i-1]}</small>`;
+        dz.innerHTML = `${userOpt?.text || user} <br><small style="color:#b91c1c;">正確: ${corrOpt?.text || answers[i-1]}</small>`;
         DragDrop.adjustDropzoneWidth(dz);
       }
     }
@@ -961,10 +957,10 @@ const ExerciseChecker = {
     if (!res) return;
     const percent = Math.round((correct/total)*100);
     if (correct === total) {
-      res.innerHTML = `<strong><i class="fas fa-trophy"></i> 全部正确！ (${correct}/${total})</strong>`;
+      res.innerHTML = `<strong><i class="fas fa-trophy"></i> 全部正確！ (${correct}/${total})</strong>`;
       res.className = 'result-feedback result-correct';
     } else {
-      res.innerHTML = `<strong><i class="fas fa-chart-line"></i> 答对 ${correct}/${total} (${percent}%)</strong>`;
+      res.innerHTML = `<strong><i class="fas fa-chart-line"></i> 答對 ${correct}/${total} (${percent}%)</strong>`;
       res.className = 'result-feedback result-incorrect';
     }
     res.style.display = 'block';
@@ -972,7 +968,7 @@ const ExerciseChecker = {
 };
 
 // ============================================
-// 单元管理器
+// 單元管理器
 // ============================================
 const UnitManager = (function() {
   let unitsIndex = [];
@@ -983,27 +979,21 @@ const UnitManager = (function() {
   async function init() {
     await loadUnitsIndex();
     populateUnitSelect();
-
     const urlUnit = getUnitFromURL();
     if (urlUnit) {
       const found = unitsIndex.find(u => u.unitId === urlUnit);
-      if (found) {
-        await loadAndRenderUnit(found);
-        return;
-      }
+      if (found) { await loadAndRenderUnit(found); return; }
     }
-    if (unitsIndex.length > 0) {
-      await loadAndRenderUnit(unitsIndex[0]);
-    }
+    if (unitsIndex.length > 0) await loadAndRenderUnit(unitsIndex[0]);
   }
 
   async function loadUnitsIndex() {
     try {
       const res = await fetch('./data/units-index.json');
-      if (!res.ok) throw new Error('网络错误');
+      if (!res.ok) throw new Error('網路錯誤');
       unitsIndex = await res.json();
     } catch (e) {
-      console.warn('加载单元索引失败，使用内置测试数据', e);
+      console.warn('載入單元索引失敗，使用內置測試數據', e);
       unitsIndex = [
         { unitId: 'unit1', unitName: 'Unit 1 – A Severe Fire in Hong Kong', dataUrl: './data/unit1.json' },
         { unitId: 'unit2', unitName: 'Unit 2 – The Rise of Blindbox', dataUrl: './data/unit2.json' }
@@ -1031,37 +1021,30 @@ const UnitManager = (function() {
     try {
       if (currentUnitId && currentUnitId.startsWith('upload_')) {
         const prevEntry = unitsIndex.find(u => u.unitId === currentUnitId);
-        if (prevEntry?.dataUrl?.startsWith('blob:')) {
-          URL.revokeObjectURL(prevEntry.dataUrl);
-        }
+        if (prevEntry?.dataUrl?.startsWith('blob:')) URL.revokeObjectURL(prevEntry.dataUrl);
       }
-
       AudioController.stop();
       if (currentUnitId) {
         DragDrop.dragHistory.delete(currentUnitId);
         DragDrop.vocabDragHistory.delete(currentUnitId);
       }
-
       Renderer.showLoading();
       const res = await fetch(unitInfo.dataUrl);
-      if (!res.ok) throw new Error('加载单元数据失败');
+      if (!res.ok) throw new Error('載入單元數據失敗');
       const unitData = await res.json();
       currentUnitData = unitData;
       currentUnitId = unitData.unitId || unitInfo.unitId;
       app.dataset.unitId = currentUnitId;
-
       const select = document.getElementById('unit-select');
       select.value = currentUnitId;
-
       const url = new URL(window.location);
       url.searchParams.set('unit', currentUnitId);
       window.history.pushState({}, '', url);
-
       Renderer.renderAll(unitData, currentUnitId);
       AudioController.preloadUnitAudio(currentUnitId, unitData.audio);
     } catch (e) {
       console.error(e);
-      alert('加载单元失败：' + e.message);
+      alert('載入單元失敗：' + e.message);
     }
   }
 
@@ -1073,27 +1056,23 @@ const UnitManager = (function() {
   async function handleFileUpload(input) {
     const file = input.files[0];
     if (!file) return;
-    
     try {
       const text = await file.text();
       const unitData = JSON.parse(text);
-      
       if (!unitData.unitId || !unitData.unitName || !unitData.article) {
-        throw new Error('无效的单元JSON格式：缺少 unitId/unitName/article');
+        throw new Error('無效的單元JSON格式：缺少 unitId/unitName/article');
       }
-      
       const tempId = 'upload_' + Date.now();
       const tempEntry = {
         unitId: tempId,
         unitName: unitData.unitName,
         dataUrl: URL.createObjectURL(file)
       };
-      
       unitsIndex.push(tempEntry);
       populateUnitSelect();
       await loadAndRenderUnit(tempEntry);
     } catch (e) {
-      alert('解析JSON失败：' + e.message);
+      alert('解析JSON失敗：' + e.message);
     } finally {
       input.value = '';
     }
@@ -1109,23 +1088,13 @@ const UnitManager = (function() {
 })();
 
 // ============================================
-// 全局拖拽监听器
+// 全局拖拽監聽器
 // ============================================
-document.addEventListener('dragstart', (e) => {
-  DragDrop.handleDragStart(e);
-});
-
-document.addEventListener('dragover', (e) => {
-  e.preventDefault();
-});
-
-document.addEventListener('drop', (e) => {
-  DragDrop.handleDrop(e);
-});
+document.addEventListener('dragstart', (e) => { DragDrop.handleDragStart(e); });
+document.addEventListener('dragover', (e) => { e.preventDefault(); });
+document.addEventListener('drop', (e) => { DragDrop.handleDrop(e); });
 
 // ============================================
-// 页面启动
+// 頁面啟動
 // ============================================
-window.onload = () => {
-  UnitManager.init();
-};
+window.onload = () => { UnitManager.init(); };
