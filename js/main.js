@@ -247,7 +247,7 @@ const AudioController = {
   playImplicationEnglishTTS(text, paraNum, unitId) {
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'en-GB';  // 英國口音
-    utter.rate = 0.75;      // 慢速 (0.75 比正常慢)
+    utter.rate = 0.75;      // 慢速
     utter.pitch = 1;
     utter.volume = 1;
     
@@ -279,19 +279,16 @@ const AudioController = {
     
     this.stop(); // 停止任何正在播放的音頻
     
-    // 高亮當前部分
+    // 只高亮當前部分
     this.clearImplicationHighlights();
     if (element) element.classList.add('implication-playing');
     
     try {
-      // 嘗試播放本地粵語音頻
+      // 嘗試播放本地粵語音頻（兩個獨立的文件）
       const audio = new Audio();
-      // 粵語音頻命名規則：impl_canto_{paraNum}_{partIndex}.mp3
-      // partIndex: 0=前半, 1=後半
-      const pattern = `/english-reading-multi/audio/${unitId}/impl_canto_{id}_{part}.mp3`;
-      audio.src = pattern
-        .replace('{id}', paraNum.toString().padStart(2, '0'))
-        .replace('{part}', partIndex);
+      // 粵語音頻文件：cantonese_interp_part1.mp3 和 cantonese_interp_part2.mp3
+      const audioFile = partIndex === 0 ? 'cantonese_interp_part1.mp3' : 'cantonese_interp_part2.mp3';
+      audio.src = `./audio/${audioFile}`;
       
       await audio.play();
       this.currentAudio = audio;
@@ -302,7 +299,7 @@ const AudioController = {
       };
       
       audio.onerror = () => {
-        console.warn('本地粵語音頻失敗，直接停止');
+        console.warn(`本地粵語音頻 ${audioFile} 失敗，直接停止`);
         this.clearImplicationHighlights();
         this.currentAudio = null;
         // 不轉 TTS，直接結束
@@ -582,7 +579,10 @@ const Renderer = {
       const chineseText = para.implication.chinese;
       const marker = '換句話說：';
       const markerIndex = chineseText.indexOf(marker);
-      
+
+      // 使用固定高度的容器，防止畫面抖動
+      html += `<div class="implication-chinese-container" style="min-height: 3.6em; line-height: 1.8;">`;
+
       if (markerIndex !== -1) {
         const beforePart = chineseText.substring(0, markerIndex);
         const afterPart = chineseText.substring(markerIndex);
@@ -595,7 +595,7 @@ const Renderer = {
                        data-unit-id="${unitId}"
                        data-part-index="0"
                        onclick="AudioController.playImplicationChinese(${paraNum}, '${unitId}', 0, '${encodedBefore}')"
-                       title="點擊播放粵語">${beforePart}</span>`;
+                       title="點擊播放粵語（前半）">${beforePart}</span>`;
         
         // 後半部分（從「換句話說：」開始）
         const encodedAfter = this.encodeForHtmlAttribute(afterPart);
@@ -605,7 +605,7 @@ const Renderer = {
                        data-unit-id="${unitId}"
                        data-part-index="1"
                        onclick="AudioController.playImplicationChinese(${paraNum}, '${unitId}', 1, '${encodedAfter}')"
-                       title="點擊播放粵語">${afterPart}</span>`;
+                       title="點擊播放粵語（後半）">${afterPart}</span>`;
       } else {
         // 如果沒有「換句話說：」，整個作為一部分
         const encodedText = this.encodeForHtmlAttribute(chineseText);
@@ -617,6 +617,8 @@ const Renderer = {
                        onclick="AudioController.playImplicationChinese(${paraNum}, '${unitId}', 0, '${encodedText}')"
                        title="點擊播放粵語">${chineseText}</span>`;
       }
+
+      html += `</div>`; // 關閉 implication-chinese-container
 
       html += `
               </div>
