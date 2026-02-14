@@ -989,3 +989,12 @@ body {
   font-style: italic;
   color: #b45309;
 }
+
+/* 讓 [換句話說] 部分更醒目 */
+.implication-chinese-part.implication-saying {
+  font-weight: 600;
+  color: #b45309;           /* 深橙色文字 */
+  background-color: rgba(245, 158, 11, 0.1); /* 淺橙色背景 */
+  padding: 2px 4px;
+  border-radius: 4px;
+}

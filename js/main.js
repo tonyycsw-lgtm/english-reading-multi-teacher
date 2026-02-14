@@ -575,9 +575,9 @@ const Renderer = {
                    title="點擊播放英文">${para.implication.english}</div>
               <div class="implication-chinese" lang="zh">`;
 
-      // 處理中文部分，分為前半和後半（如果有「換句話說：」）
+      // 處理中文部分，分為前半和後半（如果有「[換句話說]：」）
       const chineseText = para.implication.chinese;
-      const marker = '換句話說：';
+      const marker = '[換句話說]：';
       const markerIndex = chineseText.indexOf(marker);
 
       // 使用固定高度的容器，防止畫面抖動
