@@ -44,7 +44,7 @@ const AudioController = {
       try {
         const audio = new Audio();
         audio.preload = 'metadata';
-        const src = `/english-reading-multi/audio/${unitId}/paragraph_${i.toString().padStart(2,'0')}.mp3`;
+        const src = `/english-reading-multi-teacher/audio/${unitId}/paragraph_${i.toString().padStart(2,'0')}.mp3`;
         audio.src = src;
         audio.onerror = () => {}; // 靜默失敗
         audio.load();
@@ -248,7 +248,7 @@ const AudioController = {
       // 嘗試播放本地音頻
       const audio = new Audio();
       const unitData = UnitManager.getCurrentUnitData();
-      const pattern = unitData.audio?.paragraphPattern || `/english-reading-multi/audio/${unitId}/paragraph_{id}.mp3`;
+      const pattern = unitData.audio?.paragraphPattern || `/english-reading-multi-teacher/audio/${unitId}/paragraph_{id}.mp3`;
       const audioPath = pattern.replace('{id}', paraNum.toString().padStart(2, '0'));
       
       // 設置超時，避免長時間等待
@@ -320,7 +320,7 @@ const AudioController = {
     try {
       // 嘗試播放本地英文音頻
       const audio = new Audio();
-      const pattern = unitData.audio?.implicationPattern || `/english-reading-multi/audio/${unitId}/impl_{id}.mp3`;
+      const pattern = unitData.audio?.implicationPattern || `/english-reading-multi-teacher/audio/${unitId}/impl_{id}.mp3`;
       const audioPath = pattern.replace('{id}', paraNum.toString().padStart(2,'0'));
       
       const timeoutPromise = new Promise((_, reject) => {
@@ -422,7 +422,7 @@ const AudioController = {
           .replace('{para}', paraStr)
           .replace('{part}', partStr);
       } else {
-        audioPath = `/english-reading-multi/audio/${unitId}/impl_chinese_${paraStr}_${partStr}.mp3`;
+        audioPath = `/english-reading-multi-teacher/audio/${unitId}/impl_chinese_${paraStr}_${partStr}.mp3`;
       }
       
       const timeoutPromise = new Promise((_, reject) => {
@@ -487,7 +487,7 @@ const AudioController = {
     try {
       // 嘗試播放本地音頻
       const audio = new Audio();
-      const pattern = unitData.audio?.implicationPattern || `/english-reading-multi/audio/${unitId}/impl_{id}.mp3`;
+      const pattern = unitData.audio?.implicationPattern || `/english-reading-multi-teacher/audio/${unitId}/impl_{id}.mp3`;
       const audioPath = pattern.replace('{id}', paraNum.toString().padStart(2,'0'));
       
       const timeoutPromise = new Promise((_, reject) => {
@@ -539,7 +539,7 @@ const AudioController = {
     try {
       // 嘗試播放本地詞彙音頻
       const audio = new Audio();
-      const pattern = unitData.audio?.vocabularyPattern || `/english-reading-multi/audio/${unitId}/word_{id}.mp3`;
+      const pattern = unitData.audio?.vocabularyPattern || `/english-reading-multi-teacher/audio/${unitId}/word_{id}.mp3`;
       const audioPath = pattern.replace('{id}', vocabId.toString().padStart(2,'0'));
       
       const timeoutPromise = new Promise((_, reject) => {
