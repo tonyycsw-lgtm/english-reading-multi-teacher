@@ -37,20 +37,16 @@ const AudioController = {
   },
 
   preloadUnitAudio(unitId, audioPaths = null) {
-    // 只預加載第1段（如果存在的話），避免大量404錯誤
-    const existingParas = [1]; // 根據實際存在的文件調整
-    
+    const existingParas = [1];
     existingParas.forEach(i => {
       try {
         const audio = new Audio();
         audio.preload = 'metadata';
         const src = `/english-reading-multi-teacher/audio/${unitId}/paragraph_${i.toString().padStart(2,'0')}.mp3`;
         audio.src = src;
-        audio.onerror = () => {}; // 靜默失敗
+        audio.onerror = () => {};
         audio.load();
-      } catch (e) {
-        // 忽略錯誤
-      }
+      } catch (e) {}
     });
   },
 
@@ -231,7 +227,6 @@ const AudioController = {
     this.currentSentenceIndex = -1;
   },
 
-  // ===== 段落音頻播放（優先本地，失敗回退到逐句TTS） =====
   async toggleParagraphAudio(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_para-audio-btn-${paraNum}`);
     if (!btn) return;
@@ -245,26 +240,22 @@ const AudioController = {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 載入中...';
     
     try {
-      // 嘗試播放本地音頻
       const audio = new Audio();
       const unitData = UnitManager.getCurrentUnitData();
       const pattern = unitData.audio?.paragraphPattern || `/english-reading-multi-teacher/audio/${unitId}/paragraph_{id}.mp3`;
       const audioPath = pattern.replace('{id}', paraNum.toString().padStart(2, '0'));
       
-      // 設置超時，避免長時間等待
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error('Timeout')), 3000);
       });
       
       audio.src = audioPath;
       
-      // 使用 Promise.race 處理加載超時
       await Promise.race([
         audio.play(),
         timeoutPromise
       ]);
       
-      // 播放成功
       this.stop();
       this.currentAudio = audio;
       this.currentPlayingButton = btn;
@@ -285,14 +276,12 @@ const AudioController = {
       };
       
     } catch (e) {
-      // 任何錯誤都回退到 TTS
       console.log(`本地音頻段落 ${paraNum} 不可用，使用 TTS`, e);
       btn.classList.remove('loading');
       this.playParagraphBySentences(paraNum, unitId);
     }
   },
 
-  // ===== 解讀容器英文播放（優先本地，失敗回退TTS） =====
   async playImplicationEnglish(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_impl-audio-btn-${paraNum}`);
     
@@ -307,7 +296,6 @@ const AudioController = {
     const implEnglish = unitData?.article?.paragraphs[paraNum-1]?.implication?.english || '';
     const cleanEnglish = implEnglish.replace(/^💡\s*/, '');
     
-    // 高亮英文部分
     this.clearImplicationHighlights();
     const englishEl = document.getElementById(`${unitId}_impl-${paraNum}`)?.querySelector('.implication-english');
     if (englishEl) englishEl.classList.add('implication-playing');
@@ -318,7 +306,6 @@ const AudioController = {
     }
 
     try {
-      // 嘗試播放本地英文音頻
       const audio = new Audio();
       const pattern = unitData.audio?.implicationPattern || `/english-reading-multi-teacher/audio/${unitId}/impl_{id}.mp3`;
       const audioPath = pattern.replace('{id}', paraNum.toString().padStart(2,'0'));
@@ -356,7 +343,6 @@ const AudioController = {
     }
   },
 
-  // 英文 TTS 播放（英國口音，慢速）
   playImplicationEnglishTTS(text, paraNum, unitId, btn = null) {
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'en-GB';
@@ -387,7 +373,6 @@ const AudioController = {
     this.currentAudio = utter;
   },
 
-  // ===== 解讀容器中文部分播放（粵語，無TTS回退） =====
   async playImplicationChinese(paraNum, unitId, partIndex, text) {
     const btn = document.getElementById(`${unitId}_impl-audio-btn-${paraNum}`);
     const elementId = `${unitId}_impl-${paraNum}-chinese-${partIndex}`;
@@ -409,7 +394,6 @@ const AudioController = {
     }
     
     try {
-      // 嘗試播放本地粵語音頻
       const audio = new Audio();
       const unitData = UnitManager.getCurrentUnitData();
       
@@ -468,7 +452,6 @@ const AudioController = {
     }
   },
 
-  // ===== 解讀容器整體播放（保留向後兼容） =====
   async toggleImplicationAudio(paraNum, unitId) {
     const btn = document.getElementById(`${unitId}_impl-audio-btn-${paraNum}`);
     if (!btn) return;
@@ -485,7 +468,6 @@ const AudioController = {
     const cleanImpl = rawImpl.replace(/^💡\s*/, '');
     
     try {
-      // 嘗試播放本地音頻
       const audio = new Audio();
       const pattern = unitData.audio?.implicationPattern || `/english-reading-multi-teacher/audio/${unitId}/impl_{id}.mp3`;
       const audioPath = pattern.replace('{id}', paraNum.toString().padStart(2,'0'));
@@ -521,7 +503,6 @@ const AudioController = {
     }
   },
 
-  // ===== 詞彙音頻播放（優先本地，失敗回退TTS） =====
   async playVocabularyWord(vocabId, unitId) {
     const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
     if (!btn) return;
@@ -537,7 +518,6 @@ const AudioController = {
     const word = unitData?.vocabulary?.find(v => v.id === vocabId)?.word || '';
     
     try {
-      // 嘗試播放本地詞彙音頻
       const audio = new Audio();
       const pattern = unitData.audio?.vocabularyPattern || `/english-reading-multi-teacher/audio/${unitId}/word_{id}.mp3`;
       const audioPath = pattern.replace('{id}', vocabId.toString().padStart(2,'0'));
@@ -579,7 +559,6 @@ const AudioController = {
     }
   },
 
-  // 通用 TTS 播放
   playTTS(text, btn = null, type = '') {
     if (!window.speechSynthesis) return;
     
@@ -1186,44 +1165,37 @@ const DragDrop = {
     }
   },
 
-adjustDropzoneWidth(dz) {
-  const text = dz.textContent.trim();
-  const len = text.length;
-  
-  // 基礎設定
-  const baseMinWidth = 80;      // 基礎最小寬度 (px)
-  const charWidth = 7;          // 每個字元寬度 (px)
-  const maxWidth = 250;         // 最大寬度限制 (px)
-  
-  // 特殊處理：如果為空
-  if (len === 0) {
-    dz.style.minWidth = baseMinWidth + 'px';
-    dz.style.width = baseMinWidth + 'px';
-    dz.style.padding = '6px 2px';
-    return;
-  }
-  
-  // 計算建議寬度
-  let suggestedWidth = Math.max(baseMinWidth, len * charWidth);
-  
-  // 應用最大寬度限制
-  suggestedWidth = Math.min(suggestedWidth, maxWidth);
-  
-  // 設定寬度
-  dz.style.minWidth = suggestedWidth + 'px';
-  dz.style.width = 'auto';
-  
-  // 根據文字長度調整視覺效果
-  if (len <= 3) {
-    dz.style.padding = '6px 8px';
-  } else if (len >= 15) {
-    dz.style.padding = '6px 10px';
-    dz.style.fontSize = '11px';
-  } else {
-    dz.style.padding = '6px 12px';
-    dz.style.fontSize = '12px';
-  }
-},
+  adjustDropzoneWidth(dz) {
+    const text = dz.textContent.trim();
+    const len = text.length;
+    
+    const baseMinWidth = 80;
+    const charWidth = 7;
+    const maxWidth = 250;
+    
+    if (len === 0) {
+      dz.style.minWidth = baseMinWidth + 'px';
+      dz.style.width = baseMinWidth + 'px';
+      dz.style.padding = '6px 2px';
+      return;
+    }
+    
+    let suggestedWidth = Math.max(baseMinWidth, len * charWidth);
+    suggestedWidth = Math.min(suggestedWidth, maxWidth);
+    
+    dz.style.minWidth = suggestedWidth + 'px';
+    dz.style.width = 'auto';
+    
+    if (len <= 3) {
+      dz.style.padding = '6px 8px';
+    } else if (len >= 15) {
+      dz.style.padding = '6px 10px';
+      dz.style.fontSize = '11px';
+    } else {
+      dz.style.padding = '6px 12px';
+      dz.style.fontSize = '12px';
+    }
+  },
 };
 
 // ============================================
@@ -1369,11 +1341,13 @@ const ExerciseChecker = {
       } else if (user === answers[i-1]) {
         dz.classList.add('correct'); 
         dz.classList.add('filled');
+        dz.style.color = '#047857';        // 綠色文字
         correct++;
         DragDrop.adjustDropzoneWidth(dz);
       } else {
         dz.classList.add('incorrect');
         dz.classList.add('filled');
+        dz.style.color = '#b91c1c';        // 紅色文字
         const userOpt = data.sevenFive.options.find(o => o.id === user);
         const corrOpt = data.sevenFive.options.find(o => o.id === answers[i-1]);
         dz.innerHTML = `${userOpt?.text || user} <br><small style="color:#b91c1c;">正確: ${corrOpt?.text || answers[i-1]}</small>`;
@@ -1396,10 +1370,10 @@ const ExerciseChecker = {
         dz.classList.remove('filled','correct','incorrect','empty'); 
         dz.removeAttribute('data-answer');
         dz.style.color = '';
-       dz.style.minWidth = '80px'; 
-       dz.style.width = '80px'; 
-       dz.style.padding = '6px 2px';
-       dz.style.fontSize = '12px';
+        dz.style.minWidth = '80px'; 
+        dz.style.width = '80px'; 
+        dz.style.padding = '6px 2px';
+        dz.style.fontSize = '12px';
       }
     }
     

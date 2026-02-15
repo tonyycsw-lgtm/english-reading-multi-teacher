@@ -253,7 +253,7 @@ body {
 }
 .paragraph-controls .btn,
 .paragraph-controls .toggle-button-group {
-  margin: 0; /* 移除預設外邊距，統一由 gap 控制間距 */
+  margin: 0;
 }
 
 /* ===== 按鈕樣式 ===== */
@@ -376,7 +376,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/* 翻譯內容樣式（預設隱藏） */
 .unified-content .translation-content {
   margin: 0;
   padding: 16px;
@@ -387,10 +386,9 @@ body {
   line-height: 1.8;
   letter-spacing: 0.18em;
   border-radius: 0 6px 6px 0;
-  display: none; /* 預設隱藏 */
+  display: none;
 }
 
-/* 解讀內容樣式（預設隱藏） */
 .unified-content .implication-content {
   margin: 0;
   padding: 16px;
@@ -398,7 +396,7 @@ body {
   border-left: 4px solid #f59e0b;
   color: #92400e;
   font-size: 12px;
-  display: none; /* 預設隱藏 */
+  display: none;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
@@ -453,7 +451,6 @@ body {
   color: white;
 }
 
-/* 確保翻譯句子懸停效果在統一容器中也生效 */
 .unified-content .translation-sentence {
   display: inline;
   transition: background-color 0.2s ease;
@@ -746,7 +743,7 @@ body {
 
 .seven-five-dropzone {
   min-height: 28px;
-  min-width: 45px;
+  min-width: 80px;
   width: auto;
   padding: 6px 8px;
   margin: 0 1px;
@@ -763,8 +760,8 @@ body {
 }
 
 .seven-five-dropzone.empty {
-  min-width: 45px;
-  width: 45px;
+  min-width: 80px;
+  width: 80px;
   padding: 6px 8px;
   border: 1.5px dashed #8b5cf6;
   background-color: #faf5ff;
@@ -949,10 +946,9 @@ body {
 }
 
 /* ===== 解讀容器懸停與播放高亮 ===== */
-/* 解讀容器三個部分的統一懸停效果 */
 .implication-english:hover,
 .implication-chinese-part:hover {
-  background-color: rgba(79, 70, 229, 0.12);  /* 淺紫色/淺綠色 */
+  background-color: rgba(79, 70, 229, 0.12);
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
   cursor: pointer;
   border-radius: 4px;
@@ -960,7 +956,6 @@ body {
   transition: background-color 0.2s ease;
 }
 
-/* 播放時的高亮 */
 .implication-english.implication-playing,
 .implication-chinese-part.implication-playing {
   background-color: rgba(79, 70, 229, 0.15);
@@ -970,13 +965,11 @@ body {
   padding: 2px 0;
 }
 
-/* 確保播放時的高亮覆蓋懸停效果 */
 .implication-english.implication-playing:hover,
 .implication-chinese-part.implication-playing:hover {
   background-color: rgba(79, 70, 229, 0.2);
 }
 
-/* 解讀容器中的中文部分樣式 */
 .implication-chinese-part {
   display: inline;
   transition: background-color 0.2s ease;
@@ -988,19 +981,13 @@ body {
 .implication-chinese-part.implication-saying {
   font-style: italic;
   color: #b45309;
-}
-
-/* 讓 [換句話說] 部分更醒目 */
-.implication-chinese-part.implication-saying {
   font-weight: 600;
-  color: #b45309;           /* 深橙色文字 */
-  background-color: rgba(245, 158, 11, 0.1); /* 淺橙色背景 */
+  background-color: rgba(245, 158, 11, 0.1);
   padding: 2px 4px;
   border-radius: 4px;
 }
 
 /* ===== 容器动画效果 ===== */
-/* 为统一内容容器添加过渡效果 */
 .unified-content .translation-content,
 .unified-content .implication-content {
   transition: opacity 0.3s ease, transform 0.3s ease;
