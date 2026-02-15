@@ -714,7 +714,7 @@ const Renderer = {
                onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="image-fallback" style="display:none; width:100%; height:180px; align-items:center; justify-content:center; color:#64748b;" lang="zh">
             <i class="fas fa-image" style="font-size:48px;"></i>
-            <div style="margin-left:12px;">圖片載入失敗</div>
+            <div style="margin-left:12px;">圖片載入</div>
           </div>
         </div>
         <div class="article-paragraph-wrapper" id="article-content-${unitId}">
