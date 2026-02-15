@@ -332,11 +332,27 @@ const AudioController = {
     }
     
     try {
-      // 嘗試播放本地粵語音頻（兩個獨立的文件）
+      // 嘗試播放單元專屬的粵語音頻
       const audio = new Audio();
-      // 粵語音頻文件：cantonese_interp_part1.mp3 和 cantonese_interp_part2.mp3
-      const audioFile = partIndex === 0 ? 'cantonese_interp_part1.mp3' : 'cantonese_interp_part2.mp3';
-      audio.src = `./audio/${audioFile}`;
+      const unitData = UnitManager.getCurrentUnitData();
+      
+      // 構建單元專屬的粵語音頻路徑
+      // 格式: /english-reading-multi/audio/{unitId}/impl_chinese_{paraNum}_{partIndex+1}.mp3
+      const paraStr = paraNum.toString().padStart(2, '0');
+      const partStr = (partIndex + 1).toString();
+      
+      // 優先使用音頻配置中的模式（如果有的話）
+      let audioPath;
+      if (unitData?.audio?.implicationChinesePattern) {
+        audioPath = unitData.audio.implicationChinesePattern
+          .replace('{para}', paraStr)
+          .replace('{part}', partStr);
+      } else {
+        // 默認路徑格式
+        audioPath = `/english-reading-multi/audio/${unitId}/impl_chinese_${paraStr}_${partStr}.mp3`;
+      }
+      
+      audio.src = audioPath;
       
       await audio.play();
       this.currentAudio = audio;
@@ -351,7 +367,7 @@ const AudioController = {
       };
       
       audio.onerror = () => {
-        console.warn(`本地粵語音頻 ${audioFile} 失敗，直接停止`);
+        console.warn(`本地粵語音頻 ${audioPath} 失敗，直接停止`);  // ✅ 改為 audioPath
         this.clearImplicationHighlights();
         this.currentAudio = null;
         if (btn) {
