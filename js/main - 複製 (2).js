@@ -719,45 +719,23 @@ const Renderer = {
   showTranslation(paraNum, unitId) {
     const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
     const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.add('active');
+    if (implBtn) implBtn.classList.remove('active');
     const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
     const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
-    
-    // 检查翻译内容当前是否可见
-    const isVisible = transContent && transContent.style.display === 'block';
-    
-    if (isVisible) {
-      // 如果可见，则隐藏
-      if (transContent) transContent.style.display = 'none';
-      if (transBtn) transBtn.classList.remove('active');
-    } else {
-      // 如果不可见，则显示翻译，隐藏解读
-      if (transContent) transContent.style.display = 'block';
-      if (implContent) implContent.style.display = 'none';
-      if (transBtn) transBtn.classList.add('active');
-      if (implBtn) implBtn.classList.remove('active');
-    }
+    if (transContent) transContent.style.display = 'block';
+    if (implContent) implContent.style.display = 'none';
   },
 
   showImplication(paraNum, unitId) {
     const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
     const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.remove('active');
+    if (implBtn) implBtn.classList.add('active');
     const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
     const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
-    
-    // 检查解读内容当前是否可见
-    const isVisible = implContent && implContent.style.display === 'flex';
-    
-    if (isVisible) {
-      // 如果可见，则隐藏
-      if (implContent) implContent.style.display = 'none';
-      if (implBtn) implBtn.classList.remove('active');
-    } else {
-      // 如果不可见，则显示解读，隐藏翻译
-      if (implContent) implContent.style.display = 'flex';
-      if (transContent) transContent.style.display = 'none';
-      if (implBtn) implBtn.classList.add('active');
-      if (transBtn) transBtn.classList.remove('active');
-    }
+    if (transContent) transContent.style.display = 'none';
+    if (implContent) implContent.style.display = 'flex';
   },
 
   renderVocabUsage(unitData, unitId) {

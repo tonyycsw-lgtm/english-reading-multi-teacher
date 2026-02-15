@@ -24,17 +24,6 @@ const AudioController = {
     }
   },
 
-  resetImplicationButton(btn, isPlaying = false) {
-    if (!btn) return;
-    btn.classList.remove('playing', 'loading');
-    if (isPlaying) {
-      btn.classList.add('playing');
-      btn.innerHTML = '<i class="fas fa-stop"></i>';
-    } else {
-      btn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  },
-
   preloadUnitAudio(unitId, audioPaths = null) {
     const base = audioPaths || {};
     const paraCount = UnitManager.getCurrentUnitData()?.article?.paragraphs?.length || 6;
@@ -54,11 +43,7 @@ const AudioController = {
       this.currentAudio = null;
     }
     if (this.currentPlayingButton) {
-      if (this.currentPlayingButton.id.includes('_impl-audio-btn-')) {
-        this.resetImplicationButton(this.currentPlayingButton, false);
-      } else {
-        this.resetButton(this.currentPlayingButton);
-      }
+      this.resetButton(this.currentPlayingButton);
       this.currentPlayingButton = null;
     }
     this.clearAllSentenceHighlights();
@@ -222,14 +207,6 @@ const AudioController = {
 
   // ===== 解讀容器英文播放 =====
   async playImplicationEnglish(paraNum, unitId) {
-    const btn = document.getElementById(`${unitId}_impl-audio-btn-${paraNum}`);
-    
-    // 如果正在播放，則停止
-    if (btn && btn.classList.contains('playing')) {
-      this.stop();
-      return;
-    }
-    
     this.stop();
     
     const unitData = UnitManager.getCurrentUnitData();
@@ -240,12 +217,6 @@ const AudioController = {
     this.clearImplicationHighlights();
     const englishEl = document.getElementById(`${unitId}_impl-${paraNum}`)?.querySelector('.implication-english');
     if (englishEl) englishEl.classList.add('implication-playing');
-
-    // 更新按鈕狀態為播放中
-    if (btn) {
-      this.resetImplicationButton(btn, true);
-      this.currentPlayingButton = btn;
-    }
 
     try {
       // 嘗試播放本地英文音頻
@@ -259,25 +230,21 @@ const AudioController = {
       audio.onended = () => {
         this.clearImplicationHighlights();
         this.currentAudio = null;
-        if (btn) {
-          this.resetImplicationButton(btn, false);
-          if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-        }
       };
       
       audio.onerror = () => {
         console.warn('本地英文音頻失敗，使用 TTS');
-        this.playImplicationEnglishTTS(cleanEnglish, paraNum, unitId, btn);
+        this.playImplicationEnglishTTS(cleanEnglish, paraNum, unitId);
       };
       
     } catch (e) {
       console.warn('本地英文音頻載入失敗，使用 TTS', e);
-      this.playImplicationEnglishTTS(cleanEnglish, paraNum, unitId, btn);
+      this.playImplicationEnglishTTS(cleanEnglish, paraNum, unitId);
     }
   },
 
   // 英文 TTS 播放（英國口音，慢速）
-  playImplicationEnglishTTS(text, paraNum, unitId, btn = null) {
+  playImplicationEnglishTTS(text, paraNum, unitId) {
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'en-GB';  // 英國口音
     utter.rate = 0.75;      // 慢速
@@ -287,20 +254,12 @@ const AudioController = {
     utter.onend = () => {
       this.clearImplicationHighlights();
       this.currentAudio = null;
-      if (btn) {
-        this.resetImplicationButton(btn, false);
-        if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-      }
     };
     
     utter.onerror = (e) => {
       console.error('英文 TTS 播放錯誤', e);
       this.clearImplicationHighlights();
       this.currentAudio = null;
-      if (btn) {
-        this.resetImplicationButton(btn, false);
-        if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-      }
     };
     
     window.speechSynthesis.speak(utter);
@@ -309,11 +268,10 @@ const AudioController = {
 
   // ===== 解讀容器中文部分播放（粵語） =====
   async playImplicationChinese(paraNum, unitId, partIndex, text) {
-    const btn = document.getElementById(`${unitId}_impl-audio-btn-${paraNum}`);
+    // 如果正在播放當前部分，則停止
     const elementId = `${unitId}_impl-${paraNum}-chinese-${partIndex}`;
     const element = document.getElementById(elementId);
     
-    // 如果正在播放當前部分，則停止
     if (element && element.classList.contains('implication-playing')) {
       this.stop();
       return;
@@ -324,12 +282,6 @@ const AudioController = {
     // 只高亮當前部分
     this.clearImplicationHighlights();
     if (element) element.classList.add('implication-playing');
-    
-    // 更新按鈕狀態為播放中
-    if (btn) {
-      this.resetImplicationButton(btn, true);
-      this.currentPlayingButton = btn;
-    }
     
     try {
       // 嘗試播放本地粵語音頻（兩個獨立的文件）
@@ -344,20 +296,12 @@ const AudioController = {
       audio.onended = () => {
         this.clearImplicationHighlights();
         this.currentAudio = null;
-        if (btn) {
-          this.resetImplicationButton(btn, false);
-          if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-        }
       };
       
       audio.onerror = () => {
         console.warn(`本地粵語音頻 ${audioFile} 失敗，直接停止`);
         this.clearImplicationHighlights();
         this.currentAudio = null;
-        if (btn) {
-          this.resetImplicationButton(btn, false);
-          if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-        }
         // 不轉 TTS，直接結束
       };
       
@@ -365,10 +309,6 @@ const AudioController = {
       console.warn('本地粵語音頻載入失敗', e);
       this.clearImplicationHighlights();
       this.currentAudio = null;
-      if (btn) {
-        this.resetImplicationButton(btn, false);
-        if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-      }
       // 失敗就直接停止，不播放 TTS
     }
   },
@@ -397,7 +337,7 @@ const AudioController = {
       btn.classList.add('playing');
       btn.innerHTML = '<i class="fas fa-stop"></i>';
       audio.onended = () => {
-        this.resetImplicationButton(btn, false);
+        this.resetButton(btn);
         if (this.currentAudio === audio) this.currentAudio = null;
         if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
       };
@@ -632,7 +572,7 @@ const Renderer = {
             <div class="implication-text-wrapper">
               <div class="implication-english" lang="en" 
                    onclick="AudioController.playImplicationEnglish(${paraNum}, '${unitId}')">
-                   ${para.implication.english}</div>
+		   ${para.implication.english}</div>
               <div class="implication-chinese" lang="zh">`;
 
       // 處理中文部分，分為前半和後半（如果有「[換句話說]：」）
@@ -655,7 +595,7 @@ const Renderer = {
                        data-unit-id="${unitId}"
                        data-part-index="0"
                        onclick="AudioController.playImplicationChinese(${paraNum}, '${unitId}', 0, '${encodedBefore}')">
-                       ${beforePart}</span>`;
+		       ${beforePart}</span>`;
         
         // 後半部分（從「換句話說：」開始）
         const encodedAfter = this.encodeForHtmlAttribute(afterPart);
@@ -665,7 +605,7 @@ const Renderer = {
                        data-unit-id="${unitId}"
                        data-part-index="1"
                        onclick="AudioController.playImplicationChinese(${paraNum}, '${unitId}', 1, '${encodedAfter}')">
-                       ${afterPart}</span>`;
+		       ${afterPart}</span>`;
       } else {
         // 如果沒有「換句話說：」，整個作為一部分
         const encodedText = this.encodeForHtmlAttribute(chineseText);
@@ -675,7 +615,7 @@ const Renderer = {
                        data-unit-id="${unitId}"
                        data-part-index="0"
                        onclick="AudioController.playImplicationChinese(${paraNum}, '${unitId}', 0, '${encodedText}')">
-                       ${chineseText}</span>`;
+		       ${chineseText}</span>`;
       }
 
       html += `</div>`; // 關閉 implication-chinese-container
@@ -719,45 +659,23 @@ const Renderer = {
   showTranslation(paraNum, unitId) {
     const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
     const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.add('active');
+    if (implBtn) implBtn.classList.remove('active');
     const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
     const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
-    
-    // 检查翻译内容当前是否可见
-    const isVisible = transContent && transContent.style.display === 'block';
-    
-    if (isVisible) {
-      // 如果可见，则隐藏
-      if (transContent) transContent.style.display = 'none';
-      if (transBtn) transBtn.classList.remove('active');
-    } else {
-      // 如果不可见，则显示翻译，隐藏解读
-      if (transContent) transContent.style.display = 'block';
-      if (implContent) implContent.style.display = 'none';
-      if (transBtn) transBtn.classList.add('active');
-      if (implBtn) implBtn.classList.remove('active');
-    }
+    if (transContent) transContent.style.display = 'block';
+    if (implContent) implContent.style.display = 'none';
   },
 
   showImplication(paraNum, unitId) {
     const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
     const implBtn = document.getElementById(`${unitId}_impl-btn-${paraNum}`);
+    if (transBtn) transBtn.classList.remove('active');
+    if (implBtn) implBtn.classList.add('active');
     const transContent = document.getElementById(`${unitId}_trans-${paraNum}`);
     const implContent = document.getElementById(`${unitId}_impl-${paraNum}`);
-    
-    // 检查解读内容当前是否可见
-    const isVisible = implContent && implContent.style.display === 'flex';
-    
-    if (isVisible) {
-      // 如果可见，则隐藏
-      if (implContent) implContent.style.display = 'none';
-      if (implBtn) implBtn.classList.remove('active');
-    } else {
-      // 如果不可见，则显示解读，隐藏翻译
-      if (implContent) implContent.style.display = 'flex';
-      if (transContent) transContent.style.display = 'none';
-      if (implBtn) implBtn.classList.add('active');
-      if (transBtn) transBtn.classList.remove('active');
-    }
+    if (transContent) transContent.style.display = 'none';
+    if (implContent) implContent.style.display = 'flex';
   },
 
   renderVocabUsage(unitData, unitId) {

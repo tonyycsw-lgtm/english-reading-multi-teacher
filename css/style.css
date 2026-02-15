@@ -998,3 +998,22 @@ body {
   padding: 2px 4px;
   border-radius: 4px;
 }
+
+/* ===== 容器动画效果 ===== */
+/* 为统一内容容器添加过渡效果 */
+.unified-content .translation-content,
+.unified-content .implication-content {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.unified-content .translation-content[style*="display: block"],
+.unified-content .implication-content[style*="display: flex"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.unified-content .translation-content[style*="display: none"],
+.unified-content .implication-content[style*="display: none"] {
+  opacity: 0;
+  transform: translateY(-10px);
+}
