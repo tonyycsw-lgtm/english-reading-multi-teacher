@@ -3,7 +3,7 @@
   "unitName": "Unit 1 – A Severe Fire in Hong Kong\n香港發生嚴重火警",
   "article": {
     "title": "<strong>A Severe Fire in Hong Kong</strong>\n<strong>香港發生嚴重火警</strong>",
-    "illustration": "/english-reading-multi/images/unit1/fireman.png",
+    "illustration": "/english-reading-multi-teacher/images/unit1/fireman.png",
     "paragraphs": [
       {
         "id": 1,
@@ -257,8 +257,8 @@
   },
   "grammarText": "<strong>A Severe Fire in Hong Kong:</strong> A terrible fire broke out <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-1' maxlength='10'></span> November 26, 2025, in Wang Fuk Yuen, Hong Kong. It started from <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-2' maxlength='10'></span> scaffolding of a building and spread quickly because <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-3' maxlength='10'></span> strong winds. The fire was a big challenge for <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-4' maxlength='15'></span> (firefighter). Many residents <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-5' maxlength='15'></span> (trap) on the upper floors, but the rescue team kept in touch with them by phone. More than 700 workers <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-6' maxlength='15'></span> (dispatch) to the scene. Sadly, a firefighter lost <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-7' maxlength='10'></span> (he) life in the fire. The government took quick action, <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-8' maxlength='10'></span> opened temporary shelters for the affected people. It is important <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-9' maxlength='15'></span> (remember) fire safety. The cause of the fire is still under <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-10' maxlength='15'></span> (investigate).",
   "audio": {
-    "paragraphPattern": "/english-reading-multi/audio/unit1/paragraph_{id}.mp3",
-    "implicationPattern": "/english-reading-multi/audio/unit1/impl_{id}.mp3",
-    "vocabularyPattern": "/english-reading-multi/audio/unit1/word_{id}.mp3"
+    "paragraphPattern": "/english-reading-multi-teacher/audio/unit1/paragraph_{id}.mp3",
+    "implicationPattern": "/english-reading-multi-teacher/audio/unit1/impl_{id}.mp3",
+    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit1/word_{id}.mp3"
   }
 }

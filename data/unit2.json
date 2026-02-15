@@ -3,7 +3,7 @@
   "unitName": "盲盒的心理學：利弊解析 | A psychologist opens up the pros and cons of blind boxes",
   "article": {
     "title": "<strong>A psychologist opens up the pros and cons of blind boxes</strong>\n<strong>盲盒的心理學：利弊解析</strong>",
-    "illustration": "/english-reading-multi/images/unit4/placeholder.jpg",
+    "illustration": "/english-reading-multi-teacher/images/unit2/placeholder.jpg",
     "paragraphs": [
       {
         "id": 1,
@@ -291,8 +291,8 @@
   },
   "grammarText": "<strong>Building Friendship Resilience:</strong> Blind boxes <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-1' maxlength='20'></span> (become) a global phenomenon. They are designed <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-2' maxlength='15'></span> (keep) their contents a mystery. Before <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-3' maxlength='15'></span> (open) a box, the brain releases dopamine. During the peak phase, the brain <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-4' maxlength='20'></span> (flood) with neurochemicals. This causes people <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-5' maxlength='15'></span> (feel) excitement. Some collectors enjoy <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-6' maxlength='15'></span> (hide) their purchases from others. A hobby becomes unhealthy <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-7' maxlength='10'></span> it starts to take over your life. Sharing a hobby with family often <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-8' maxlength='15'></span> (strengthen) relationships. However, <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-9' maxlength='15'></span> (spend) money you don't have is a major warning sign. Remember, a hobby <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-10' maxlength='20'></span> (not take) over your life.",
   "audio": {
-    "paragraphPattern": "/english-reading-multi/audio/unit4/paragraph_{id}.mp3",
-    "implicationPattern": "/english-reading-multi/audio/unit4/impl_{id}.mp3",
-    "vocabularyPattern": "/english-reading-multi/audio/unit4/word_{id}.mp3"
+    "paragraphPattern": "/english-reading-multi-teacher/audio/unit2/paragraph_{id}.mp3",
+    "implicationPattern": "/english-reading-multi-teacher/audio/unit2/impl_{id}.mp3",
+    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit2/word_{id}.mp3"
   }
 }

@@ -3,7 +3,7 @@
   "unitName": "青少年友誼：化解衝突與建立韌性 | Teen friendships: navigating conflict and building resilience",
   "article": {
     "title": "<strong>Teen friendships: navigating conflict and building resilience</strong>\n<strong>青少年友誼：化解衝突與建立韌性</strong>",
-    "illustration": "/english-reading-multi/images/unit3/placeholder.jpg",
+    "illustration": "/english-reading-multi-teacher/images/unit3/placeholder.jpg",
     "paragraphs": [
       {
         "id": 1,
@@ -333,8 +333,8 @@
   },
   "grammarText": "<strong>Building Friendship Resilience:</strong> Leo and his best friend <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-1' maxlength='15'></span> (attend) the same schools for years. After Leo <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-2' maxlength='10'></span> (join) the football team, they started <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-3' maxlength='15'></span> (spend) less time together. Leo wanted <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-4' maxlength='15'></span> (explain) his situation but feared <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-5' maxlength='20'></span> (perceive) as weak. The therapist advised them <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-6' maxlength='10'></span> (calm) down first. She suggested <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-7' maxlength='20'></span> (express) feelings with \"I statements.\" It is important <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-8' maxlength='15'></span> (restate) what you hear. Friendships can <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-9' maxlength='12'></span> (dissolve) due to shifting interests. Building resilience involves <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-10' maxlength='15'></span> (have) diverse social outlets.",
   "audio": {
-    "paragraphPattern": "/english-reading-multi/audio/unit3/paragraph_{id}.mp3",
-    "implicationPattern": "/english-reading-multi/audio/unit3/impl_{id}.mp3",
-    "vocabularyPattern": "/english-reading-multi/audio/unit3/word_{id}.mp3"
+    "paragraphPattern": "/english-reading-multi-teacher/audio/unit3/paragraph_{id}.mp3",
+    "implicationPattern": "/english-reading-multi-teacher/audio/unit3/impl_{id}.mp3",
+    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit3/word_{id}.mp3"
   }
 }
