@@ -3,7 +3,7 @@
   "unitName": "香港巴士安全帶規定全面檢討 | Hong Kong to fully review plans for bus seat belt rules",
   "article": {
     "title": "<strong>Hong Kong to fully review plans for bus seat belt rules before relaunch</strong>\n<strong>香港巴士安全帶規定全面檢討後再推出</strong>",
-    "illustration": "/english-reading-multi-teacher/images/unit5/cover.png",
+    "illustration": "/english-reading-multi-teacher/images/unit4/cover.png",
     "paragraphs": [
       {
         "id": 1,
@@ -199,7 +199,7 @@
       "A four-pronged approach will be used to <span class='vocab-dropzone' id='vocab-drop-4'></span> public concerns.",
       "The government will <span class='vocab-dropzone' id='vocab-drop-5'></span> a more cautious approach this time.",
       "Improving the installation and <span class='vocab-dropzone' id='vocab-drop-6'></span> of seat belts is a key step.",
-      "The goal is to <span class='vocab-dropzone' <span class='vocab-dropzone' id='vocab-drop-7'></span> both safety and convenience for passengers.",
+      "The goal is to <span class='vocab-dropzone' id='vocab-drop-7'></span> both safety and convenience for passengers.",
       "Experts will be asked to <span class='vocab-dropzone' id='vocab-drop-8'></span> the risks on different bus routes.",
       "The government will <span class='vocab-dropzone' id='vocab-drop-9'></span> experts to study the issue.",
       "Stepping up <span class='vocab-dropzone' id='vocab-drop-10'></span> will help raise passenger awareness."
@@ -295,8 +295,8 @@
   },
   "grammarText": "<strong>Future of Transport Policy:</strong> The Transport Chief <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-1' maxlength='20'></span> (pledge) to review the bus seat belt rules. The government plans <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-2' maxlength='15'></span> (review) the policy thoroughly. This includes <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-3' maxlength='20'></span> (examine) possible exemptions. They <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-4' maxlength='15'></span> (adopt) a four-pronged approach to address concerns. The aim is <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-5' maxlength='15'></span> (ensure) the rules are practical. They are committed to <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-6' maxlength='20'></span> (work) with bus operators. This collaborative effort started <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-7' maxlength='10'></span> the previous law failed. A collaborative approach <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-8' maxlength='20'></span> (strengthen) public trust. <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-9' maxlength='15'></span> (listen) to public views is crucial. Proposals will be finalized before they <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-10' maxlength='20'></span> (present) to the legislature.",
   "audio": {
-    "paragraphPattern": "/english-reading-multi-teacher/audio/unit5/paragraph_{id}.mp3",
-    "implicationPattern": "/english-reading-multi-teacher/audio/unit5/impl_{id}.mp3",
-    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit5/word_{id}.mp3"
+    "paragraphPattern": "/english-reading-multi-teacher/audio/unit4/paragraph_{id}.mp3",
+    "implicationPattern": "/english-reading-multi-teacher/audio/unit4/impl_{id}.mp3",
+    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit4/word_{id}.mp3"
   }
 }
