@@ -1319,54 +1319,55 @@ const ExerciseChecker = {
     this.genericResetFill(unitId, 'grammar', data.answers.grammar.length, 1.5);
   },
 
-checkSevenFive(unitId) {
-  const data = UnitManager.getCurrentUnitData();
-  const answers = data.answers.sevenFive;        // 正確文本數組
-  const options = data.sevenFive.options;        // 選項列表 [{id, text}, ...]
-  let correct = 0;
+  checkSevenFive(unitId) {
+    const data = UnitManager.getCurrentUnitData();
+    const answers = data.answers.sevenFive;        // 正確文本數組
+    const options = data.sevenFive.options;        // 選項列表 [{id, text}, ...]
+    let correct = 0;
 
-  for (let i = 1; i <= answers.length; i++) {
-    const dz = document.getElementById(`${unitId}_drop-${i}`);
-    if (!dz) continue;
+    for (let i = 1; i <= answers.length; i++) {
+      const dz = document.getElementById(`${unitId}_drop-${i}`);
+      if (!dz) continue;
 
-    const user = dz.getAttribute('data-answer'); // 用戶拖拽的選項 ID
-    dz.classList.remove('correct', 'incorrect', 'empty');
-    dz.style.color = '';
+      const user = dz.getAttribute('data-answer'); // 用戶拖拽的選項 ID
+      dz.classList.remove('correct', 'incorrect', 'empty');
+      dz.style.color = '';
 
-    if (!user) {
-      // 未作答：自動填入正確答案（灰色提示）
-      dz.classList.add('empty');
-      const correctOpt = options.find(o => o.text === answers[i - 1]);
-      dz.innerHTML = correctOpt ? correctOpt.text : answers[i - 1];
-      dz.style.color = '#7c3aed';
-      DragDrop.adjustDropzoneWidth(dz);
-    } else {
-      // 已作答：查找用戶選中的選項文本
-      const userOpt = options.find(o => o.id === user);
-      const userText = userOpt ? userOpt.text : user;
-
-      if (userText === answers[i - 1]) {
-        // 正確
-        dz.classList.add('correct');
-        dz.classList.add('filled');
-        dz.innerHTML = userText;                     // 只顯示文本
-        dz.style.color = '#047857';                   // 綠色
-        correct++;
+      if (!user) {
+        // 未作答：自動填入正確答案（灰色提示）
+        dz.classList.add('empty');
+        const correctOpt = options.find(o => o.text.trim().toLowerCase() === answers[i-1].trim().toLowerCase());
+        dz.innerHTML = correctOpt ? correctOpt.text : answers[i-1];
+        dz.style.color = '#7c3aed';
         DragDrop.adjustDropzoneWidth(dz);
       } else {
-        // 錯誤
-        dz.classList.add('incorrect');
-        dz.classList.add('filled');
-        const correctOpt = options.find(o => o.text === answers[i - 1]);
-        dz.innerHTML = `${userText} <br><small style="color:#b91c1c;">正確: ${correctOpt?.text || answers[i - 1]}</small>`;
-        dz.style.color = '#b91c1c';                   // 紅色
-        DragDrop.adjustDropzoneWidth(dz);
+        // 已作答：查找用戶選中的選項文本
+        const userOpt = options.find(o => String(o.id) === user);
+        const userText = userOpt ? userOpt.text.trim().toLowerCase() : '';
+        const correctText = answers[i-1].trim().toLowerCase();
+
+        if (userText === correctText) {
+          // 正確
+          dz.classList.add('correct');
+          dz.classList.add('filled');
+          dz.innerHTML = userOpt.text;               // 只顯示原始文本
+          dz.style.color = '#047857';                 // 綠色
+          correct++;
+          DragDrop.adjustDropzoneWidth(dz);
+        } else {
+          // 錯誤
+          dz.classList.add('incorrect');
+          dz.classList.add('filled');
+          const correctOpt = options.find(o => o.text.trim().toLowerCase() === correctText);
+          dz.innerHTML = `${userOpt ? userOpt.text : user} <br><small style="color:#b91c1c;">正確: ${correctOpt ? correctOpt.text : answers[i-1]}</small>`;
+          dz.style.color = '#b91c1c';                 // 紅色
+          DragDrop.adjustDropzoneWidth(dz);
+        }
       }
     }
-  }
 
-  this.showResult(unitId, 'sevenfive', correct, answers.length);
-}
+    this.showResult(unitId, 'sevenfive', correct, answers.length);
+  },
 
   resetSevenFive(unitId) {
     const data = UnitManager.getCurrentUnitData();
