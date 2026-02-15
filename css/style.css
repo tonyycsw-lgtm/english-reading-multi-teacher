@@ -746,9 +746,9 @@ body {
 
 .seven-five-dropzone {
   min-height: 28px;
-  min-width: 80px;
-  width: 80px;
-  padding: 6px 2px;
+  min-width: 45px;
+  width: auto;
+  padding: 6px 8px;
   margin: 0 1px;
   border: 1.5px dashed #9ca3af;
   border-radius: 5px;
@@ -763,8 +763,8 @@ body {
 }
 
 .seven-five-dropzone.empty {
-  min-width: 80px;
-  width: 80px;
+  min-width: 45px;
+  width: 45px;
   padding: 6px 8px;
   border: 1.5px dashed #8b5cf6;
   background-color: #faf5ff;

@@ -1076,7 +1076,7 @@ const Renderer = {
     const el = e.target;
     let min = el.classList.contains('cloze-input') ? 1.8 : 1.5;
     const len = el.value.length;
-    el.style.width = `${Math.max(min, len * 0.55 + 0.25)}em`;
+    el.style.width = `${Math.max(min, len * 0.8 + 0.5)}em`;
   },
   
   focusWidth(e) {
@@ -1148,8 +1148,8 @@ const DragDrop = {
       last.dropzone.innerHTML = '';
       last.dropzone.classList.remove('filled');
       last.dropzone.removeAttribute('data-answer');
-      last.dropzone.style.minWidth = '80px';
-      last.dropzone.style.width = '80px';
+      last.dropzone.style.minWidth = '45px';
+      last.dropzone.style.width = '45px';
     }
   },
 
@@ -1186,11 +1186,44 @@ const DragDrop = {
     }
   },
 
-  adjustDropzoneWidth(dz) {
-    const len = dz.textContent.trim().length;
-    dz.style.minWidth = Math.max(80, len * 10) + 'px';
-    dz.style.width = 'auto';
+adjustDropzoneWidth(dz) {
+  const text = dz.textContent.trim();
+  const len = text.length;
+  
+  // 基礎設定
+  const baseMinWidth = 45;      // 基礎最小寬度 (px)
+  const charWidth = 7;          // 每個字元寬度 (px)
+  const maxWidth = 250;         // 最大寬度限制 (px)
+  
+  // 特殊處理：如果為空
+  if (len === 0) {
+    dz.style.minWidth = baseMinWidth + 'px';
+    dz.style.width = baseMinWidth + 'px';
+    dz.style.padding = '6px 2px';
+    return;
   }
+  
+  // 計算建議寬度
+  let suggestedWidth = Math.max(baseMinWidth, len * charWidth);
+  
+  // 應用最大寬度限制
+  suggestedWidth = Math.min(suggestedWidth, maxWidth);
+  
+  // 設定寬度
+  dz.style.minWidth = suggestedWidth + 'px';
+  dz.style.width = 'auto';
+  
+  // 根據文字長度調整視覺效果
+  if (len <= 3) {
+    dz.style.padding = '6px 8px';
+  } else if (len >= 15) {
+    dz.style.padding = '6px 10px';
+    dz.style.fontSize = '11px';
+  } else {
+    dz.style.padding = '6px 12px';
+    dz.style.fontSize = '12px';
+  }
+},
 };
 
 // ============================================
@@ -1363,8 +1396,10 @@ const ExerciseChecker = {
         dz.classList.remove('filled','correct','incorrect','empty'); 
         dz.removeAttribute('data-answer');
         dz.style.color = '';
-        dz.style.minWidth = '80px'; 
-        dz.style.width = '80px';
+       dz.style.minWidth = '45px';    // ← 把 80 改成 45
+       dz.style.width = '45px';       // ← 把 80 改成 45
+       dz.style.padding = '6px 2px';
+       dz.style.fontSize = '12px';
       }
     }
     
