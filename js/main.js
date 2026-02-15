@@ -1148,8 +1148,8 @@ const DragDrop = {
       last.dropzone.innerHTML = '';
       last.dropzone.classList.remove('filled');
       last.dropzone.removeAttribute('data-answer');
-      last.dropzone.style.minWidth = '45px';
-      last.dropzone.style.width = '45px';
+      last.dropzone.style.minWidth = '80px';
+      last.dropzone.style.width = '80px';
     }
   },
 
@@ -1191,7 +1191,7 @@ adjustDropzoneWidth(dz) {
   const len = text.length;
   
   // 基礎設定
-  const baseMinWidth = 45;      // 基礎最小寬度 (px)
+  const baseMinWidth = 80;      // 基礎最小寬度 (px)
   const charWidth = 7;          // 每個字元寬度 (px)
   const maxWidth = 250;         // 最大寬度限制 (px)
   
@@ -1396,8 +1396,8 @@ const ExerciseChecker = {
         dz.classList.remove('filled','correct','incorrect','empty'); 
         dz.removeAttribute('data-answer');
         dz.style.color = '';
-       dz.style.minWidth = '45px';    // ← 把 80 改成 45
-       dz.style.width = '45px';       // ← 把 80 改成 45
+       dz.style.minWidth = '80px'; 
+       dz.style.width = '80px'; 
        dz.style.padding = '6px 2px';
        dz.style.fontSize = '12px';
       }
