@@ -1076,7 +1076,7 @@ const Renderer = {
     const el = e.target;
     let min = el.classList.contains('cloze-input') ? 1.8 : 1.5;
     const len = el.value.length;
-    el.style.width = `${Math.max(min, len * 0.8 + 0.5)}em`;
+    el.style.width = `${Math.max(min, len * 0.55 + 0.25)}em`;
   },
   
   focusWidth(e) {
