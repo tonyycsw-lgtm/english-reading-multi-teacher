@@ -455,26 +455,19 @@ body {
   color: white;
 }
 
-/* ===== 中文翻譯樣式（鼠標保持默認）===== */
+/* ===== 中文翻譯樣式（與英文高亮完全統一）===== */
 .translation-sentence {
   display: inline;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
   border-radius: 4px;
   padding: 2px 0;
-  cursor: default;  /* 默認箭頭，不是手指 */
+  cursor: default;
 }
 
-.translation-sentence:hover {
-  background-color: rgba(139, 92, 246, 0.25);
-  cursor: default;  /* 懸停時也是默認箭頭 */
-  border-radius: 4px;
-  padding: 2px 0;
-  transition: background-color 0.2s ease;
-}
-
+.translation-sentence:hover,
 .translation-sentence.translation-highlight {
-  background-color: rgba(139, 92, 246, 0.15);
-  box-shadow: 0 1px 4px rgba(139, 92, 246, 0.15);
+  background-color: rgba(79, 70, 229, 0.12);  /* 統一使用英文的顏色 */
+  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
   font-weight: 500;
 }
 
