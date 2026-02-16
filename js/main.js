@@ -930,8 +930,8 @@ const Renderer = {
 
     html += `</div></div>`;
 
-    // ===== 修改後的詞彙表部分（分頁顯示）=====
-    const itemsPerPage = 15;
+    // ===== 詞彙表部分（分頁顯示）=====
+    const itemsPerPage = 20; // 每頁20個詞彙
     
     html += `
       <div class="vocab-section">
@@ -951,12 +951,13 @@ const Renderer = {
   initVocabPagination(unitId, vocab, itemsPerPage) {
     if (!Renderer.vocabPages) Renderer.vocabPages = new Map();
     
-    const totalPages = Math.ceil(vocab.length / itemsPerPage);
+    const actualItemsPerPage = itemsPerPage || 20; // 預設20
+    const totalPages = Math.ceil(vocab.length / actualItemsPerPage);
     
     Renderer.vocabPages.set(unitId, {
       currentPage: 1,
       totalPages,
-      itemsPerPage,
+      itemsPerPage: actualItemsPerPage,
       vocab
     });
     
@@ -1004,10 +1005,12 @@ const Renderer = {
     const paginationContainer = document.getElementById(`${unitId}_vocab-pagination`);
     if (!paginationContainer) return;
 
+    // 分頁按鈕 HTML - 放在上方
     let paginationHtml = `
       <button class="vocab-page-btn vocab-page-nav" 
               onclick="Renderer.changeVocabPage('${unitId}', ${currentPage - 1})"
-              ${currentPage === 1 ? 'disabled' : ''}>
+              ${currentPage === 1 ? 'disabled' : ''}
+              title="上一頁">
         <i class="fas fa-chevron-left"></i>
       </button>
     `;
@@ -1020,28 +1023,56 @@ const Renderer = {
           (i >= currentPage - 1 && i <= currentPage + 1)) {
         paginationHtml += `
           <button class="vocab-page-btn ${i === currentPage ? 'active' : ''}"
-                  onclick="Renderer.changeVocabPage('${unitId}', ${i})">
+                  onclick="Renderer.changeVocabPage('${unitId}', ${i})"
+                  title="第 ${i} 頁">
             ${i}
           </button>
         `;
       } else if (i === currentPage - 2 || i === currentPage + 2) {
-        paginationHtml += `<span class="vocab-page-btn" style="border: none; cursor: default;">...</span>`;
+        paginationHtml += `<span class="vocab-page-btn" style="border: none; cursor: default; background: transparent; box-shadow: none;">...</span>`;
       }
     }
 
     paginationHtml += `
       <button class="vocab-page-btn vocab-page-nav"
               onclick="Renderer.changeVocabPage('${unitId}', ${currentPage + 1})"
-              ${currentPage === state.totalPages ? 'disabled' : ''}>
+              ${currentPage === state.totalPages ? 'disabled' : ''}
+              title="下一頁">
         <i class="fas fa-chevron-right"></i>
       </button>
-      <div class="vocab-info">
-        <span>第 ${currentPage} / ${state.totalPages} 頁</span>
-        <span>共 ${state.vocab.length} 個詞彙</span>
-      </div>
     `;
 
+    // 設置分頁按鈕（在上方）
     paginationContainer.innerHTML = paginationHtml;
+
+    // 創建或更新頁碼信息容器（在下方）
+    let infoContainer = document.getElementById(`${unitId}_vocab-info`);
+    if (!infoContainer) {
+      infoContainer = document.createElement('div');
+      infoContainer.id = `${unitId}_vocab-info`;
+      infoContainer.className = 'vocab-info';
+      
+      // 將信息容器添加到詞彙部分的最後
+      const vocabSection = document.querySelector('.vocab-section');
+      if (vocabSection) {
+        vocabSection.appendChild(infoContainer);
+      }
+    }
+
+    // 更新頁碼信息
+    const start = (currentPage - 1) * state.itemsPerPage + 1;
+    const end = Math.min(currentPage * state.itemsPerPage, state.vocab.length);
+    
+    infoContainer.innerHTML = `
+      <span>
+        <i class="fas fa-book"></i> 
+        第 ${currentPage} / ${state.totalPages} 頁
+      </span>
+      <span>
+        <i class="fas fa-list"></i> 
+        顯示 ${start}-${end} 條，共 ${state.vocab.length} 個詞彙
+      </span>
+    `;
   },
 
   changeVocabPage(unitId, page) {
