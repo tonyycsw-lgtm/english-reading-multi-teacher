@@ -219,39 +219,30 @@ body {
   margin-bottom: 12px;
 }
 
-/* ===== 英文句子樣式 ===== */
+/* ===== 英文句子樣式（統一高亮）===== */
 .sentence-highlightable {
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   border-radius: 4px;
-  padding: 2px 0;  /* 統一使用上下2px，左右0，確保高亮時不會位移 */
+  padding: 2px 0;  /* 上下2px，左右0，確保高亮時不會位移 */
   display: inline;
   position: relative;
 }
 
-.sentence-highlightable:hover {
-  background-color: rgba(79, 70, 229, 0.08);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-}
-
-/* 完全統一的懸停與播放高亮樣式 - 無左側邊框，背景較淡 */
+/* 完全統一的懸停、選中、播放高亮樣式 - 所有狀態顏色一致 */
+.sentence-highlightable:hover,
 .sentence-highlightable.sentence-selected,
 .sentence-highlightable.sentence-playing {
-  background-color: rgba(79, 70, 229, 0.12);
+  background-color: rgba(79, 70, 229, 0.12);  /* 統一使用相同透明度 */
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
   border-left: none;
-  padding: 2px 0;  /* 與基礎樣式完全一致，避免排版位移 */
+  padding: 2px 0;  /* 與基礎樣式完全一致 */
   font-weight: normal;
+  cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* 移除可能衝突的其他高亮樣式 */
-.sentence-highlightable.sentence-selected {
-  border-left: none;
-  padding: 2px 0;  /* 確保覆蓋任何可能的 !important 規則 */
-}
-
+/* 確保播放狀態沒有動畫干擾 */
 .sentence-highlightable.sentence-playing {
   animation: none;
 }
@@ -464,18 +455,18 @@ body {
   color: white;
 }
 
-/* ===== 中文翻譯樣式 ===== */
+/* ===== 中文翻譯樣式（鼠標保持默認）===== */
 .translation-sentence {
   display: inline;
   transition: background-color 0.2s ease;
   border-radius: 4px;
   padding: 2px 0;
-  cursor: default;
+  cursor: default;  /* 默認箭頭，不是手指 */
 }
 
 .translation-sentence:hover {
   background-color: rgba(139, 92, 246, 0.25);
-  cursor: default;
+  cursor: default;  /* 懸停時也是默認箭頭 */
   border-radius: 4px;
   padding: 2px 0;
   transition: background-color 0.2s ease;
