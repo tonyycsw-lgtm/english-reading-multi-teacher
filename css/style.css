@@ -173,19 +173,19 @@ body {
 /* ===== 文章與詞彙雙欄布局（比例調整） ===== */
 .article-vocab-wrapper {
   display: flex;
-  gap: 16px;              /* 使用 px 代替 mm，更適合響應式 */
+  gap: 16px;
   margin-bottom: 16mm;
   align-items: flex-start;
 }
 
 .article-section {
-  flex: 7;                 /* 文章區域佔 7 份 */
-  min-width: 0;            /* 防止溢出 */
+  flex: 7;
+  min-width: 0;
 }
 
 .vocab-section {
-  flex: 3;                 /* 詞彙區域佔 3 份，比例 7:3 */
-  min-width: 0;            /* 防止溢出 */
+  flex: 3;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   height: fit-content;
@@ -481,7 +481,7 @@ body {
   line-height: 1.8;
 }
 
-/* ===== 詞彙表分頁樣式（上下雙按鈕，無資訊文字，適應較窄容器） ===== */
+/* ===== 詞彙表分頁樣式（上下雙按鈕，無資訊文字，優化長單詞顯示） ===== */
 .vocab-title {
   font-size: 14px;
   font-weight: 700;
@@ -503,8 +503,8 @@ body {
   background: white;
   border-radius: 6px;
   border: 1px solid #e2e8f0;
-  flex-wrap: nowrap;        /* 強制不換行 */
-  overflow-x: auto;         /* 過長時可橫向捲動 */
+  flex-wrap: nowrap;
+  overflow-x: auto;
   white-space: nowrap;
 }
 
@@ -529,13 +529,13 @@ body {
   background: white;
   color: #4f46e5;
   font-weight: 600;
-  font-size: 12px;        /* 縮小按鈕字體 */
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;           /* 防止按鈕被壓縮 */
+  flex-shrink: 0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
@@ -580,9 +580,9 @@ body {
   overflow: visible;
 }
 
-/* 詞彙項目樣式 - 適應較窄容器 */
+/* 詞彙項目樣式 - 優化長單詞顯示 */
 .vocab-item {
-  padding: 10px 8px;
+  padding: 8px 6px;
   margin-bottom: 2px;
   background: white;
   border-radius: 6px;
@@ -590,7 +590,7 @@ body {
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .vocab-item:hover {
@@ -603,8 +603,8 @@ body {
 .vocab-audio-btn {
   background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
   color: white;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: none;
   display: flex;
@@ -614,7 +614,7 @@ body {
   flex-shrink: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .vocab-audio-btn:hover {
@@ -634,43 +634,46 @@ body {
   cursor: wait;
 }
 
-/* 調整詞彙容器內部文字的換行 */
+/* 調整詞彙容器內部文字的換行 - 優化長單詞 */
 .vocab-text {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;           /* 防止 flex 子項溢出 */
+  min-width: 0;
 }
 
 .vocab-word-line {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 4px;
+  margin-bottom: 2px;
 }
 
 .vocab-number {
-  min-width: 24px;
+  min-width: 22px;
   font-weight: 600;
   color: #4f46e5;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .vocab-word {
   font-weight: 700;
   color: #1e40af;
-  font-size: 14px;        /* 稍微縮小字體以適應較窄容器 */
-  word-break: break-word;
+  font-size: 13px;
+  word-break: break-all;
   overflow-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.3;
 }
 
 .vocab-meaning {
   color: #4b5563;
-  font-size: 12px;        /* 稍微縮小字體 */
-  padding-left: 32px;
-  line-height: 1.5;
-  word-break: break-word;
+  font-size: 11px;
+  padding-left: 26px;
+  line-height: 1.4;
+  word-break: break-all;
   overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .highlight1 { color: #dc2626; background-color: rgba(220, 38, 38, 0.08); }
