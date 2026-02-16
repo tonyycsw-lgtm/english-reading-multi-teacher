@@ -193,9 +193,12 @@ body {
 
 .article-illustration {
   width: 100%;
-  max-height: 180px;
+  height: auto;
+  max-height: 220px;        /* 稍微增加高度 */
+  aspect-ratio: 16/9;       /* 常見的橫向比例 */
+  object-fit: cover;        /* 裁剪以填滿 */
+  object-position: center;  /* 從中心裁剪重要部分 */
   border-radius: 8px;
-  object-fit: cover;
   border: 1px solid #e2e8f0;
   margin: 0 auto 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);

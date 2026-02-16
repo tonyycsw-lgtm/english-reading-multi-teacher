@@ -503,79 +503,76 @@ const AudioController = {
     }
   },
 
-async playVocabularyWord(vocabId, unitId) {    
-  const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
-  if (!btn) return;
-  
-  if (btn.classList.contains('playing')) { 
-    this.stop(); 
-    return; 
-  }
-  
-  btn.classList.add('loading');
-  
-  const unitData = UnitManager.getCurrentUnitData();
-  const wordObj = unitData?.vocabulary?.find(v => v.id === vocabId);
-  const word = wordObj?.word || '';
-  
-  // 清理單詞，移除 HTML 標籤和特殊字符，用於文件名
-  const cleanWord = word
-    .replace(/<[^>]*>/g, '')           // 移除 HTML 標籤
-    .replace(/[^\w\s'-]/g, '')          // 保留字母、數字、空格、連字符、撇號
-    .replace(/\s+/g, '_')                // 空格轉為底線
-    .toLowerCase();                      // 轉為小寫
-  
-  // 在 try 外部定義 audioPath，擴大作用域
-  let audioPath;
-  
-  try {
-    const audio = new Audio();
+// 原始代碼約第 540-620 行
+// 替換整個函數
+
+  async playVocabularyWord(vocabId, unitId) {    
+    const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
+    if (!btn) return;
     
-    // 方案一：使用詞彙本身命名
-    // 路徑：/english-reading-multi-teacher/audio/{unitId}/vocab/{word}.mp3
-    audioPath = `/english-reading-multi-teacher/audio/${unitId}/vocab/${cleanWord}.mp3`;
+    if (btn.classList.contains('playing')) { 
+      this.stop(); 
+      return; 
+    }
     
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Timeout')), 3000);
-    });
+    btn.classList.add('loading');
     
-    audio.src = audioPath;
+    const unitData = UnitManager.getCurrentUnitData();
+    const wordObj = unitData?.vocabulary?.find(v => v.id === vocabId);
+    const word = wordObj?.word || '';
     
-    await Promise.race([
-      audio.play(),
-      timeoutPromise
-    ]);
+    // 清理單詞，移除 HTML 標籤和特殊字符，用於文件名
+    const cleanWord = word
+      .replace(/<[^>]*>/g, '')           // 移除 HTML 標籤
+      .replace(/[^\w\s'-]/g, '')          // 保留字母、數字、空格、連字符、撇號
+      .replace(/\s+/g, '_')                // 空格轉為底線
+      .toLowerCase();                      // 轉為小寫
     
-    this.stop();
-    this.currentAudio = audio;
-    this.currentPlayingButton = btn;
-    btn.classList.remove('loading');
-    btn.classList.add('playing');
-    btn.innerHTML = '<i class="fas fa-stop"></i>';
-    
-    audio.onended = () => {
-      this.resetButton(btn);
-      if (this.currentAudio === audio) this.currentAudio = null;
-      if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-    };
-    
-    audio.onerror = () => {
-      console.log(`本地詞彙音頻 ${cleanWord} 失敗，使用 TTS`);
-      console.log(`嘗試路徑: ${audioPath}`);
+    try {
+      const audio = new Audio();
+      
+      // 方案一：使用詞彙本身命名
+      // 路徑：/english-reading-multi-teacher/audio/{unitId}/vocab/{word}.mp3
+      const audioPath = `/english-reading-multi-teacher/audio/${unitId}/vocab/${cleanWord}.mp3`;
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Timeout')), 3000);
+      });
+      
+      audio.src = audioPath;
+      
+      await Promise.race([
+        audio.play(),
+        timeoutPromise
+      ]);
+      
+      this.stop();
+      this.currentAudio = audio;
+      this.currentPlayingButton = btn;
+      btn.classList.remove('loading');
+      btn.classList.add('playing');
+      btn.innerHTML = '<i class="fas fa-stop"></i>';
+      
+      audio.onended = () => {
+        this.resetButton(btn);
+        if (this.currentAudio === audio) this.currentAudio = null;
+        if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
+      };
+      
+      audio.onerror = () => {
+        console.log(`本地詞彙音頻 ${cleanWord} 失敗，使用 TTS`);
+        console.log(`嘗試路徑: ${audioPath}`);  // 可選：添加路徑信息
+        btn.classList.remove('loading');
+        this.playTTS(word, btn, 'vocab');
+      };
+      
+    } catch (e) {
+      console.log(`本地詞彙音頻 ${cleanWord} 載入失敗，使用 TTS`, e);
+      console.log(`嘗試路徑: ${audioPath}`);  // 可選：添加路徑信息
       btn.classList.remove('loading');
       this.playTTS(word, btn, 'vocab');
-    };
-    
-  } catch (e) {
-    console.log(`本地詞彙音頻 ${cleanWord} 載入失敗，使用 TTS`, e);
-    if (audioPath) {
-      console.log(`嘗試路徑: ${audioPath}`);
     }
-    btn.classList.remove('loading');
-    // 確保 TTS 被調用
-    this.playTTS(word, btn, 'vocab');
-  }
-},                     
+  },                                               
 
   playTTS(text, btn = null, type = '') {
     if (!window.speechSynthesis) return;
@@ -721,22 +718,22 @@ const Renderer = {
     const englishTitle = titleParts[0] || '';
     const chineseTitle = titleParts[1] || '';
 
-let html = `
-  <div class="article-section">
-    <div class="article-header">
-      <h3 class="article-title">
-        <span lang="en">${englishTitle}</span><br>
-        <span lang="zh">${chineseTitle}</span>
-      </h3>
-      <img src="${article.illustration || './images/placeholder.png'}" alt="illustration" class="article-illustration"
-           onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="image-fallback" style="display:none; width:100%; aspect-ratio:16/9; max-height:220px; align-items:center; justify-content:center; color:#64748b; background-color:#f1f5f9;" lang="zh">
-        <i class="fas fa-image" style="font-size:48px;"></i>
-        <div style="margin-left:12px;">圖片載入失敗</div>
-      </div>
-    </div>
-    <div class="article-paragraph-wrapper" id="article-content-${unitId}">
-`;
+    let html = `
+      <div class="article-section">
+        <div class="article-header">
+          <h3 class="article-title">
+            <span lang="en">${englishTitle}</span><br>
+            <span lang="zh">${chineseTitle}</span>
+          </h3>
+          <img src="${article.illustration || './images/placeholder.png'}" alt="illustration" class="article-illustration"
+               onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="image-fallback" style="display:none; width:100%; height:180px; align-items:center; justify-content:center; color:#64748b;" lang="zh">
+            <i class="fas fa-image" style="font-size:48px;"></i>
+            <div style="margin-left:12px;">圖片載入</div>
+          </div>
+        </div>
+        <div class="article-paragraph-wrapper" id="article-content-${unitId}">
+    `;
 
     article.paragraphs.forEach((para, idx) => {
       const paraNum = idx + 1;
