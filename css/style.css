@@ -938,15 +938,21 @@ body {
   .upload-btn { width: 100%; justify-content: center; }
 }
 
-/* ===== 解讀容器懸停與播放高亮 ===== */
+/* ===== 解讀容器懸停與播放高亮（無位移版）===== */
+.implication-english,
+.implication-chinese-part {
+  display: inline;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 4px;
+  padding: 2px 0;  /* 基礎狀態就設定內邊距，避免懸停時變化 */
+  cursor: pointer;
+}
+
 .implication-english:hover,
 .implication-chinese-part:hover {
   background-color: rgba(79, 70, 229, 0.12);
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 2px 0;
-  transition: background-color 0.2s ease;
+  /* 移除 padding 和 border-radius，因為基礎狀態已經定義 */
 }
 
 .implication-english.implication-playing,
@@ -954,21 +960,13 @@ body {
   background-color: rgba(79, 70, 229, 0.15);
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.15);
   font-weight: 500;
-  border-radius: 4px;
-  padding: 2px 0;
+  /* 移除 padding 和 border-radius，因為基礎狀態已經定義 */
 }
 
 .implication-english.implication-playing:hover,
 .implication-chinese-part.implication-playing:hover {
   background-color: rgba(79, 70, 229, 0.2);
-}
-
-.implication-chinese-part {
-  display: inline;
-  transition: background-color 0.2s ease;
-  border-radius: 4px;
-  padding: 2px 0;
-  cursor: pointer;
+  /* 移除 padding 和 border-radius，因為基礎狀態已經定義 */
 }
 
 .implication-chinese-part.implication-saying {
