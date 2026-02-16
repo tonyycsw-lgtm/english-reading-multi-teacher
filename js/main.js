@@ -503,76 +503,79 @@ const AudioController = {
     }
   },
 
-// 原始代碼約第 540-620 行
-// 替換整個函數
-
-  async playVocabularyWord(vocabId, unitId) {    
-    const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
-    if (!btn) return;
+async playVocabularyWord(vocabId, unitId) {    
+  const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
+  if (!btn) return;
+  
+  if (btn.classList.contains('playing')) { 
+    this.stop(); 
+    return; 
+  }
+  
+  btn.classList.add('loading');
+  
+  const unitData = UnitManager.getCurrentUnitData();
+  const wordObj = unitData?.vocabulary?.find(v => v.id === vocabId);
+  const word = wordObj?.word || '';
+  
+  // 清理單詞，移除 HTML 標籤和特殊字符，用於文件名
+  const cleanWord = word
+    .replace(/<[^>]*>/g, '')           // 移除 HTML 標籤
+    .replace(/[^\w\s'-]/g, '')          // 保留字母、數字、空格、連字符、撇號
+    .replace(/\s+/g, '_')                // 空格轉為底線
+    .toLowerCase();                      // 轉為小寫
+  
+  // 在 try 外部定義 audioPath，擴大作用域
+  let audioPath;
+  
+  try {
+    const audio = new Audio();
     
-    if (btn.classList.contains('playing')) { 
-      this.stop(); 
-      return; 
-    }
+    // 方案一：使用詞彙本身命名
+    // 路徑：/english-reading-multi-teacher/audio/{unitId}/vocab/{word}.mp3
+    audioPath = `/english-reading-multi-teacher/audio/${unitId}/vocab/${cleanWord}.mp3`;
     
-    btn.classList.add('loading');
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Timeout')), 3000);
+    });
     
-    const unitData = UnitManager.getCurrentUnitData();
-    const wordObj = unitData?.vocabulary?.find(v => v.id === vocabId);
-    const word = wordObj?.word || '';
+    audio.src = audioPath;
     
-    // 清理單詞，移除 HTML 標籤和特殊字符，用於文件名
-    const cleanWord = word
-      .replace(/<[^>]*>/g, '')           // 移除 HTML 標籤
-      .replace(/[^\w\s'-]/g, '')          // 保留字母、數字、空格、連字符、撇號
-      .replace(/\s+/g, '_')                // 空格轉為底線
-      .toLowerCase();                      // 轉為小寫
+    await Promise.race([
+      audio.play(),
+      timeoutPromise
+    ]);
     
-    try {
-      const audio = new Audio();
-      
-      // 方案一：使用詞彙本身命名
-      // 路徑：/english-reading-multi-teacher/audio/{unitId}/vocab/{word}.mp3
-      const audioPath = `/english-reading-multi-teacher/audio/${unitId}/vocab/${cleanWord}.mp3`;
-      
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout')), 3000);
-      });
-      
-      audio.src = audioPath;
-      
-      await Promise.race([
-        audio.play(),
-        timeoutPromise
-      ]);
-      
-      this.stop();
-      this.currentAudio = audio;
-      this.currentPlayingButton = btn;
-      btn.classList.remove('loading');
-      btn.classList.add('playing');
-      btn.innerHTML = '<i class="fas fa-stop"></i>';
-      
-      audio.onended = () => {
-        this.resetButton(btn);
-        if (this.currentAudio === audio) this.currentAudio = null;
-        if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-      };
-      
-      audio.onerror = () => {
-        console.log(`本地詞彙音頻 ${cleanWord} 失敗，使用 TTS`);
-        console.log(`嘗試路徑: ${audioPath}`);  // 可選：添加路徑信息
-        btn.classList.remove('loading');
-        this.playTTS(word, btn, 'vocab');
-      };
-      
-    } catch (e) {
-      console.log(`本地詞彙音頻 ${cleanWord} 載入失敗，使用 TTS`, e);
-      console.log(`嘗試路徑: ${audioPath}`);  // 可選：添加路徑信息
+    this.stop();
+    this.currentAudio = audio;
+    this.currentPlayingButton = btn;
+    btn.classList.remove('loading');
+    btn.classList.add('playing');
+    btn.innerHTML = '<i class="fas fa-stop"></i>';
+    
+    audio.onended = () => {
+      this.resetButton(btn);
+      if (this.currentAudio === audio) this.currentAudio = null;
+      if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
+    };
+    
+    audio.onerror = () => {
+      console.log(`本地詞彙音頻 ${cleanWord} 失敗，使用 TTS`);
+      console.log(`嘗試路徑: ${audioPath}`);
       btn.classList.remove('loading');
       this.playTTS(word, btn, 'vocab');
+    };
+    
+  } catch (e) {
+    console.log(`本地詞彙音頻 ${cleanWord} 載入失敗，使用 TTS`, e);
+    if (audioPath) {
+      console.log(`嘗試路徑: ${audioPath}`);
     }
-  },                                               
+    btn.classList.remove('loading');
+    // 確保 TTS 被調用
+    this.playTTS(word, btn, 'vocab');
+  }
+},                     
 
   playTTS(text, btn = null, type = '') {
     if (!window.speechSynthesis) return;
