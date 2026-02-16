@@ -191,14 +191,14 @@
     ]
   },
   "vocabulary": [
-    { "id": 1, "word": "navigate", "meaning": "v. 應對；導航；處理", "highlightClass": "highlight1" },
-    { "id": 2, "word": "resilience", "meaning": "n. 韌性；復原力", "highlightClass": "highlight2" },
-    { "id": 3, "word": "heated", "meaning": "adj. 激烈的；憤怒的", "highlightClass": "highlight3" },
-    { "id": 4, "word": "confrontation", "meaning": "n. 對峙；衝突", "highlightClass": "highlight4" },
-    { "id": 5, "word": "lashed out", "meaning": "phr. v. 猛烈抨擊；怒斥", "highlightClass": "highlight5" },
-    { "id": 6, "word": "accusing", "meaning": "v. 指責；譴責", "highlightClass": "highlight1" },
-    { "id": 7, "word": "therapist", "meaning": "n. 治療師", "highlightClass": "highlight2" },
-    { "id": 8, "word": "significance", "meaning": "n. 重要性；意義", "highlightClass": "highlight3" },
+    { "id": 1, "word": "heated", "meaning": "adj. 激烈的；憤怒的", "highlightClass": "highlight3" },
+    { "id": 2, "word": "confrontation", "meaning": "n. 對峙；衝突", "highlightClass": "highlight4" },
+    { "id": 3, "word": "lashed out", "meaning": "phr. v. 猛烈抨擊；怒斥", "highlightClass": "highlight5" },
+    { "id": 4, "word": "accusing", "meaning": "v. 指責；譴責", "highlightClass": "highlight1" },
+    { "id": 5, "word": "therapist", "meaning": "n. 治療師", "highlightClass": "highlight2" },
+    { "id": 6, "word": "significance", "meaning": "n. 重要性；意義", "highlightClass": "highlight3" },
+    { "id": 7, "word": "resilience", "meaning": "n. 韌性；復原力", "highlightClass": "highlight2" },
+    { "id": 8, "word": "navigate", "meaning": "v. 應對；導航；處理", "highlightClass": "highlight1" },
     { "id": 9, "word": "transitions", "meaning": "n. 轉變；過渡", "highlightClass": "highlight4" },
     { "id": 10, "word": "stand on our own two feet", "meaning": "idiom. 自立；獨立", "highlightClass": "highlight5" },
     { "id": 11, "word": "juggle", "meaning": "v. 兼顧；同時應付", "highlightClass": "highlight1" },
@@ -320,21 +320,4 @@
   ],
   "clozeText": "<strong>Building Friendship Resilience:</strong> According to family <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-1' maxlength='15'></span> Katie Leung, building friendship <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-2' maxlength='12'></span> is crucial for teens. They often have to <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-3' maxlength='8'></span> many responsibilities and may fear being <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-4' maxlength='12'></span> as weak. Conflicts arise from different <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-5' maxlength='15'></span>. To resolve them, use \"I <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-6' maxlength='12'></span>\" to express yourself. If a friend responds without <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-7' maxlength='10'></span>, it may be time to move on. Beware of friendship killers like <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-8' maxlength='15'></span> and <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-9' maxlength='12'></span>. Finally, having diverse social <span class='grammar-blank'><input type='text' class='cloze-input' id='cloze-10' maxlength='10'></span> helps build resilience.",
   "sevenFive": {
-    "text": "<strong>Building Friendship Resilience:</strong> Leo and his best friend had a heated confrontation after Leo <span class='seven-five-dropzone' id='drop-1'></span>. The therapist, Katie Leung, says it's important to build resilience to navigate such changes. First, when conflicts happen, it's normal because of <span class='seven-five-dropzone' id='drop-2'></span>. To resolve things, you should calm down and then use \"I statements\" to express your feelings without blaming them. If after you've been honest, they still can't respond with <span class='seven-five-dropzone' id='drop-3'></span>, it might be time to move on. Leung warns against friendship killers like judgment, which means <span class='seven-five-dropzone' id='drop-4'></span>. Another killer is dismissal, which is when someone <span class='seven-five-dropzone' id='drop-5'></span>. Finally, to build strong resilience, it's helpful <span class='seven-five-dropzone' id='drop-6'></span> outside of your main school group. This ensures you always have <span class='seven-five-dropzone' id='drop-7'></span>.",
-    "options": [
-      { "id": "1", "text": "different perspectives" },
-      { "id": "2", "text": "considers your feelings trivial" },
-      { "id": "3", "text": "joined the football team" },
-      { "id": "4", "text": "a supportive group to turn to" },
-      { "id": "5", "text": "ignores the issue by changing the subject" },
-      { "id": "6", "text": "empathy" },
-      { "id": "7", "text": "to have backup communities" }
-    ]
-  },
-  "grammarText": "<strong>Building Friendship Resilience:</strong> Leo and his best friend <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-1' maxlength='15'></span> (attend) the same schools for years. After Leo <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-2' maxlength='10'></span> (join) the football team, they started <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-3' maxlength='15'></span> (spend) less time together. Leo wanted <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-4' maxlength='15'></span> (explain) his situation but feared <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-5' maxlength='20'></span> (perceive) as weak. The therapist advised them <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-6' maxlength='10'></span> (calm) down first. She suggested <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-7' maxlength='20'></span> (express) feelings with \"I statements.\" It is important <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-8' maxlength='15'></span> (restate) what you hear. Friendships can <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-9' maxlength='12'></span> (dissolve) due to shifting interests. Building resilience involves <span class='grammar-blank'><input type='text' class='grammar-input' id='grammar-10' maxlength='15'></span> (have) diverse social outlets.",
-  "audio": {
-    "paragraphPattern": "/english-reading-multi-teacher/audio/unit3/paragraph_{id}.mp3",
-    "implicationPattern": "/english-reading-multi-teacher/audio/unit3/impl_{id}.mp3",
-    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit3/word_{id}.mp3"
-  }
-}
+    "text": "<strong
