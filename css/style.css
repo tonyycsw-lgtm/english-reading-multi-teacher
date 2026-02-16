@@ -194,10 +194,10 @@ body {
 .article-illustration {
   width: 100%;
   height: auto;
-  max-height: 220px;        /* 稍微增加高度 */
-  aspect-ratio: 16/9;       /* 常見的橫向比例 */
-  object-fit: cover;        /* 裁剪以填滿 */
-  object-position: center;  /* 從中心裁剪重要部分 */
+  max-height: 220px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  object-position: center;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
   margin: 0 auto 16px;
@@ -219,11 +219,12 @@ body {
   margin-bottom: 12px;
 }
 
+/* ===== 英文句子樣式 ===== */
 .sentence-highlightable {
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   border-radius: 4px;
-  padding: 2px 0;
+  padding: 2px 0;  /* 統一使用上下2px，左右0，確保高亮時不會位移 */
   display: inline;
   position: relative;
 }
@@ -231,38 +232,27 @@ body {
 .sentence-highlightable:hover {
   background-color: rgba(79, 70, 229, 0.08);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 }
 
 /* 完全統一的懸停與播放高亮樣式 - 無左側邊框，背景較淡 */
 .sentence-highlightable.sentence-selected,
 .sentence-highlightable.sentence-playing {
-  background-color: rgba(79, 70, 229, 0.12);  /* 較淡的背景色 */
+  background-color: rgba(79, 70, 229, 0.12);
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
-  border-left: none;                          /* 移除左側邊框 */
-  padding-left: 2px;                           /* 標準內邊距 */
+  border-left: none;
+  padding: 2px 0;  /* 與基礎樣式完全一致，避免排版位移 */
   font-weight: normal;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* 確保懸停時不會有其他干擾樣式 */
-.sentence-highlightable:hover {
-  background-color: rgba(79, 70, 229, 0.08);  /* 懸停時更淡 */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
 /* 移除可能衝突的其他高亮樣式 */
 .sentence-highlightable.sentence-selected {
-  /* 覆蓋原有可能存在的左側邊框樣式 */
-  border-left: none !important;
-  padding-left: 2px !important;
+  border-left: none;
+  padding: 2px 0;  /* 確保覆蓋任何可能的 !important 規則 */
 }
 
 .sentence-highlightable.sentence-playing {
-  /* 確保播放狀態與懸停狀態完全一致 */
-  animation: none;
-}
-
-.sentence-playing {
   animation: none;
 }
 
@@ -474,7 +464,8 @@ body {
   color: white;
 }
 
-.unified-content .translation-sentence {
+/* ===== 中文翻譯樣式 ===== */
+.translation-sentence {
   display: inline;
   transition: background-color 0.2s ease;
   border-radius: 4px;
@@ -482,10 +473,23 @@ body {
   cursor: default;
 }
 
-.unified-content .translation-sentence.translation-highlight {
+.translation-sentence:hover {
+  background-color: rgba(139, 92, 246, 0.25);
+  cursor: default;
+  border-radius: 4px;
+  padding: 2px 0;
+  transition: background-color 0.2s ease;
+}
+
+.translation-sentence.translation-highlight {
   background-color: rgba(139, 92, 246, 0.15);
   box-shadow: 0 1px 4px rgba(139, 92, 246, 0.15);
   font-weight: 500;
+}
+
+.translation-content[lang="zh"] .translation-sentence {
+  letter-spacing: 0.18em;
+  line-height: 1.8;
 }
 
 /* ===== 詞彙表 ===== */
@@ -943,31 +947,6 @@ body {
   .upload-btn { width: 100%; justify-content: center; }
 }
 
-.translation-sentence {
-  display: inline;
-  transition: background-color 0.2s ease;
-  border-radius: 4px;
-  padding: 2px 0;
-  cursor: default;
-}
-
-.translation-sentence.translation-highlight {
-  background-color: rgba(139, 92, 246, 0.15);
-  box-shadow: 0 1px 4px rgba(139, 92, 246, 0.15);
-  font-weight: 500;
-}
-
-.translation-content[lang="zh"] .translation-sentence {
-  letter-spacing: 0.18em;
-  line-height: 1.8;
-}
-
-.sentence-highlightable:hover {
-  background-color: rgba(79, 70, 229, 0.12);
-  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
-  cursor: pointer;
-}
-
 /* ===== 解讀容器懸停與播放高亮 ===== */
 .implication-english:hover,
 .implication-chinese-part:hover {
@@ -1026,21 +1005,4 @@ body {
 .unified-content .implication-content[style*="display: none"] {
   opacity: 0;
   transform: translateY(-10px);
-}
-
-/* 中文翻譯懸停效果 */
-.translation-sentence:hover {
-  background-color: rgba(139, 92, 246, 0.25);
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 2px 0;
-  transition: background-color 0.2s ease;
-}
-
-/* 英文句子高亮樣式強化（與懸停中文時對應） */
-.sentence-highlightable.sentence-selected {
-  background-color: rgba(79, 70, 229, 0.2);
-  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.15);
-  border-left: 2px solid #4f46e5;
-  padding-left: 4px;
 }
