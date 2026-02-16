@@ -115,9 +115,7 @@
     ]
   },
   "vocabulary": [
-    { "id": 1, "word": "fire", "meaning": "n. 火；火災", "highlightClass": "highlight1" },
     { "id": 2, "word": "break out", "meaning": "phr. 爆發；突然發生", "highlightClass": "highlight2" },
-    { "id": 3, "word": "start", "meaning": "v. 開始；啟動", "highlightClass": "highlight3" },
     { "id": 4, "word": "escalate", "meaning": "v. 升級；擴大", "highlightClass": "highlight4" },
     { "id": 5, "word": "spread", "meaning": "v. 傳播；蔓延", "highlightClass": "highlight5" },
     { "id": 6, "word": "rapidly", "meaning": "adv. 迅速地", "highlightClass": "highlight1" },
@@ -127,17 +125,11 @@
     { "id": 10, "word": "resident", "meaning": "n. 居民", "highlightClass": "highlight5" },
     { "id": 11, "word": "rescue", "meaning": "v. & n. 營救；救援", "highlightClass": "highlight1" },
     { "id": 12, "word": "immediately", "meaning": "adv. 立刻", "highlightClass": "highlight2" },
-    { "id": 13, "word": "team", "meaning": "n. 團隊", "highlightClass": "highlight3" },
-    { "id": 14, "word": "touch", "meaning": "n./v. 接觸；聯繫", "highlightClass": "highlight4" },
-    { "id": 15, "word": "phone", "meaning": "n. 電話", "highlightClass": "highlight5" },
     { "id": 16, "word": "dispatch", "meaning": "v. 派遣", "highlightClass": "highlight1" },
     { "id": 17, "word": "ambulance", "meaning": "n. 救護車", "highlightClass": "highlight2" },
     { "id": 18, "word": "tragically", "meaning": "adv. 悲慘地", "highlightClass": "highlight3" },
     { "id": 19, "word": "injury", "meaning": "n. 傷害", "highlightClass": "highlight4" },
-    { "id": 20, "word": "lose", "meaning": "v. 失去", "highlightClass": "highlight5" },
-    { "id": 21, "word": "life", "meaning": "n. 生命", "highlightClass": "highlight1" },
     { "id": 22, "word": "mourn", "meaning": "v. 哀悼", "highlightClass": "highlight2" },
-    { "id": 23, "word": "action", "meaning": "n. 行動", "highlightClass": "highlight3" },
     { "id": 24, "word": "shelter", "meaning": "n. 避難所", "highlightClass": "highlight4" },
     { "id": 25, "word": "psychologist", "meaning": "n. 心理學家", "highlightClass": "highlight5" },
     { "id": 26, "word": "send", "meaning": "v. 發送；派遣", "highlightClass": "highlight1" },
@@ -259,6 +251,6 @@
   "audio": {
     "paragraphPattern": "/english-reading-multi-teacher/audio/unit1/paragraph_{id}.mp3",
     "implicationPattern": "/english-reading-multi-teacher/audio/unit1/impl_{id}.mp3",
-    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit1/word_{id}.mp3"
+    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit1/vocab/{word}.mp3"
   }
 }
