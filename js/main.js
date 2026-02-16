@@ -503,79 +503,79 @@ const AudioController = {
     }
   },
 
-async playVocabularyWord(vocabId, unitId) {    
-  const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
-  if (!btn) return;
-  
-  if (btn.classList.contains('playing')) { 
-    this.stop(); 
-    return; 
-  }
-  
-  btn.classList.add('loading');
-  
-  const unitData = UnitManager.getCurrentUnitData();
-  const wordObj = unitData?.vocabulary?.find(v => v.id === vocabId);
-  const word = wordObj?.word || '';
-  
-  // 清理單詞，移除 HTML 標籤和特殊字符，用於文件名
-  const cleanWord = word
-    .replace(/<[^>]*>/g, '')           // 移除 HTML 標籤
-    .replace(/[^\w\s'-]/g, '')          // 保留字母、數字、空格、連字符、撇號
-    .replace(/\s+/g, '_')                // 空格轉為底線
-    .toLowerCase();                      // 轉為小寫
-  
-  // 在 try 外部定義 audioPath，擴大作用域
-  let audioPath;
-  
-  try {
-    const audio = new Audio();
+  async playVocabularyWord(vocabId, unitId) {    
+    const btn = document.getElementById(`${unitId}_vocab-audio-btn-${vocabId}`);
+    if (!btn) return;
     
-    // 方案一：使用詞彙本身命名
-    // 路徑：/english-reading-multi-teacher/audio/{unitId}/vocab/{word}.mp3
-    audioPath = `/english-reading-multi-teacher/audio/${unitId}/vocab/${cleanWord}.mp3`;
-    
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Timeout')), 3000);
-    });
-    
-    audio.src = audioPath;
-    
-    await Promise.race([
-      audio.play(),
-      timeoutPromise
-    ]);
-    
-    this.stop();
-    this.currentAudio = audio;
-    this.currentPlayingButton = btn;
-    btn.classList.remove('loading');
-    btn.classList.add('playing');
-    btn.innerHTML = '<i class="fas fa-stop"></i>';
-    
-    audio.onended = () => {
-      this.resetButton(btn);
-      if (this.currentAudio === audio) this.currentAudio = null;
-      if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
-    };
-    
-    audio.onerror = () => {
-      console.log(`本地詞彙音頻 ${cleanWord} 失敗，使用 TTS`);
-      console.log(`嘗試路徑: ${audioPath}`);
-      btn.classList.remove('loading');
-      this.playTTS(word, btn, 'vocab');
-    };
-    
-  } catch (e) {
-    console.log(`本地詞彙音頻 ${cleanWord} 載入失敗，使用 TTS`, e);
-    if (audioPath) {
-      console.log(`嘗試路徑: ${audioPath}`);
+    if (btn.classList.contains('playing')) { 
+      this.stop(); 
+      return; 
     }
-    btn.classList.remove('loading');
-    // 確保 TTS 被調用
-    this.playTTS(word, btn, 'vocab');
-  }
-},                     
+    
+    btn.classList.add('loading');
+    
+    const unitData = UnitManager.getCurrentUnitData();
+    const wordObj = unitData?.vocabulary?.find(v => v.id === vocabId);
+    const word = wordObj?.word || '';
+    
+    // 清理單詞，移除 HTML 標籤和特殊字符，用於文件名
+    const cleanWord = word
+      .replace(/<[^>]*>/g, '')           // 移除 HTML 標籤
+      .replace(/[^\w\s'-]/g, '')          // 保留字母、數字、空格、連字符、撇號
+      .replace(/\s+/g, '_')                // 空格轉為底線
+      .toLowerCase();                      // 轉為小寫
+  
+    // 在 try 外部定義 audioPath，擴大作用域
+    let audioPath;
+  
+    try {
+      const audio = new Audio();
+    
+      // 方案一：使用詞彙本身命名
+      // 路徑：/english-reading-multi-teacher/audio/{unitId}/vocab/{word}.mp3
+      audioPath = `/english-reading-multi-teacher/audio/${unitId}/vocab/${cleanWord}.mp3`;
+    
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Timeout')), 3000);
+      });
+    
+      audio.src = audioPath;
+    
+      await Promise.race([
+        audio.play(),
+        timeoutPromise
+      ]);
+    
+      this.stop();
+      this.currentAudio = audio;
+      this.currentPlayingButton = btn;
+      btn.classList.remove('loading');
+      btn.classList.add('playing');
+      btn.innerHTML = '<i class="fas fa-stop"></i>';
+    
+      audio.onended = () => {
+        this.resetButton(btn);
+        if (this.currentAudio === audio) this.currentAudio = null;
+        if (this.currentPlayingButton === btn) this.currentPlayingButton = null;
+      };
+    
+      audio.onerror = () => {
+        console.log(`本地詞彙音頻 ${cleanWord} 失敗，使用 TTS`);
+        console.log(`嘗試路徑: ${audioPath}`);
+        btn.classList.remove('loading');
+        this.playTTS(word, btn, 'vocab');
+      };
+    
+    } catch (e) {
+      console.log(`本地詞彙音頻 ${cleanWord} 載入失敗，使用 TTS`, e);
+      if (audioPath) {
+        console.log(`嘗試路徑: ${audioPath}`);
+      }
+      btn.classList.remove('loading');
+      // 確保 TTS 被調用
+      this.playTTS(word, btn, 'vocab');
+    }
+  },                     
 
   playTTS(text, btn = null, type = '') {
     if (!window.speechSynthesis) return;
@@ -781,22 +781,22 @@ const Renderer = {
     const englishTitle = titleParts[0] || '';
     const chineseTitle = titleParts[1] || '';
 
-let html = `
-  <div class="article-section">
-    <div class="article-header">
-      <h3 class="article-title">
-        <span lang="en">${englishTitle}</span><br>
-        <span lang="zh">${chineseTitle}</span>
-      </h3>
-      <img src="${article.illustration || './images/placeholder.png'}" alt="illustration" class="article-illustration"
-           onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="image-fallback" style="display:none; width:100%; aspect-ratio:16/9; max-height:220px; align-items:center; justify-content:center; color:#64748b; background-color:#f1f5f9;" lang="zh">
-        <i class="fas fa-image" style="font-size:48px;"></i>
-        <div style="margin-left:12px;">圖片載入失敗</div>
-      </div>
-    </div>
-    <div class="article-paragraph-wrapper" id="article-content-${unitId}">
-`;
+    let html = `
+      <div class="article-section">
+        <div class="article-header">
+          <h3 class="article-title">
+            <span lang="en">${englishTitle}</span><br>
+            <span lang="zh">${chineseTitle}</span>
+          </h3>
+          <img src="${article.illustration || './images/placeholder.png'}" alt="illustration" class="article-illustration"
+               onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="image-fallback" style="display:none; width:100%; aspect-ratio:16/9; max-height:220px; align-items:center; justify-content:center; color:#64748b; background-color:#f1f5f9;" lang="zh">
+            <i class="fas fa-image" style="font-size:48px;"></i>
+            <div style="margin-left:12px;">圖片載入失敗</div>
+          </div>
+        </div>
+        <div class="article-paragraph-wrapper" id="article-content-${unitId}">
+    `;
 
     article.paragraphs.forEach((para, idx) => {
       const paraNum = idx + 1;
@@ -930,17 +930,59 @@ let html = `
 
     html += `</div></div>`;
 
-    html += `<div class="vocab-section"><h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心詞彙</h4><div class="vocab-list" id="${unitId}_vocab-list">`;
+    // ===== 修改後的詞彙表部分（分頁顯示）=====
+    const itemsPerPage = 15;
     
-    vocab.forEach((v, i) => {
-      html += `
+    html += `
+      <div class="vocab-section">
+        <h4 class="vocab-title" lang="zh"><i class="fas fa-bookmark"></i> 核心詞彙</h4>
+        <div class="vocab-pagination" id="${unitId}_vocab-pagination"></div>
+        <div class="vocab-list" id="${unitId}_vocab-list"></div>
+      </div>
+    `;
+    
+    wrapper.innerHTML = html;
+
+    // 初始化詞彙表分頁
+    this.initVocabPagination(unitId, vocab, itemsPerPage);
+  },
+
+  // ===== 詞彙表分頁方法 =====
+  initVocabPagination(unitId, vocab, itemsPerPage) {
+    if (!Renderer.vocabPages) Renderer.vocabPages = new Map();
+    
+    const totalPages = Math.ceil(vocab.length / itemsPerPage);
+    
+    Renderer.vocabPages.set(unitId, {
+      currentPage: 1,
+      totalPages,
+      itemsPerPage,
+      vocab
+    });
+    
+    this.renderVocabPage(unitId, 1);
+    this.renderVocabPaginationButtons(unitId, 1);
+  },
+
+  renderVocabPage(unitId, page) {
+    const state = Renderer.vocabPages?.get(unitId);
+    if (!state) return;
+    
+    const start = (page - 1) * state.itemsPerPage;
+    const end = start + state.itemsPerPage;
+    const pageItems = state.vocab.slice(start, end);
+    
+    let vocabHtml = '';
+    pageItems.forEach((v, i) => {
+      const globalIndex = start + i + 1;
+      vocabHtml += `
         <div class="vocab-item ${v.highlightClass || ''}">
           <button class="vocab-audio-btn" onclick="AudioController.playVocabularyWord(${v.id}, '${unitId}')" id="${unitId}_vocab-audio-btn-${v.id}">
             <i class="fas fa-volume-up"></i>
           </button>
           <div class="vocab-text">
             <div class="vocab-word-line">
-              <span class="vocab-number">${i+1}.</span>
+              <span class="vocab-number">${globalIndex}.</span>
               <span class="vocab-word" lang="en">${v.word}</span>
             </div>
             <div class="vocab-meaning" lang="zh">${v.meaning}</div>
@@ -948,10 +990,71 @@ let html = `
         </div>
       `;
     });
-    
-    html += `</div></div>`;
-    wrapper.innerHTML = html;
+
+    const vocabList = document.getElementById(`${unitId}_vocab-list`);
+    if (vocabList) {
+      vocabList.innerHTML = vocabHtml;
+    }
   },
+
+  renderVocabPaginationButtons(unitId, currentPage) {
+    const state = Renderer.vocabPages?.get(unitId);
+    if (!state) return;
+    
+    const paginationContainer = document.getElementById(`${unitId}_vocab-pagination`);
+    if (!paginationContainer) return;
+
+    let paginationHtml = `
+      <button class="vocab-page-btn vocab-page-nav" 
+              onclick="Renderer.changeVocabPage('${unitId}', ${currentPage - 1})"
+              ${currentPage === 1 ? 'disabled' : ''}>
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    `;
+
+    // 顯示頁碼（智慧顯示）
+    for (let i = 1; i <= state.totalPages; i++) {
+      if (state.totalPages <= 7 || 
+          i === 1 || 
+          i === state.totalPages || 
+          (i >= currentPage - 1 && i <= currentPage + 1)) {
+        paginationHtml += `
+          <button class="vocab-page-btn ${i === currentPage ? 'active' : ''}"
+                  onclick="Renderer.changeVocabPage('${unitId}', ${i})">
+            ${i}
+          </button>
+        `;
+      } else if (i === currentPage - 2 || i === currentPage + 2) {
+        paginationHtml += `<span class="vocab-page-btn" style="border: none; cursor: default;">...</span>`;
+      }
+    }
+
+    paginationHtml += `
+      <button class="vocab-page-btn vocab-page-nav"
+              onclick="Renderer.changeVocabPage('${unitId}', ${currentPage + 1})"
+              ${currentPage === state.totalPages ? 'disabled' : ''}>
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div class="vocab-info">
+        <span>第 ${currentPage} / ${state.totalPages} 頁</span>
+        <span>共 ${state.vocab.length} 個詞彙</span>
+      </div>
+    `;
+
+    paginationContainer.innerHTML = paginationHtml;
+  },
+
+  changeVocabPage(unitId, page) {
+    const state = Renderer.vocabPages?.get(unitId);
+    if (!state) return;
+    
+    if (page < 1 || page > state.totalPages) return;
+    
+    state.currentPage = page;
+    this.renderVocabPage(unitId, page);
+    this.renderVocabPaginationButtons(unitId, page);
+  },
+  // ===== 分頁方法結束 =====
 
   showTranslation(paraNum, unitId) {
     const transBtn = document.getElementById(`${unitId}_trans-btn-${paraNum}`);
@@ -1640,7 +1743,6 @@ const UnitManager = (function() {
       Renderer.renderAll(unitData, currentUnitId);
       AudioController.preloadUnitAudio(currentUnitId, unitData.audio);
       
-     // 添加：記錄詞彙音頻路徑格式（可選）
       console.log(`單元 ${currentUnitId} 詞彙音頻路徑格式: /audio/${currentUnitId}/vocab/{word}.mp3`);	
 
     } catch (e) {
