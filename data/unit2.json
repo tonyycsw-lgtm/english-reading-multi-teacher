@@ -39,11 +39,11 @@
       },
       {
         "id": 3,
-        "english": "Ngan explained that opening a blind box would <span class='highlight1'>activate</span> the brain's reward system in three <span class='highlight2'>phases</span>. First, there is an <span class='highlight3'>anticipation</span> <span class='highlight4'>phase</span> that starts before we even open the box. The brain's <span class='highlight5'>pleasure</span> centre lights up with <span class='highlight1'>dopamine</span>, a key chemical for <span class='highlight2'>motivation</span> and <span class='highlight3'>pleasure</span>, <span class='highlight4'>amplified</span> by the exciting <span class='highlight5'>uncertainty</span> of not knowing exactly what is inside.",
+        "english": "Ngan explained that opening a blind box would <span class='highlight1'>activate</span> the brain's reward system in three <span class='highlight2'>phases</span>. First, there is an <span class='highlight3'>anticipation</span> <span class='highlight2'>phase</span> that starts before we even open the box. The brain's <span class='highlight4'>pleasure</span> centre lights up with dopamine, a key chemical for <span class='highlight5'>motivation</span> and <span class='highlight4'>pleasure</span>, <span class='highlight1'>amplified</span> by the exciting <span class='highlight2'>uncertainty</span> of not knowing exactly what is inside.",
         "sentences": [
           "Ngan explained that opening a blind box would <span class='highlight1'>activate</span> the brain's reward system in three <span class='highlight2'>phases</span>.",
-          "First, there is an <span class='highlight3'>anticipation</span> <span class='highlight4'>phase</span> that starts before we even open the box.",
-          "The brain's <span class='highlight5'>pleasure</span> centre lights up with <span class='highlight1'>dopamine</span>, a key chemical for <span class='highlight2'>motivation</span> and <span class='highlight3'>pleasure</span>, <span class='highlight4'>amplified</span> by the exciting <span class='highlight5'>uncertainty</span> of not knowing exactly what is inside."
+          "First, there is an <span class='highlight3'>anticipation</span> <span class='highlight2'>phase</span> that starts before we even open the box.",
+          "The brain's <span class='highlight4'>pleasure</span> centre lights up with dopamine, a key chemical for <span class='highlight5'>motivation</span> and <span class='highlight4'>pleasure</span>, <span class='highlight1'>amplified</span> by the exciting <span class='highlight2'>uncertainty</span> of not knowing exactly what is inside."
         ],
         "translation": "🌐 顏解釋，打開盲盒會分三個階段激活大腦的獎勵系統。首先，在我們打開盒子之前，就進入了期待階段。大腦的愉悅中心會釋放多巴胺，這是一種與動機和愉悅感相關的關鍵化學物質，而不知道裡面到底是什麼所帶來的不確定性，更放大了這種興奮感。",
         "translation_sentences": [
@@ -58,10 +58,10 @@
       },
       {
         "id": 4,
-        "english": "Wong, who asked to share only her surname, is a 16-year-old student at King George V School in Hong Kong. She said she had almost completed an entire Labubu <span class='highlight1'>collection</span>. 'Right before opening a blind box, I get a mix of nervousness and excitement, hoping that I'll get something I've been wanting,' Wong said, adding that she would think about where to place each Labubu.",
+        "english": "Wong, who asked to share only her surname, is a 16-year-old student at King George V School in Hong Kong. She said she had almost completed an entire Labubu <span class='highlight3'>collection</span>. 'Right before opening a blind box, I get a mix of nervousness and excitement, hoping that I'll get something I've been wanting,' Wong said, adding that she would think about where to place each Labubu.",
         "sentences": [
           "Wong, who asked to share only her surname, is a 16-year-old student at King George V School in Hong Kong.",
-          "She said she had almost completed an entire Labubu <span class='highlight1'>collection</span>.",
+          "She said she had almost completed an entire Labubu <span class='highlight3'>collection</span>.",
           "'Right before opening a blind box, I get a mix of nervousness and excitement, hoping that I'll get something I've been wanting,' Wong said, adding that she would think about where to place each Labubu."
         ],
         "translation": "🌐 只願意透露姓氏的黃同學是香港英皇佐治五世學校的16歲學生。她說她幾乎收集了全套的 Labubu。黃同學說：「就在打開盲盒之前，我會感到既緊張又興奮，希望能抽到我想要的款式。」她還補充說，她會事先想好要把每個 Labubu 放在哪裡。",
@@ -77,22 +77,22 @@
       },
       {
         "id": 5,
-        "english": "As we open the box, the brain enters its <span class='highlight2'>peak</span> <span class='highlight3'>phase</span>. Multiple parts are activated all at once. 'The reward <span class='highlight4'>circuit</span> goes into overdrive,' Ngan said. 'The <span class='highlight5'>visual</span> processing areas become hyper-alert, and your <span class='highlight1'>memory</span> systems engage more strongly.' In the final <span class='highlight2'>phase</span>, the brain is flooded with more <span class='highlight3'>dopamine</span> – which reinforces the experience as a 'positive' one – and <span class='highlight4'>serotonin</span>, which creates feelings of <span class='highlight5'>satisfaction</span>. Together, these <span class='highlight1'>neurotransmitters</span> make the <span class='highlight2'>memory</span> more <span class='highlight3'>vivid</span>.",
+        "english": "As we open the box, the brain enters its <span class='highlight4'>peak</span> <span class='highlight2'>phase</span>. Multiple parts are activated all at once. 'The reward <span class='highlight5'>circuit</span> goes into <span class='highlight1'>overdrive</span>,' Ngan said. 'The <span class='highlight2'>visual</span> processing areas become hyper-alert, and your <span class='highlight3'>memory</span> systems engage more strongly.' In the final <span class='highlight2'>phase</span>, the brain is flooded with more dopamine – which reinforces the experience as a 'positive' one – and serotonin, which creates feelings of <span class='highlight4'>satisfaction</span>. Together, these neurotransmitters make the <span class='highlight3'>memory</span> more vivid.",
         "sentences": [
-          "As we open the box, the brain enters its <span class='highlight2'>peak</span> <span class='highlight3'>phase</span>.",
+          "As we open the box, the brain enters its <span class='highlight4'>peak</span> <span class='highlight2'>phase</span>.",
           "Multiple parts are activated all at once.",
-          "'The reward <span class='highlight4'>circuit</span> goes into overdrive,' Ngan said.",
-          "'The <span class='highlight5'>visual</span> processing areas become hyper-alert, and your <span class='highlight1'>memory</span> systems engage more strongly.'",
-          "In the final <span class='highlight2'>phase</span>, the brain is flooded with more <span class='highlight3'>dopamine</span> – which reinforces the experience as a 'positive' one – and <span class='highlight4'>serotonin</span>, which creates feelings of <span class='highlight5'>satisfaction</span>.",
-          "Together, these <span class='highlight1'>neurotransmitters</span> make the <span class='highlight2'>memory</span> more <span class='highlight3'>vivid</span>."
+          "'The reward <span class='highlight5'>circuit</span> goes into <span class='highlight1'>overdrive</span>,' Ngan said.",
+          "'The <span class='highlight2'>visual</span> processing areas become hyper-alert, and your <span class='highlight3'>memory</span> systems engage more strongly.'",
+          "In the final <span class='highlight2'>phase</span>, the brain is flooded with more dopamine – which reinforces the experience as a 'positive' one – and serotonin, which creates feelings of <span class='highlight4'>satisfaction</span>.",
+          "Together, these neurotransmitters make the <span class='highlight3'>memory</span> more vivid."
         ],
-        "translation": "🌐 當我們打開盒子時，大腦進入高峰階段。多個區域同時被激活。顏說：「獎勵迴路超速運轉。」「視覺處理區域變得高度警覺，記憶系統也更強烈地參與其中。」在最後階段，大腦充滿了更多的多巴胺——這會強化這次體驗為「正向」體驗——以及創造滿足感的血清素。這些神經傳導物質共同作用，使這段記憶更加鮮明。",
+        "translation": "🌐 當我們打開盒子時，大腦進入高峰階段。多個區域同時被激活。顏說：「獎勵迴路超速運轉。」「視覺處理區域變得高度警覺，記憶系統也更強烈地參與其中。」在最後階段，大腦充滿了更多的多巴胺——這會強化這次體驗為「正向」體驗——以及血清素，這會創造滿足感。這些神經傳導物質共同作用，使這段記憶更加鮮明。",
         "translation_sentences": [
           "🌐 當我們打開盒子時，大腦進入高峰階段。",
           "多個區域同時被激活。",
           "顏說：「獎勵迴路超速運轉。」",
           "「視覺處理區域變得高度警覺，記憶系統也更強烈地參與其中。」",
-          "在最後階段，大腦充滿了更多的多巴胺——這會強化這次體驗為「正向」體驗——以及創造滿足感的血清素。",
+          "在最後階段，大腦充滿了更多的多巴胺——這會強化這次體驗為「正向」體驗——以及血清素，這會創造滿足感。",
           "這些神經傳導物質共同作用，使這段記憶更加鮮明。"
         ],
         "implication": {
@@ -102,12 +102,12 @@
       },
       {
         "id": 6,
-        "english": "Collecting blind boxes can be a way to find <span class='highlight4'>comfort</span> and manage tough <span class='highlight5'>emotions</span>. The hobby can offer a moment of joy that provides a small break from a stressful <span class='highlight1'>schedule</span>. Beyond the individual experience, blind boxes can also build <span class='highlight2'>social</span> <span class='highlight3'>connections</span> which help teenagers feel less alone. They can also <span class='highlight4'>strengthen</span> <span class='highlight5'>bonds</span> when family members collect blind boxes together. For example, Wong shared that collecting Labubu toys had become an interest that her mum also enjoyed. Her dad would surprise her with new items, making it a family hobby.",
+        "english": "Collecting blind boxes can be a way to find <span class='highlight5'>comfort</span> and manage tough <span class='highlight1'>emotions</span>. The hobby can offer a moment of joy that provides a small break from a stressful <span class='highlight2'>schedule</span>. Beyond the individual experience, blind boxes can also build <span class='highlight3'>social</span> <span class='highlight4'>connections</span> which help teenagers feel less alone. They can also <span class='highlight5'>strengthen</span> <span class='highlight1'>bonds</span> when family members collect blind boxes together. For example, Wong shared that collecting Labubu toys had become an interest that her mum also enjoyed. Her dad would surprise her with new items, making it a family hobby.",
         "sentences": [
-          "Collecting blind boxes can be a way to find <span class='highlight4'>comfort</span> and manage tough <span class='highlight5'>emotions</span>.",
-          "The hobby can offer a moment of joy that provides a small break from a stressful <span class='highlight1'>schedule</span>.",
-          "Beyond the individual experience, blind boxes can also build <span class='highlight2'>social</span> <span class='highlight3'>connections</span> which help teenagers feel less alone.",
-          "They can also <span class='highlight4'>strengthen</span> <span class='highlight5'>bonds</span> when family members collect blind boxes together.",
+          "Collecting blind boxes can be a way to find <span class='highlight5'>comfort</span> and manage tough <span class='highlight1'>emotions</span>.",
+          "The hobby can offer a moment of joy that provides a small break from a stressful <span class='highlight2'>schedule</span>.",
+          "Beyond the individual experience, blind boxes can also build <span class='highlight3'>social</span> <span class='highlight4'>connections</span> which help teenagers feel less alone.",
+          "They can also <span class='highlight5'>strengthen</span> <span class='highlight1'>bonds</span> when family members collect blind boxes together.",
           "For example, Wong shared that collecting Labubu toys had become an interest that her mum also enjoyed.",
           "Her dad would surprise her with new items, making it a family hobby."
         ],
@@ -127,12 +127,12 @@
       },
       {
         "id": 7,
-        "english": "Ngan pointed out the importance of knowing when a hobby <span class='highlight1'>crosses the line</span>. A person might spend money they do not have on their hobby. They might be <span class='highlight2'>anxious</span> if they cannot buy a new box, hide their <span class='highlight3'>purchases</span> from others and allow the hobby to hurt their friendships and grades. 'Remember, a hobby adds to your life. It does not take over it,' Ngan <span class='highlight4'>stressed</span>.",
+        "english": "Ngan pointed out the importance of knowing when a hobby <span class='highlight2'>crosses the line</span>. A person might spend money they do not have on their hobby. They might be <span class='highlight3'>anxious</span> if they cannot buy a new box, hide their <span class='highlight4'>purchases</span> from others and allow the hobby to hurt their friendships and grades. 'Remember, a hobby adds to your life. It does not take over it,' Ngan <span class='highlight5'>stressed</span>.",
         "sentences": [
-          "Ngan pointed out the importance of knowing when a hobby <span class='highlight1'>crosses the line</span>.",
+          "Ngan pointed out the importance of knowing when a hobby <span class='highlight2'>crosses the line</span>.",
           "A person might spend money they do not have on their hobby.",
-          "They might be <span class='highlight2'>anxious</span> if they cannot buy a new box, hide their <span class='highlight3'>purchases</span> from others and allow the hobby to hurt their friendships and grades.",
-          "'Remember, a hobby adds to your life. It does not take over it,' Ngan <span class='highlight4'>stressed</span>."
+          "They might be <span class='highlight3'>anxious</span> if they cannot buy a new box, hide their <span class='highlight4'>purchases</span> from others and allow the hobby to hurt their friendships and grades.",
+          "'Remember, a hobby adds to your life. It does not take over it,' Ngan <span class='highlight5'>stressed</span>."
         ],
         "translation": "🌐 顏指出了解何時一個愛好越界的重要性。一個人可能會在愛好上花費超出自己能力的金錢。如果買不到新盒子他們可能會感到焦慮，向他人隱瞞自己的消費，並讓這個愛好損害他們的友誼和學業成績。顏強調：「記住，愛好是為你的生活增添色彩，而不是主宰你的生活。」",
         "translation_sentences": [
@@ -155,30 +155,30 @@
     { "id": 4, "word": "psychologist", "meaning": "n. 心理學家", "highlightClass": "highlight4" },
     { "id": 5, "word": "appeal", "meaning": "n./v. 吸引力；吸引", "highlightClass": "highlight5" },
     { "id": 6, "word": "activate", "meaning": "v. 激活；啟動", "highlightClass": "highlight1" },
-    { "id": 7, "word": "phases", "meaning": "n. 階段", "highlightClass": "highlight2" },
+    { "id": 7, "word": "phase", "meaning": "n. 階段", "highlightClass": "highlight2" },
     { "id": 8, "word": "anticipation", "meaning": "n. 期待；預期", "highlightClass": "highlight3" },
-    { "id": 9, "word": "phase", "meaning": "n. 階段", "highlightClass": "highlight4" },
-    { "id": 10, "word": "pleasure", "meaning": "n. 愉悅", "highlightClass": "highlight5" },
-    { "id": 11, "word": "dopamine", "meaning": "n. 多巴胺", "highlightClass": "highlight1" },
-    { "id": 12, "word": "motivation", "meaning": "n. 動機", "highlightClass": "highlight2" },
-    { "id": 13, "word": "amplified", "meaning": "v. 放大；增強", "highlightClass": "highlight3" },
-    { "id": 14, "word": "uncertainty", "meaning": "n. 不確定性", "highlightClass": "highlight4" },
-    { "id": 15, "word": "collection", "meaning": "n. 收藏品；系列", "highlightClass": "highlight5" },
-    { "id": 16, "word": "peak", "meaning": "adj./n. 高峰的；頂點", "highlightClass": "highlight1" },
-    { "id": 17, "word": "circuit", "meaning": "n. 迴路；線路", "highlightClass": "highlight2" },
-    { "id": 18, "word": "visual", "meaning": "adj. 視覺的", "highlightClass": "highlight3" },
-    { "id": 19, "word": "memory", "meaning": "n. 記憶", "highlightClass": "highlight4" },
-    { "id": 20, "word": "serotonin", "meaning": "n. 血清素", "highlightClass": "highlight5" },
-    { "id": 21, "word": "satisfaction", "meaning": "n. 滿足；滿意", "highlightClass": "highlight1" },
-    { "id": 22, "word": "neurotransmitters", "meaning": "n. 神經傳導物質", "highlightClass": "highlight2" },
-    { "id": 23, "word": "vivid", "meaning": "adj. 鮮明的；生動的", "highlightClass": "highlight3" },
-    { "id": 24, "word": "comfort", "meaning": "n. 安慰；舒適", "highlightClass": "highlight4" },
-    { "id": 25, "word": "emotions", "meaning": "n. 情緒", "highlightClass": "highlight5" },
-    { "id": 26, "word": "schedule", "meaning": "n. 日程表；時間表", "highlightClass": "highlight1" },
-    { "id": 27, "word": "social", "meaning": "adj. 社交的", "highlightClass": "highlight2" },
-    { "id": 28, "word": "connections", "meaning": "n. 聯繫；連結", "highlightClass": "highlight3" },
-    { "id": 29, "word": "strengthen", "meaning": "v. 加強；鞏固", "highlightClass": "highlight4" },
-    { "id": 30, "word": "bonds", "meaning": "n. 聯繫；連結", "highlightClass": "highlight5" }
+    { "id": 9, "word": "pleasure", "meaning": "n. 愉悅", "highlightClass": "highlight4" },
+    { "id": 10, "word": "motivation", "meaning": "n. 動機", "highlightClass": "highlight5" },
+    { "id": 11, "word": "amplified", "meaning": "v. 放大；增強", "highlightClass": "highlight1" },
+    { "id": 12, "word": "uncertainty", "meaning": "n. 不確定性", "highlightClass": "highlight2" },
+    { "id": 13, "word": "collection", "meaning": "n. 收藏品；系列", "highlightClass": "highlight3" },
+    { "id": 14, "word": "peak", "meaning": "adj./n. 高峰的；頂點", "highlightClass": "highlight4" },
+    { "id": 15, "word": "circuit", "meaning": "n. 迴路；線路", "highlightClass": "highlight5" },
+    { "id": 16, "word": "overdrive", "meaning": "n. 超速運轉；過載狀態", "highlightClass": "highlight1" },
+    { "id": 17, "word": "visual", "meaning": "adj. 視覺的", "highlightClass": "highlight2" },
+    { "id": 18, "word": "memory", "meaning": "n. 記憶", "highlightClass": "highlight3" },
+    { "id": 19, "word": "satisfaction", "meaning": "n. 滿足；滿意", "highlightClass": "highlight4" },
+    { "id": 20, "word": "comfort", "meaning": "n. 安慰；舒適", "highlightClass": "highlight5" },
+    { "id": 21, "word": "emotions", "meaning": "n. 情緒", "highlightClass": "highlight1" },
+    { "id": 22, "word": "schedule", "meaning": "n. 日程表；時間表", "highlightClass": "highlight2" },
+    { "id": 23, "word": "social", "meaning": "adj. 社交的", "highlightClass": "highlight3" },
+    { "id": 24, "word": "connections", "meaning": "n. 聯繫；連結", "highlightClass": "highlight4" },
+    { "id": 25, "word": "strengthen", "meaning": "v. 加強；鞏固", "highlightClass": "highlight5" },
+    { "id": 26, "word": "bonds", "meaning": "n. 聯繫；連結", "highlightClass": "highlight1" },
+    { "id": 27, "word": "crosses the line", "meaning": "phr. 越界；做得太過分", "highlightClass": "highlight2" },
+    { "id": 28, "word": "anxious", "meaning": "adj. 焦慮的", "highlightClass": "highlight3" },
+    { "id": 29, "word": "purchases", "meaning": "n. 購買的物品", "highlightClass": "highlight4" },
+    { "id": 30, "word": "stressed", "meaning": "v./adj. 強調；感到壓力的", "highlightClass": "highlight5" }
   ],
   "answers": {
     "vocab": ["psychologist", "anticipation", "dopamine", "amplified", "uncertainty", "circuit", "serotonin", "vivid", "strengthen", "anxious"],
