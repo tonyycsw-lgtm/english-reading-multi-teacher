@@ -1007,3 +1007,20 @@ body {
   opacity: 0;
   transform: translateY(-10px);
 }
+
+/* 中文翻譯懸停效果 */
+.translation-sentence:hover {
+  background-color: rgba(139, 92, 246, 0.25);
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 0;
+  transition: background-color 0.2s ease;
+}
+
+/* 英文句子高亮樣式強化（與懸停中文時對應） */
+.sentence-highlightable.sentence-selected {
+  background-color: rgba(79, 70, 229, 0.2);
+  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.15);
+  border-left: 2px solid #4f46e5;
+  padding-left: 4px;
+}

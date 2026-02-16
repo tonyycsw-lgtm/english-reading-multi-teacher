@@ -649,6 +649,51 @@ const SentenceHover = {
         });
       }
     });
+    
+    // 新增：設置中文翻譯懸停監聽器
+    this.setupChineseHoverListeners(unitId);
+  },
+  
+  // 新增：設置中文翻譯懸停監聽器
+  setupChineseHoverListeners(unitId) {
+    document.querySelectorAll(`#${unitId} .translation-sentence`).forEach(transSentence => {
+      if (transSentence.hasAttribute('data-chinese-hover-initialized')) return;
+      
+      const paraNum = transSentence.dataset.para;
+      const sentenceIdx = transSentence.dataset.sentenceIndex;
+      
+      if (paraNum && sentenceIdx !== undefined) {
+        transSentence.setAttribute('data-chinese-hover-initialized', 'true');
+        
+        transSentence.addEventListener('mouseenter', () => {
+          this.highlightEnglishSentence(unitId, paraNum, sentenceIdx);
+        });
+        
+        transSentence.addEventListener('mouseleave', () => {
+          this.clearEnglishSentenceHighlight();
+        });
+      }
+    });
+  },
+  
+  // 新增：高亮對應的英文句子
+  highlightEnglishSentence(unitId, paraNum, sentenceIdx) {
+    // 清除所有英文句子高亮
+    document.querySelectorAll(`#${unitId} .sentence-highlightable.sentence-selected`).forEach(el => {
+      el.classList.remove('sentence-selected');
+    });
+    
+    // 高亮對應的英文句子
+    const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIdx}"]`;
+    const sentenceEl = document.querySelector(selector);
+    if (sentenceEl) sentenceEl.classList.add('sentence-selected');
+  },
+  
+  // 新增：清除英文句子高亮
+  clearEnglishSentenceHighlight() {
+    document.querySelectorAll('.sentence-highlightable.sentence-selected').forEach(el => {
+      el.classList.remove('sentence-selected');
+    });
   },
   
   highlightTranslation(unitId, paraNum, sentenceIdx) {
@@ -794,7 +839,16 @@ let html = `
                         ${sentence}</span> `;
         });
       } else {
-        html += para.translation;
+        // 如果沒有按句子分割的翻譯，按標點符號簡單分割
+        const transSentences = para.translation.split(/(?<=[。？！!?])\s*/);
+        transSentences.forEach((sentence, sIdx) => {
+          if (sentence.trim()) {
+            html += `<span class="translation-sentence" lang="zh" 
+                          data-para="${paraNum}" 
+                          data-sentence-index="${sIdx}">
+                          ${sentence}</span> `;
+          }
+        });
       }
 
       html += `
