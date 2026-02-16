@@ -631,7 +631,10 @@ async playVocabularyWord(vocabId, unitId) {
 // ============================================
 const SentenceHover = {
   setupHoverListeners(unitId) {
-    document.querySelectorAll(`[data-unit-id="${unitId}"] .sentence-highlightable`).forEach(sentence => {
+    console.log('Setting up hover listeners for unit:', unitId);
+    
+    // 設置英文句子懸停
+    document.querySelectorAll(`.sentence-highlightable`).forEach(sentence => {
       if (sentence.hasAttribute('data-hover-initialized')) return;
       
       const paraNum = sentence.closest('[id*="para"]')?.id.match(/para(\d+)/)?.[1];
@@ -650,46 +653,58 @@ const SentenceHover = {
       }
     });
     
-    // 新增：設置中文翻譯懸停監聽器
+    // 設置中文翻譯懸停
     this.setupChineseHoverListeners(unitId);
   },
   
-  // 新增：設置中文翻譯懸停監聽器
   setupChineseHoverListeners(unitId) {
-    document.querySelectorAll(`#${unitId} .translation-sentence`).forEach(transSentence => {
+    console.log('Setting up Chinese hover listeners for unit:', unitId);
+    
+    document.querySelectorAll(`.translation-sentence`).forEach(transSentence => {
       if (transSentence.hasAttribute('data-chinese-hover-initialized')) return;
       
       const paraNum = transSentence.dataset.para;
       const sentenceIdx = transSentence.dataset.sentenceIndex;
       
+      console.log('Processing translation sentence:', {paraNum, sentenceIdx});
+      
       if (paraNum && sentenceIdx !== undefined) {
         transSentence.setAttribute('data-chinese-hover-initialized', 'true');
         
         transSentence.addEventListener('mouseenter', () => {
+          console.log('Chinese hover enter:', {unitId, paraNum, sentenceIdx});
           this.highlightEnglishSentence(unitId, paraNum, sentenceIdx);
         });
         
         transSentence.addEventListener('mouseleave', () => {
+          console.log('Chinese hover leave');
           this.clearEnglishSentenceHighlight();
         });
       }
     });
   },
   
-  // 新增：高亮對應的英文句子
   highlightEnglishSentence(unitId, paraNum, sentenceIdx) {
+    console.log('Highlighting English sentence:', {unitId, paraNum, sentenceIdx});
+    
     // 清除所有英文句子高亮
-    document.querySelectorAll(`#${unitId} .sentence-highlightable.sentence-selected`).forEach(el => {
+    document.querySelectorAll(`.sentence-highlightable.sentence-selected`).forEach(el => {
       el.classList.remove('sentence-selected');
     });
     
     // 高亮對應的英文句子
     const selector = `#${unitId}_para${paraNum}-text .sentence-highlightable[data-sentence-index="${sentenceIdx}"]`;
+    console.log('Selector:', selector);
+    
     const sentenceEl = document.querySelector(selector);
-    if (sentenceEl) sentenceEl.classList.add('sentence-selected');
+    if (sentenceEl) {
+      sentenceEl.classList.add('sentence-selected');
+      console.log('Found and highlighted English sentence');
+    } else {
+      console.log('English sentence not found');
+    }
   },
   
-  // 新增：清除英文句子高亮
   clearEnglishSentenceHighlight() {
     document.querySelectorAll('.sentence-highlightable.sentence-selected').forEach(el => {
       el.classList.remove('sentence-selected');
