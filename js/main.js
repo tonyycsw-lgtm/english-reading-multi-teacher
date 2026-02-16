@@ -1045,34 +1045,6 @@ const Renderer = {
     // 設置分頁按鈕（在上方）
     paginationContainer.innerHTML = paginationHtml;
 
-    // 創建或更新頁碼信息容器（在下方）
-    let infoContainer = document.getElementById(`${unitId}_vocab-info`);
-    if (!infoContainer) {
-      infoContainer = document.createElement('div');
-      infoContainer.id = `${unitId}_vocab-info`;
-      infoContainer.className = 'vocab-info';
-      
-      // 將信息容器添加到詞彙部分的最後
-      const vocabSection = document.querySelector('.vocab-section');
-      if (vocabSection) {
-        vocabSection.appendChild(infoContainer);
-      }
-    }
-
-    // 更新頁碼信息
-    const start = (currentPage - 1) * state.itemsPerPage + 1;
-    const end = Math.min(currentPage * state.itemsPerPage, state.vocab.length);
-    
-    infoContainer.innerHTML = `
-      <span>
-        <i class="fas fa-book"></i> 
-        第 ${currentPage} / ${state.totalPages} 頁
-      </span>
-      <span>
-        <i class="fas fa-list"></i> 
-        顯示 ${start}-${end} 條，共 ${state.vocab.length} 個詞彙
-      </span>
-    `;
   },
 
   changeVocabPage(unitId, page) {
