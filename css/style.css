@@ -233,13 +233,33 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+/* 完全統一的懸停與播放高亮樣式 - 無左側邊框，背景較淡 */
 .sentence-highlightable.sentence-selected,
 .sentence-highlightable.sentence-playing {
-  background-color: rgba(79, 70, 229, 0.12);
-  font-weight: normal;
-  border-left: none;
-  padding-left: 2px;
+  background-color: rgba(79, 70, 229, 0.12);  /* 較淡的背景色 */
   box-shadow: 0 1px 4px rgba(79, 70, 229, 0.1);
+  border-left: none;                          /* 移除左側邊框 */
+  padding-left: 2px;                           /* 標準內邊距 */
+  font-weight: normal;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 確保懸停時不會有其他干擾樣式 */
+.sentence-highlightable:hover {
+  background-color: rgba(79, 70, 229, 0.08);  /* 懸停時更淡 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 移除可能衝突的其他高亮樣式 */
+.sentence-highlightable.sentence-selected {
+  /* 覆蓋原有可能存在的左側邊框樣式 */
+  border-left: none !important;
+  padding-left: 2px !important;
+}
+
+.sentence-highlightable.sentence-playing {
+  /* 確保播放狀態與懸停狀態完全一致 */
+  animation: none;
 }
 
 .sentence-playing {
