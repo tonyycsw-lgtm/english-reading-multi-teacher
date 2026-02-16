@@ -297,6 +297,6 @@
   "audio": {
     "paragraphPattern": "/english-reading-multi-teacher/audio/unit4/paragraph_{id}.mp3",
     "implicationPattern": "/english-reading-multi-teacher/audio/unit4/impl_{id}.mp3",
-    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit4/word_{id}.mp3"
+    "vocabularyPattern": "/english-reading-multi-teacher/audio/unit4/vocab/{word}.mp3"
   }
 }
