@@ -26,11 +26,11 @@
       },
       {
         "id": 2,
-        "english": "Strong winds made the fire <span class='highlight3'>spread</span> <span class='highlight4'>rapidly</span> to seven nearby buildings. The old scaffolding and green construction nets on the buildings acted like fuel, making the flames burn more <span class='highlight5'>fiercely</span>. The high temperature at the <span class='highlight1'>scene</span> was a big <span class='highlight1'>challenge</span> for <span class='highlight2'>firefighters</span>.",
+        "english": "Strong winds made the fire <span class='highlight3'>spread</span> <span class='highlight4'>rapidly</span> to seven nearby buildings. The old scaffolding and green construction nets on the buildings acted like fuel, making the flames burn more <span class='highlight5'>fiercely</span>. The high temperature at the <span class='highlight1'>scene</span> was a big <span class='highlight2'>challenge</span> for <span class='highlight3'>firefighters</span>.",
         "sentences": [
           "Strong winds made the fire <span class='highlight3'>spread</span> <span class='highlight4'>rapidly</span> to seven nearby buildings.",
           "The old scaffolding and green construction nets on the buildings acted like fuel, making the flames burn more <span class='highlight5'>fiercely</span>.",
-          "The high temperature at the <span class='highlight1'>scene</span> was a big <span class='highlight1'>challenge</span> for <span class='highlight2'>firefighters</span>."
+          "The high temperature at the <span class='highlight1'>scene</span> was a big <span class='highlight2'>challenge</span> for <span class='highlight3'>firefighters</span>."
         ],
         "translation": "🌐 強風導致大火迅速蔓延至附近七幢大廈。大廈上的舊棚架和綠色建築網宛如燃料一般，令火焰燃燒得更為猛烈。現場的高溫對消防人員來說是一項巨大的挑戰。",
         "translation_sentences": [
@@ -45,10 +45,10 @@
       },
       {
         "id": 3,
-        "english": "Some <span class='highlight3'>residents</span> were <span class='highlight5'>trapped</span> on the upper floors, and <span class='highlight4'>rescue</span> workers couldn't reach them <span class='highlight5'>immediately</span> due to the <span class='highlight2'>extreme</span> <span class='highlight3'>heat</span>. However, the <span class='highlight4'>rescue</span> team kept in touch with the trapped people by phone to calm them down.",
+        "english": "Some <span class='highlight4'>residents</span> were <span class='highlight5'>trapped</span> on the upper floors, and <span class='highlight1'>rescue</span> workers couldn't reach them <span class='highlight2'>immediately</span> due to the <span class='highlight3'>extreme</span> <span class='highlight4'>heat</span>. However, the <span class='highlight1'>rescue</span> team kept in touch with the trapped people by phone to calm them down.",
         "sentences": [
-          "Some <span class='highlight3'>residents</span> were <span class='highlight5'>trapped</span> on the upper floors, and <span class='highlight4'>rescue</span> workers couldn't reach them <span class='highlight5'>immediately</span> due to the <span class='highlight2'>extreme</span> <span class='highlight3'>heat</span>.",
-          "However, the <span class='highlight4'>rescue</span> team kept in touch with the trapped people by phone to calm them down."
+          "Some <span class='highlight4'>residents</span> were <span class='highlight5'>trapped</span> on the upper floors, and <span class='highlight1'>rescue</span> workers couldn't reach them <span class='highlight2'>immediately</span> due to the <span class='highlight3'>extreme</span> <span class='highlight4'>heat</span>.",
+          "However, the <span class='highlight1'>rescue</span> team kept in touch with the trapped people by phone to calm them down."
         ],
         "translation": "🌐 部分居民被困在高層樓宇，由於溫度極高，救援人員無法立即抵達他們身邊。然而，救援團隊透過電話與被困人士保持聯繫，以安撫他們的情緒。",
         "translation_sentences": [
@@ -62,10 +62,10 @@
       },
       {
         "id": 4,
-        "english": "More than 700 <span class='highlight2'>firefighters</span> and <span class='highlight4'>rescue</span> workers were <span class='highlight1'>dispatched</span> to the <span class='highlight1'>scene</span>, along with 128 fire engines and 57 <span class='highlight2'>ambulances</span>. <span class='highlight3'>Tragically</span>, the fire caused 13 deaths and 28 <span class='highlight4'>injuries</span>, including a 37-year-old firefighter who lost his life while fighting the blaze.",
+        "english": "More than 700 <span class='highlight3'>firefighters</span> and <span class='highlight1'>rescue</span> workers were <span class='highlight5'>dispatched</span> to the <span class='highlight1'>scene</span>, along with 128 fire engines and 57 <span class='highlight1'>ambulances</span>. <span class='highlight2'>Tragically</span>, the fire caused 13 deaths and 28 <span class='highlight3'>injuries</span>, including a 37-year-old firefighter who lost his life while fighting the blaze.",
         "sentences": [
-          "More than 700 <span class='highlight2'>firefighters</span> and <span class='highlight4'>rescue</span> workers were <span class='highlight1'>dispatched</span> to the <span class='highlight1'>scene</span>, along with 128 fire engines and 57 <span class='highlight2'>ambulances</span>.",
-          "<span class='highlight3'>Tragically</span>, the fire caused 13 deaths and 28 <span class='highlight4'>injuries</span>, including a 37-year-old firefighter who lost his life while fighting the blaze."
+          "More than 700 <span class='highlight3'>firefighters</span> and <span class='highlight1'>rescue</span> workers were <span class='highlight5'>dispatched</span> to the <span class='highlight1'>scene</span>, along with 128 fire engines and 57 <span class='highlight1'>ambulances</span>.",
+          "<span class='highlight2'>Tragically</span>, the fire caused 13 deaths and 28 <span class='highlight3'>injuries</span>, including a 37-year-old firefighter who lost his life while fighting the blaze."
         ],
         "translation": "🌐 超過700名消防人員及救援人員被派遣到現場，同時出動了128輛消防車和57輛救護車。令人悲痛的是，這場大火造成13人死亡、28人受傷，其中包括一名37歲的消防人員，他在撲滅大火時殉職。",
         "translation_sentences": [
@@ -79,11 +79,11 @@
       },
       {
         "id": 5,
-        "english": "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight5'>mourn</span> the fallen hero. The Hong Kong government took quick action. It opened temporary <span class='highlight1'>shelters</span> for the <span class='highlight4'>affected</span> <span class='highlight3'>residents</span>, and social workers and <span class='highlight2'>psychologists</span> were <span class='highlight3'>sent</span> to offer emotional support.",
+        "english": "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight4'>mourn</span> the fallen hero. The Hong Kong government took quick action. It opened temporary <span class='highlight5'>shelters</span> for the <span class='highlight1'>affected</span> <span class='highlight4'>residents</span>, and social workers and <span class='highlight2'>psychologists</span> were <span class='highlight3'>sent</span> to offer emotional support.",
         "sentences": [
-          "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight5'>mourn</span> the fallen hero.",
+          "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight4'>mourn</span> the fallen hero.",
           "The Hong Kong government took quick action.",
-          "It opened temporary <span class='highlight1'>shelters</span> for the <span class='highlight4'>affected</span> <span class='highlight3'>residents</span>, and social workers and <span class='highlight2'>psychologists</span> were <span class='highlight3'>sent</span> to offer emotional support."
+          "It opened temporary <span class='highlight5'>shelters</span> for the <span class='highlight1'>affected</span> <span class='highlight4'>residents</span>, and social workers and <span class='highlight2'>psychologists</span> were <span class='highlight3'>sent</span> to offer emotional support."
         ],
         "translation": "🌐 香港消防處更將其官方網站改為黑白配色，以悼念這位殉職的英雄。香港政府迅速採取行動，為受影響的居民開設臨時庇護中心，並派遣社工及心理學家提供情緒支援。",
         "translation_sentences": [
@@ -120,30 +120,30 @@
     { "id": 3, "word": "spread", "meaning": "v. 傳播；蔓延", "highlightClass": "highlight3" },
     { "id": 4, "word": "rapidly", "meaning": "adv. 迅速地", "highlightClass": "highlight4" },
     { "id": 5, "word": "fiercely", "meaning": "adv. 猛烈地", "highlightClass": "highlight5" },
-    { "id": 6, "word": "challenge", "meaning": "n. 挑戰", "highlightClass": "highlight1" },
-    { "id": 7, "word": "firefighter", "meaning": "n. 消防員", "highlightClass": "highlight2" },
-    { "id": 8, "word": "resident", "meaning": "n. 居民", "highlightClass": "highlight3" },
-    { "id": 9, "word": "rescue", "meaning": "v. & n. 營救；救援", "highlightClass": "highlight4" },
-    { "id": 10, "word": "immediately", "meaning": "adv. 立刻", "highlightClass": "highlight5" },
-    { "id": 11, "word": "dispatch", "meaning": "v. 派遣", "highlightClass": "highlight1" },
-    { "id": 12, "word": "ambulance", "meaning": "n. 救護車", "highlightClass": "highlight2" },
-    { "id": 13, "word": "tragically", "meaning": "adv. 悲慘地", "highlightClass": "highlight3" },
-    { "id": 14, "word": "injury", "meaning": "n. 傷害", "highlightClass": "highlight4" },
-    { "id": 15, "word": "mourn", "meaning": "v. 哀悼", "highlightClass": "highlight5" },
-    { "id": 16, "word": "shelter", "meaning": "n. 避難所", "highlightClass": "highlight1" },
-    { "id": 17, "word": "psychologist", "meaning": "n. 心理學家", "highlightClass": "highlight2" },
-    { "id": 18, "word": "send", "meaning": "v. 發送；派遣", "highlightClass": "highlight3" },
-    { "id": 19, "word": "ensure", "meaning": "v. 確保", "highlightClass": "highlight4" },
-    { "id": 20, "word": "safety", "meaning": "n. 安全", "highlightClass": "highlight5" },
-    { "id": 21, "word": "important", "meaning": "adj. 重要的", "highlightClass": "highlight1" },
-    { "id": 22, "word": "cause", "meaning": "n. 原因", "highlightClass": "highlight2" },
-    { "id": 23, "word": "investigation", "meaning": "n. 調查", "highlightClass": "highlight3" },
-    { "id": 24, "word": "importance", "meaning": "n. 重要性", "highlightClass": "highlight4" },
-    { "id": 25, "word": "trap", "meaning": "v. 困住", "highlightClass": "highlight5" },
-    { "id": 26, "word": "scene", "meaning": "n. 現場", "highlightClass": "highlight1" },
-    { "id": 27, "word": "extreme", "meaning": "adj. 極度的", "highlightClass": "highlight2" },
-    { "id": 28, "word": "heat", "meaning": "n. 熱度", "highlightClass": "highlight3" },
-    { "id": 29, "word": "affect", "meaning": "v. 影響", "highlightClass": "highlight4" },
+    { "id": 6, "word": "scene", "meaning": "n. 現場", "highlightClass": "highlight1" },
+    { "id": 7, "word": "challenge", "meaning": "n. 挑戰", "highlightClass": "highlight2" },
+    { "id": 8, "word": "firefighter", "meaning": "n. 消防員", "highlightClass": "highlight3" },
+    { "id": 9, "word": "resident", "meaning": "n. 居民", "highlightClass": "highlight4" },
+    { "id": 10, "word": "trap", "meaning": "v. 困住", "highlightClass": "highlight5" },
+    { "id": 11, "word": "rescue", "meaning": "v. & n. 營救；救援", "highlightClass": "highlight1" },
+    { "id": 12, "word": "immediately", "meaning": "adv. 立刻", "highlightClass": "highlight2" },
+    { "id": 13, "word": "extreme", "meaning": "adj. 極度的", "highlightClass": "highlight3" },
+    { "id": 14, "word": "heat", "meaning": "n. 熱度", "highlightClass": "highlight4" },
+    { "id": 15, "word": "dispatch", "meaning": "v. 派遣", "highlightClass": "highlight5" },
+    { "id": 16, "word": "ambulance", "meaning": "n. 救護車", "highlightClass": "highlight1" },
+    { "id": 17, "word": "tragically", "meaning": "adv. 悲慘地", "highlightClass": "highlight2" },
+    { "id": 18, "word": "injury", "meaning": "n. 傷害", "highlightClass": "highlight3" },
+    { "id": 19, "word": "mourn", "meaning": "v. 哀悼", "highlightClass": "highlight4" },
+    { "id": 20, "word": "shelter", "meaning": "n. 避難所", "highlightClass": "highlight5" },
+    { "id": 21, "word": "affect", "meaning": "v. 影響", "highlightClass": "highlight1" },
+    { "id": 22, "word": "psychologist", "meaning": "n. 心理學家", "highlightClass": "highlight2" },
+    { "id": 23, "word": "send", "meaning": "v. 發送；派遣", "highlightClass": "highlight3" },
+    { "id": 24, "word": "ensure", "meaning": "v. 確保", "highlightClass": "highlight4" },
+    { "id": 25, "word": "safety", "meaning": "n. 安全", "highlightClass": "highlight5" },
+    { "id": 26, "word": "important", "meaning": "adj. 重要的", "highlightClass": "highlight1" },
+    { "id": 27, "word": "cause", "meaning": "n. 原因", "highlightClass": "highlight2" },
+    { "id": 28, "word": "investigation", "meaning": "n. 調查", "highlightClass": "highlight3" },
+    { "id": 29, "word": "importance", "meaning": "n. 重要性", "highlightClass": "highlight4" },
     { "id": 30, "word": "community", "meaning": "n. 社區", "highlightClass": "highlight5" }
   ],
   "answers": {
