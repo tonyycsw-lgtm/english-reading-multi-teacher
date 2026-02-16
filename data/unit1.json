@@ -7,11 +7,11 @@
     "paragraphs": [
       {
         "id": 1,
-        "english": "On November 26, 2025, a terrible fire <span class='highlight2'>broke out</span> in Wang Fuk Yuen, Tai Po, Hong Kong, which shocked the whole city. The fire started from the scaffolding on the outer wall of a building in Wang Fuk Yuen at about 2:51 pm. Within just a few hours, it <span class='highlight4'>escalated</span> to a Level 5 fire, the second-highest alarm level in Hong Kong.",
+        "english": "On November 26, 2025, a terrible fire <span class='highlight1'>broke out</span> in Wang Fuk Yuen, Tai Po, Hong Kong, which shocked the whole city. The fire started from the scaffolding on the outer wall of a building in Wang Fuk Yuen at about 2:51 pm. Within just a few hours, it <span class='highlight2'>escalated</span> to a Level 5 fire, the second-highest alarm level in Hong Kong.",
         "sentences": [
-          "On November 26, 2025, a terrible fire <span class='highlight2'>broke out</span> in Wang Fuk Yuen, Tai Po, Hong Kong, which shocked the whole city.",
+          "On November 26, 2025, a terrible fire <span class='highlight1'>broke out</span> in Wang Fuk Yuen, Tai Po, Hong Kong, which shocked the whole city.",
           "The fire started from the scaffolding on the outer wall of a building in Wang Fuk Yuen at about 2:51 pm.",
-          "Within just a few hours, it <span class='highlight4'>escalated</span> to a Level 5 fire, the second-highest alarm level in Hong Kong."
+          "Within just a few hours, it <span class='highlight2'>escalated</span> to a Level 5 fire, the second-highest alarm level in Hong Kong."
         ],
         "translation": "🌐 2025年11月26日，香港大埔宏福苑發生一場可怕的大火，震驚了全城。這場大火於下午約2時51分由宏福苑一幢大廈外牆的棚架起火。僅在數小時內，火勢便升級為香港第二高級別的五級火警。",
         "translation_sentences": [
@@ -26,11 +26,11 @@
       },
       {
         "id": 2,
-        "english": "Strong winds made the fire <span class='highlight5'>spread</span> <span class='highlight1'>rapidly</span> to seven nearby buildings. The old scaffolding and green construction nets on the buildings acted like fuel, making the flames burn more <span class='highlight2'>fiercely</span>. The high temperature at the scene was a big <span class='highlight3'>challenge</span> for <span class='highlight4'>firefighters</span>.",
+        "english": "Strong winds made the fire <span class='highlight3'>spread</span> <span class='highlight4'>rapidly</span> to seven nearby buildings. The old scaffolding and green construction nets on the buildings acted like fuel, making the flames burn more <span class='highlight5'>fiercely</span>. The high temperature at the <span class='highlight1'>scene</span> was a big <span class='highlight1'>challenge</span> for <span class='highlight2'>firefighters</span>.",
         "sentences": [
-          "Strong winds made the fire <span class='highlight5'>spread</span> <span class='highlight1'>rapidly</span> to seven nearby buildings.",
-          "The old scaffolding and green construction nets on the buildings acted like fuel, making the flames burn more <span class='highlight2'>fiercely</span>.",
-          "The high temperature at the scene was a big <span class='highlight3'>challenge</span> for <span class='highlight4'>firefighters</span>."
+          "Strong winds made the fire <span class='highlight3'>spread</span> <span class='highlight4'>rapidly</span> to seven nearby buildings.",
+          "The old scaffolding and green construction nets on the buildings acted like fuel, making the flames burn more <span class='highlight5'>fiercely</span>.",
+          "The high temperature at the <span class='highlight1'>scene</span> was a big <span class='highlight1'>challenge</span> for <span class='highlight2'>firefighters</span>."
         ],
         "translation": "🌐 強風導致大火迅速蔓延至附近七幢大廈。大廈上的舊棚架和綠色建築網宛如燃料一般，令火焰燃燒得更為猛烈。現場的高溫對消防人員來說是一項巨大的挑戰。",
         "translation_sentences": [
@@ -45,10 +45,10 @@
       },
       {
         "id": 3,
-        "english": "Some <span class='highlight5'>residents</span> were trapped on the upper floors, and <span class='highlight1'>rescue</span> workers couldn't reach them <span class='highlight2'>immediately</span> due to the extreme heat. However, the <span class='highlight1'>rescue</span> team kept in touch with the trapped people by phone to calm them down.",
+        "english": "Some <span class='highlight3'>residents</span> were <span class='highlight5'>trapped</span> on the upper floors, and <span class='highlight4'>rescue</span> workers couldn't reach them <span class='highlight5'>immediately</span> due to the <span class='highlight2'>extreme</span> <span class='highlight3'>heat</span>. However, the <span class='highlight4'>rescue</span> team kept in touch with the trapped people by phone to calm them down.",
         "sentences": [
-          "Some <span class='highlight5'>residents</span> were trapped on the upper floors, and <span class='highlight1'>rescue</span> workers couldn't reach them <span class='highlight2'>immediately</span> due to the extreme heat.",
-          "However, the <span class='highlight1'>rescue</span> team kept in touch with the trapped people by phone to calm them down."
+          "Some <span class='highlight3'>residents</span> were <span class='highlight5'>trapped</span> on the upper floors, and <span class='highlight4'>rescue</span> workers couldn't reach them <span class='highlight5'>immediately</span> due to the <span class='highlight2'>extreme</span> <span class='highlight3'>heat</span>.",
+          "However, the <span class='highlight4'>rescue</span> team kept in touch with the trapped people by phone to calm them down."
         ],
         "translation": "🌐 部分居民被困在高層樓宇，由於溫度極高，救援人員無法立即抵達他們身邊。然而，救援團隊透過電話與被困人士保持聯繫，以安撫他們的情緒。",
         "translation_sentences": [
@@ -62,9 +62,9 @@
       },
       {
         "id": 4,
-        "english": "More than 700 <span class='highlight4'>firefighters</span> and <span class='highlight1'>rescue</span> workers were <span class='highlight1'>dispatched</span> to the scene, along with 128 fire engines and 57 <span class='highlight2'>ambulances</span>. <span class='highlight3'>Tragically</span>, the fire caused 13 deaths and 28 <span class='highlight4'>injuries</span>, including a 37-year-old firefighter who lost his life while fighting the blaze.",
+        "english": "More than 700 <span class='highlight2'>firefighters</span> and <span class='highlight4'>rescue</span> workers were <span class='highlight1'>dispatched</span> to the <span class='highlight1'>scene</span>, along with 128 fire engines and 57 <span class='highlight2'>ambulances</span>. <span class='highlight3'>Tragically</span>, the fire caused 13 deaths and 28 <span class='highlight4'>injuries</span>, including a 37-year-old firefighter who lost his life while fighting the blaze.",
         "sentences": [
-          "More than 700 <span class='highlight4'>firefighters</span> and <span class='highlight1'>rescue</span> workers were <span class='highlight1'>dispatched</span> to the scene, along with 128 fire engines and 57 <span class='highlight2'>ambulances</span>.",
+          "More than 700 <span class='highlight2'>firefighters</span> and <span class='highlight4'>rescue</span> workers were <span class='highlight1'>dispatched</span> to the <span class='highlight1'>scene</span>, along with 128 fire engines and 57 <span class='highlight2'>ambulances</span>.",
           "<span class='highlight3'>Tragically</span>, the fire caused 13 deaths and 28 <span class='highlight4'>injuries</span>, including a 37-year-old firefighter who lost his life while fighting the blaze."
         ],
         "translation": "🌐 超過700名消防人員及救援人員被派遣到現場，同時出動了128輛消防車和57輛救護車。令人悲痛的是，這場大火造成13人死亡、28人受傷，其中包括一名37歲的消防人員，他在撲滅大火時殉職。",
@@ -79,11 +79,11 @@
       },
       {
         "id": 5,
-        "english": "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight2'>mourn</span> the fallen hero. The Hong Kong government took quick action. It opened temporary <span class='highlight4'>shelters</span> for the affected <span class='highlight5'>residents</span>, and social workers and <span class='highlight5'>psychologists</span> were <span class='highlight1'>sent</span> to offer emotional support.",
+        "english": "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight5'>mourn</span> the fallen hero. The Hong Kong government took quick action. It opened temporary <span class='highlight1'>shelters</span> for the <span class='highlight4'>affected</span> <span class='highlight3'>residents</span>, and social workers and <span class='highlight2'>psychologists</span> were <span class='highlight3'>sent</span> to offer emotional support.",
         "sentences": [
-          "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight2'>mourn</span> the fallen hero.",
+          "The Hong Kong Fire Services Department even changed its official website to black and white to <span class='highlight5'>mourn</span> the fallen hero.",
           "The Hong Kong government took quick action.",
-          "It opened temporary <span class='highlight4'>shelters</span> for the affected <span class='highlight5'>residents</span>, and social workers and <span class='highlight5'>psychologists</span> were <span class='highlight1'>sent</span> to offer emotional support."
+          "It opened temporary <span class='highlight1'>shelters</span> for the <span class='highlight4'>affected</span> <span class='highlight3'>residents</span>, and social workers and <span class='highlight2'>psychologists</span> were <span class='highlight3'>sent</span> to offer emotional support."
         ],
         "translation": "🌐 香港消防處更將其官方網站改為黑白配色，以悼念這位殉職的英雄。香港政府迅速採取行動，為受影響的居民開設臨時庇護中心，並派遣社工及心理學家提供情緒支援。",
         "translation_sentences": [
@@ -97,10 +97,10 @@
       },
       {
         "id": 6,
-        "english": "Schools near the fire site were closed on November 27 to <span class='highlight2'>ensure</span> students' <span class='highlight3'>safety</span>. It is <span class='highlight4'>important</span> to note that the <span class='highlight5'>cause</span> of the fire is still under <span class='highlight5'>investigation</span>, but the incident reminds everyone of the <span class='highlight3'>importance</span> of <span class='highlight3'>safety</span>, especially in old communities under construction.",
+        "english": "Schools near the fire site were closed on November 27 to <span class='highlight4'>ensure</span> students' <span class='highlight5'>safety</span>. It is <span class='highlight1'>important</span> to note that the <span class='highlight2'>cause</span> of the fire is still under <span class='highlight3'>investigation</span>, but the incident reminds everyone of the <span class='highlight4'>importance</span> of <span class='highlight5'>safety</span>, especially in old <span class='highlight5'>communities</span> under construction.",
         "sentences": [
-          "Schools near the fire site were closed on November 27 to <span class='highlight2'>ensure</span> students' <span class='highlight3'>safety</span>.",
-          "It is <span class='highlight4'>important</span> to note that the <span class='highlight5'>cause</span> of the fire is still under <span class='highlight5'>investigation</span>, but the incident reminds everyone of the <span class='highlight3'>importance</span> of <span class='highlight3'>safety</span>, especially in old communities under construction."
+          "Schools near the fire site were closed on November 27 to <span class='highlight4'>ensure</span> students' <span class='highlight5'>safety</span>.",
+          "It is <span class='highlight1'>important</span> to note that the <span class='highlight2'>cause</span> of the fire is still under <span class='highlight3'>investigation</span>, but the incident reminds everyone of the <span class='highlight4'>importance</span> of <span class='highlight5'>safety</span>, especially in old <span class='highlight5'>communities</span> under construction."
         ],
         "translation": "🌐 大火現場附近的學校於11月27日停課，以確保學生的安全。值得注意的是，這場大火的成因仍在調查中，但這宗事件提醒所有人安全的重要性，尤其是在正在進行建築工程的舊式社區。",
         "translation_sentences": [
@@ -170,7 +170,7 @@
   },
   "readingComprehension": [
     {
-      "question": "1. What is the main idea of the passage? (Main Idea)",
+      "question": "1. What is the main idea of the passage?",
       "options": [
         { "id": "A", "text": "A. How firefighters trained for fire rescue" },
         { "id": "B", "text": "B. A severe fire that happened in Hong Kong and its results" },
@@ -179,7 +179,7 @@
       ]
     },
     {
-      "question": "2. When did the fire break out in Wang Fuk Yuen? (Detail)",
+      "question": "2. When did the fire break out in Wang Fuk Yuen?",
       "options": [
         { "id": "A", "text": "A. On November 25, 2025" },
         { "id": "B", "text": "B. On November 26, 2025" },
@@ -188,7 +188,7 @@
       ]
     },
     {
-      "question": "3. How many firefighters lost their lives in the fire? (Detail)",
+      "question": "3. How many firefighters lost their lives in the fire?",
       "options": [
         { "id": "A", "text": "A. 1" },
         { "id": "B", "text": "B. 13" },
@@ -197,7 +197,7 @@
       ]
     },
     {
-      "question": "4. What does \"it\" in \"It opened temporary shelters\" refer to? (Pronoun Reference)",
+      "question": "4. What does \"it\" in \"It opened temporary shelters\" refer to?",
       "options": [
         { "id": "A", "text": "A. The fire" },
         { "id": "B", "text": "B. The Hong Kong Fire Services Department" },
@@ -206,16 +206,16 @@
       ]
     },
     {
-      "question": "5. Why were schools near the fire site closed on November 27? (Detail)",
+      "question": "5. Why were schools near the fire site closed on November 27?",
       "options": [
         { "id": "A", "text": "A. Because the students were injured in the fire" },
         { "id": "B", "text": "B. Because the schools were destroyed by the fire" },
-        { "id": "C", "text": "C. Because to ensure the students' safety" },
+        { "id": "C", "text": "C. To ensure the students' safety" },
         { "id": "D", "text": "D. Because the teachers were busy with rescue work" }
       ]
     },
     {
-      "question": "6. What can we infer from the passage? (Inference)",
+      "question": "6. What can we infer from the passage?",
       "options": [
         { "id": "A", "text": "A. The fire was put out in less than one hour" },
         { "id": "B", "text": "B. The fire was very difficult to control" },
@@ -224,7 +224,7 @@
       ]
     },
     {
-      "question": "7. What does \"escalated\" probably mean? (Word Meaning Guessing)",
+      "question": "7. What does \"escalated\" probably mean?",
       "options": [
         { "id": "A", "text": "A. Became weaker" },
         { "id": "B", "text": "B. Became more serious" },
@@ -233,7 +233,7 @@
       ]
     },
     {
-      "question": "8. How many ambulances were sent to the fire scene? (Detail)",
+      "question": "8. How many ambulances were sent to the fire scene?",
       "options": [
         { "id": "A", "text": "A. 57" },
         { "id": "B", "text": "B. 128" },
